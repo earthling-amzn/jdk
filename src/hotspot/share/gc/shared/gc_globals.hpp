@@ -40,7 +40,7 @@
 #include "gc/serial/serial_globals.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoah_globals.hpp"
+#include "gc/xenandoah/shenandoah_globals.hpp"
 #endif
 #if INCLUDE_ZGC
 #include "gc/z/shared/z_shared_globals.hpp"

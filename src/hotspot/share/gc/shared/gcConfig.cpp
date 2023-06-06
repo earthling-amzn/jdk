@@ -41,7 +41,7 @@
 #include "gc/serial/serialArguments.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoahArguments.hpp"
+#include "gc/xenandoah/shenandoahArguments.hpp"
 #endif
 #if INCLUDE_ZGC
 #include "gc/z/shared/zSharedArguments.hpp"

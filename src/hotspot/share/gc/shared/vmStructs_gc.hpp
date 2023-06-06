@@ -47,7 +47,7 @@
 #include "gc/serial/vmStructs_serial.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/vmStructs_shenandoah.hpp"
+#include "gc/xenandoah/vmStructs_shenandoah.hpp"
 #endif
 #if INCLUDE_ZGC
 #include "gc/z/shared/vmStructs_z_shared.hpp"

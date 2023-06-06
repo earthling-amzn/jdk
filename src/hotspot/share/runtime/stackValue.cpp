@@ -35,7 +35,7 @@
 #include "gc/z/zBarrier.inline.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/shenandoah/shenandoahBarrierSet.inline.hpp"
+#include "gc/xenandoah/shenandoahBarrierSet.inline.hpp"
 #endif
 
 class RegisterMap;
