@@ -54,18 +54,18 @@
  */
 
 /*
- * @test id=Shenandoah
+ * @test id=Xenandoah
  * @key randomness
  * @bug 8255401 8251944
  * @modules java.base/jdk.internal.misc:+open
  * @summary Validate barriers after Unsafe getReference, CAS and swap (GetAndSet)
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
- * @run main/othervm -XX:+UseShenandoahGC
+ * @run main/othervm -XX:+UseXenandoahGC
  *                   -XX:+UnlockDiagnosticVMOptions
  *                   -XX:-CreateCoredumpOnCrash
- *                   -XX:+ShenandoahVerify
- *                   -XX:+IgnoreUnrecognizedVMOptions -XX:+ShenandoahVerifyOptoBarriers
+ *                   -XX:+XenandoahVerify
+ *                   -XX:+IgnoreUnrecognizedVMOptions -XX:+XenandoahVerifyOptoBarriers
  *                   -XX:CompileCommand=dontinline,*::mergeImpl*
  *                   compiler.gcbarriers.UnsafeIntrinsicsTest
  */

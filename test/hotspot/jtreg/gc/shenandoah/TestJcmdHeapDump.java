@@ -26,16 +26,16 @@
  * @test id=passive
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:+ShenandoahDegeneratedGC
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:+XenandoahDegeneratedGC
  *      TestJcmdHeapDump
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:-ShenandoahDegeneratedGC
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:-XenandoahDegeneratedGC
  *      TestJcmdHeapDump
  */
 
@@ -43,20 +43,20 @@
  * @test id=aggressive
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahOOMDuringEvacALot
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahOOMDuringEvacALot
  *      TestJcmdHeapDump
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahAllocFailureALot
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahAllocFailureALot
  *      TestJcmdHeapDump
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
  *      TestJcmdHeapDump
  */
 
@@ -64,10 +64,10 @@
  * @test id=adaptive
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=adaptive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=adaptive
  *      -Dtarget=10000
  *      TestJcmdHeapDump
  */
@@ -76,10 +76,10 @@
  * @test id=static
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=static
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=static
  *      TestJcmdHeapDump
  */
 
@@ -87,10 +87,10 @@
  * @test id=compact
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=compact
  *     TestJcmdHeapDump
  */
 
@@ -98,31 +98,31 @@
  * @test id=iu-aggressive
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahOOMDuringEvacALot
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahOOMDuringEvacALot
  *      TestJcmdHeapDump
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahAllocFailureALot
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahAllocFailureALot
  *      TestJcmdHeapDump
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGCHeuristics=aggressive
  *      TestJcmdHeapDump
  */
 
 /*
  * @test id=iu
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules jdk.attach/com.sun.tools.attach
  *
  * @run main/othervm/timeout=480 -Xmx16m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu
  *      TestJcmdHeapDump
  */
 

@@ -62,7 +62,7 @@
  * @test id=shenandoah
  * @enablePreview
  * @requires jdk.foreign.linker != "UNSUPPORTED"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @library ../
  * @build jdk.test.whitebox.WhiteBox
@@ -74,7 +74,7 @@
  *   -XX:+WhiteBoxAPI
  *   --enable-native-access=ALL-UNNAMED
  *   -Xbatch
- *   -XX:+UseShenandoahGC
+ *   -XX:+UseXenandoahGC
  *   TestAsyncStackWalk
  */
 

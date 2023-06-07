@@ -24,14 +24,14 @@
 
 /*
  * @test
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC         TestSmallHeap
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx64m TestSmallHeap
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx32m TestSmallHeap
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx16m TestSmallHeap
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx8m  TestSmallHeap
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx4m  TestSmallHeap
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC         TestSmallHeap
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx64m TestSmallHeap
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx32m TestSmallHeap
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx16m TestSmallHeap
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx8m  TestSmallHeap
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx4m  TestSmallHeap
  */
 
 public class TestSmallHeap {

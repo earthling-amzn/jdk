@@ -25,7 +25,7 @@
 /**
  * @test
  * @summary Test allocation of small object to result OOM, but not to crash JVM
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestAllocSmallObj
  */
@@ -57,7 +57,7 @@ public class TestAllocSmallObj {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx16m",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     TestAllocSmallObj.class.getName(),
                     "test");
 
@@ -70,7 +70,7 @@ public class TestAllocSmallObj {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx1g",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     TestAllocSmallObj.class.getName(),
                     "test");
 

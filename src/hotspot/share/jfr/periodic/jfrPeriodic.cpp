@@ -695,10 +695,10 @@ TRACE_REQUEST_FUNC(CodeCacheConfiguration) {
   event.commit();
 }
 
-TRACE_REQUEST_FUNC(ShenandoahHeapRegionInformation) {
+TRACE_REQUEST_FUNC(XenandoahHeapRegionInformation) {
 #if INCLUDE_SHENANDOAHGC
-  if (UseShenandoahGC) {
-    VM_ShenandoahSendHeapRegionInfoEvents op;
+  if (UseXenandoahGC) {
+    VM_XenandoahSendHeapRegionInfoEvents op;
     VMThread::execute(&op);
   }
 #endif

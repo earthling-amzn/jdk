@@ -80,8 +80,8 @@ public class TestUniverse {
             expStrings.add("ZHeap");
             break;
 
-        case Shenandoah:
-            expStrings.add("Shenandoah heap");
+        case Xenandoah:
+            expStrings.add("Xenandoah heap");
             break;
         }
 
@@ -107,7 +107,7 @@ public class TestUniverse {
         }
 
         if (Compiler.isGraalEnabled()) {
-            if (gc == GC.Epsilon || gc == GC.Z || gc == GC.Shenandoah) {
+            if (gc == GC.Epsilon || gc == GC.Z || gc == GC.Xenandoah) {
                 // Not supported
                 System.out.println ("Skipped testing of " + gc + "GC, not supported by Graal");
                 return false;

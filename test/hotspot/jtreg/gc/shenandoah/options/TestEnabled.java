@@ -26,14 +26,14 @@ import java.lang.management.ManagementFactory;
 
 /*
  * @test id=default
- * @requires vm.gc.Shenandoah & vm.gc == "null"
+ * @requires vm.gc.Xenandoah & vm.gc == "null"
  * @run main/othervm -Dexpected=false -Xmx64m                                                       TestEnabled
- * @run main/othervm -Dexpected=true  -Xmx64m -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC TestEnabled
+ * @run main/othervm -Dexpected=true  -Xmx64m -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC TestEnabled
  */
 
 /*
  * @test id=already
- * @requires vm.gc.Shenandoah & vm.gc == "Shenandoah"
+ * @requires vm.gc.Xenandoah & vm.gc == "Xenandoah"
  * @run main/othervm -Dexpected=true -Xmx64m                                                        TestEnabled
  */
 public class TestEnabled {
@@ -48,7 +48,7 @@ public class TestEnabled {
 
     public static boolean isEnabled() {
         for (GarbageCollectorMXBean bean : ManagementFactory.getGarbageCollectorMXBeans()) {
-            if (bean.getName().contains("Shenandoah")) {
+            if (bean.getName().contains("Xenandoah")) {
                 return true;
             }
         }

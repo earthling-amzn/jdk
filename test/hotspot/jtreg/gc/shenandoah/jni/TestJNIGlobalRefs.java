@@ -23,21 +23,21 @@
  */
 
 /* @test id=aggressive-verify
- * @summary Test JNI Global Refs with Shenandoah
- * @requires vm.gc.Shenandoah
+ * @summary Test JNI Global Refs with Xenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/native -Xmx1g -Xlog:gc -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahVerify
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahVerify
  *      TestJNIGlobalRefs
  */
 
 /* @test id=aggressive
- * @summary Test JNI Global Refs with Shenandoah
- * @requires vm.gc.Shenandoah
+ * @summary Test JNI Global Refs with Xenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm/native -Xmx1g -Xlog:gc -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
  *      TestJNIGlobalRefs
  */
 

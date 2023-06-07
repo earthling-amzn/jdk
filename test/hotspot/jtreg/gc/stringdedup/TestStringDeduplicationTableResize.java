@@ -63,16 +63,16 @@ package gc.stringdedup;
  */
 
 /*
- * @test id=Shenandoah
+ * @test id=Xenandoah
  * @summary Test string deduplication table resize
  * @bug 8029075
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc:open
  * @modules java.base/java.lang:open
  *          java.management
- * @run driver gc.stringdedup.TestStringDeduplicationTableResize Shenandoah
+ * @run driver gc.stringdedup.TestStringDeduplicationTableResize Xenandoah
  */
 
 /*

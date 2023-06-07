@@ -26,7 +26,7 @@ package gc.arguments;
 /*
  * @test TestMaxMinHeapFreeRatioFlags
  * @summary Verify that heap size changes according to max and min heap free ratios.
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc

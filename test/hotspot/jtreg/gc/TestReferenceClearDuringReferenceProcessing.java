@@ -23,9 +23,9 @@
 
 package gc;
 
-/* @test id=Shenandoah
+/* @test id=Xenandoah
  * @bug 8256517
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.gc != "null"
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox

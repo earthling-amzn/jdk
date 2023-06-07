@@ -33,14 +33,14 @@
  */
 
 /*
- * @test id=Shenandoah
+ * @test id=Xenandoah
  * @bug 8241486
  * @summary G1/Z give warning when using LoopStripMiningIter and turn off LoopStripMiningIter (0)
  * @requires vm.flagless
  * @requires vm.flavor == "server" & !vm.graal.enabled
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
- * @run driver TestNoWarningLoopStripMiningIterSet Shenandoah
+ * @run driver TestNoWarningLoopStripMiningIterSet Xenandoah
  */
 
 /*

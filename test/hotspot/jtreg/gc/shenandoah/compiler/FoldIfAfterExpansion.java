@@ -24,11 +24,11 @@
 /**
  * @test
  * @bug 8238385
- * @summary CTW: C2 (Shenandoah) compilation fails with "Range check dependent CastII node was not removed"
- * @requires vm.gc.Shenandoah
+ * @summary CTW: C2 (Xenandoah) compilation fails with "Range check dependent CastII node was not removed"
+ * @requires vm.gc.Xenandoah
  * @modules java.base/jdk.internal.misc:+open
  *
- * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  *                   FoldIfAfterExpansion
  *
  */

@@ -83,15 +83,15 @@ import jdk.test.lib.process.OutputAnalyzer;
  */
 
 /*
- * @test id=Shenandoah
- * @requires vm.gc.Shenandoah
- * @summary Test of diagnostic command GC.heap_dump with gzipped output (Shenandoah GC)
+ * @test id=Xenandoah
+ * @requires vm.gc.Xenandoah
+ * @summary Test of diagnostic command GC.heap_dump with gzipped output (Xenandoah GC)
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.compiler
  *          java.management
  *          jdk.internal.jvmstat/sun.jvmstat.monitor
- * @run main/othervm -XX:+UseShenandoahGC HeapDumpCompressedTest
+ * @run main/othervm -XX:+UseXenandoahGC HeapDumpCompressedTest
  */
 
 /*

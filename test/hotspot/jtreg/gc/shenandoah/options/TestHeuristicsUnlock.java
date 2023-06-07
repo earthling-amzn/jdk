@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah heuristics are unlocked properly
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah heuristics are unlocked properly
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -44,10 +44,10 @@ public class TestHeuristicsUnlock {
     }
 
     public static void main(String[] args) throws Exception {
-        testWith("-XX:ShenandoahGCHeuristics=adaptive",   Mode.PRODUCT);
-        testWith("-XX:ShenandoahGCHeuristics=static",     Mode.PRODUCT);
-        testWith("-XX:ShenandoahGCHeuristics=compact",    Mode.PRODUCT);
-        testWith("-XX:ShenandoahGCHeuristics=aggressive", Mode.DIAGNOSTIC);
+        testWith("-XX:XenandoahGCHeuristics=adaptive",   Mode.PRODUCT);
+        testWith("-XX:XenandoahGCHeuristics=static",     Mode.PRODUCT);
+        testWith("-XX:XenandoahGCHeuristics=compact",    Mode.PRODUCT);
+        testWith("-XX:XenandoahGCHeuristics=aggressive", Mode.DIAGNOSTIC);
     }
 
     private static void testWith(String h, Mode mode) throws Exception {
@@ -56,7 +56,7 @@ public class TestHeuristicsUnlock {
                     "-Xmx128m",
                     "-XX:-UnlockDiagnosticVMOptions",
                     "-XX:-UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-version"
             );
@@ -77,7 +77,7 @@ public class TestHeuristicsUnlock {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:-UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-version"
             );
@@ -98,7 +98,7 @@ public class TestHeuristicsUnlock {
                     "-Xmx128m",
                     "-XX:-UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-version"
             );

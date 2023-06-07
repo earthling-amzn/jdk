@@ -25,10 +25,10 @@
 /**
  * @test
  * @summary Test JMX memory pools
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @modules java.base/jdk.internal.misc
  *          java.management
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx1g -Xms1g TestMemoryPools
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx1g -Xms1g TestMemoryPools
  */
 
 import java.lang.management.*;

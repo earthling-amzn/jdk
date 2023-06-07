@@ -66,16 +66,16 @@ package gc.arguments;
  */
 
 /*
- * @test TestUseCompressedOopsErgoShenandoah
+ * @test TestUseCompressedOopsErgoXenandoah
  * @bug 8010722
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc
  *          java.management/sun.management
  * @build jdk.test.whitebox.WhiteBox
  * @run driver jdk.test.lib.helpers.ClassFileInstaller jdk.test.whitebox.WhiteBox
- * @run driver gc.arguments.TestUseCompressedOopsErgo -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ * @run driver gc.arguments.TestUseCompressedOopsErgo -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  */
 
 public class TestUseCompressedOopsErgo {

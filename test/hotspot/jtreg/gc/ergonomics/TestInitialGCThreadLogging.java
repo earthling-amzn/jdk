@@ -53,13 +53,13 @@ public class TestInitialGCThreadLogging {
       testInitialGCThreadLogging("UseParallelGC", "GC Thread");
     }
 
-    if (GC.Shenandoah.isSupported()) {
+    if (GC.Xenandoah.isSupported()) {
       noneGCSupported = false;
-      testInitialGCThreadLogging("UseShenandoahGC", "Shenandoah GC Thread");
+      testInitialGCThreadLogging("UseXenandoahGC", "Xenandoah GC Thread");
     }
 
     if (noneGCSupported) {
-      throw new SkippedException("Skipping test because none of G1/Parallel/Shenandoah is supported.");
+      throw new SkippedException("Skipping test because none of G1/Parallel/Xenandoah is supported.");
     }
   }
 

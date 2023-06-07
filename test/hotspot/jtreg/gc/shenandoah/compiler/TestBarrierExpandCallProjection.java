@@ -24,10 +24,10 @@
 /**
  * @test
  * @bug 8252296
- * @summary Shenandoah: crash in CallNode::extract_projections
- * @requires vm.gc.Shenandoah
+ * @summary Xenandoah: crash in CallNode::extract_projections
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:-BackgroundCompilation -XX:-TieredCompilation -XX:+UseShenandoahGC -XX:CompileOnly=TestBarrierExpandCallProjection::test TestBarrierExpandCallProjection
+ * @run main/othervm -XX:-BackgroundCompilation -XX:-TieredCompilation -XX:+UseXenandoahGC -XX:CompileOnly=TestBarrierExpandCallProjection::test TestBarrierExpandCallProjection
  *
  */
 

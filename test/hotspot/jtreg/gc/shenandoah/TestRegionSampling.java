@@ -24,70 +24,70 @@
 
 /*
  * @test id=passive
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:+ShenandoahDegeneratedGC
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:+XenandoahDegeneratedGC
  *      TestRegionSampling
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:-ShenandoahDegeneratedGC
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:-XenandoahDegeneratedGC
  *      TestRegionSampling
  */
 
 /*
  * @test id=adaptive
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=adaptive
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=adaptive
  *      TestRegionSampling
  */
 
 /*
  * @test id=static
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=static
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=static
  *      TestRegionSampling
  */
 
 /*
  * @test id=compact
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=compact
  *      TestRegionSampling
  */
 
 /*
  * @test id=aggressive
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
  *      TestRegionSampling
  */
 
 /*
  * @test id=iu-aggressive
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGCHeuristics=aggressive
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGCHeuristics=aggressive
  *      TestRegionSampling
  */
 
 /*
  * @test id=iu
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+ShenandoahRegionSampling
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu
+ * @run main/othervm -Xmx1g -Xms1g -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+XenandoahRegionSampling
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu
  *      TestRegionSampling
  *
  */

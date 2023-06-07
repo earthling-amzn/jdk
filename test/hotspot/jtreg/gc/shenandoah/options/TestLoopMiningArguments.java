@@ -25,7 +25,7 @@
 /*
  * @test
  * @summary Test that loop mining arguments are sane
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.flavor == "server"
  * @library /test/lib
  * @run driver TestLoopMiningArguments
@@ -55,54 +55,54 @@ public class TestLoopMiningArguments {
     }
 
     public static void main(String[] args) throws Exception {
-        testWith("Shenandoah should have CLS and LSM enabled",
+        testWith("Xenandoah should have CLS and LSM enabled",
                 true, 1000,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC"
+                "-XX:+UseXenandoahGC"
         );
 
-        testWith("Shenandoah with +CLS should set LSM = 1",
+        testWith("Xenandoah with +CLS should set LSM = 1",
                 true, 1,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:+UseCountedLoopSafepoints"
         );
 
-        testWith("Shenandoah GC with +CLS should not override LSM>1",
+        testWith("Xenandoah GC with +CLS should not override LSM>1",
                 true, 10,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:LoopStripMiningIter=10",
                 "-XX:+UseCountedLoopSafepoints"
         );
 
-        testWith("Shenandoah GC with +CLS should not override LSM=1",
+        testWith("Xenandoah GC with +CLS should not override LSM=1",
                 true, 1,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:LoopStripMiningIter=1",
                 "-XX:+UseCountedLoopSafepoints"
         );
 
-        testWith("Shenandoah GC with +CLS should override LSM=0 to 1",
+        testWith("Xenandoah GC with +CLS should override LSM=0 to 1",
                 true, 1,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:LoopStripMiningIter=0",
                 "-XX:+UseCountedLoopSafepoints"
         );
 
-        testWith("Shenandoah GC with -CLS should set LSM = 0",
+        testWith("Xenandoah GC with -CLS should set LSM = 0",
                 false, 0,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:-UseCountedLoopSafepoints"
         );
 
-        testWith("Shenandoah GC with -CLS should override LSM to 0",
+        testWith("Xenandoah GC with -CLS should override LSM to 0",
                 false, 0,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:LoopStripMiningIter=10",
                 "-XX:-UseCountedLoopSafepoints"
         );

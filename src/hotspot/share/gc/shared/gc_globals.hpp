@@ -128,8 +128,8 @@
   product(bool, ZGenerational, false,                                       \
           "Use the generational version of ZGC")                            \
                                                                             \
-  product(bool, UseShenandoahGC, false,                                     \
-          "Use the Shenandoah garbage collector")                           \
+  product(bool, UseXenandoahGC, false,                                     \
+          "Use the Xenandoah garbage collector")                           \
                                                                             \
   product(uint, ParallelGCThreads, 0,                                       \
           "Number of parallel threads parallel gc will use")                \

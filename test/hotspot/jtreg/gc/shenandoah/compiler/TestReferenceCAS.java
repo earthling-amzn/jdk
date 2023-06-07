@@ -28,29 +28,29 @@
 
 /*
  * @test id=default
- * @summary Shenandoah reference CAS test
- * @requires vm.gc.Shenandoah
+ * @summary Xenandoah reference CAS test
+ * @requires vm.gc.Xenandoah
  * @modules java.base/jdk.internal.misc:+open
  *
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC                                                 TestReferenceCAS
- * @run main/othervm -Diters=100   -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -Xint                                           TestReferenceCAS
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:-TieredCompilation                          TestReferenceCAS
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:TieredStopAtLevel=1                         TestReferenceCAS
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:TieredStopAtLevel=4                         TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC                                                 TestReferenceCAS
+ * @run main/othervm -Diters=100   -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -Xint                                           TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:-TieredCompilation                          TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:TieredStopAtLevel=1                         TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:TieredStopAtLevel=4                         TestReferenceCAS
  */
 
 /*
  * @test id=no-coops
- * @summary Shenandoah reference CAS test
- * @requires vm.gc.Shenandoah
+ * @summary Xenandoah reference CAS test
+ * @requires vm.gc.Xenandoah
  * @requires vm.bits == "64"
  * @modules java.base/jdk.internal.misc:+open
  *
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:-UseCompressedOops                          TestReferenceCAS
- * @run main/othervm -Diters=100   -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:-UseCompressedOops -Xint                    TestReferenceCAS
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:-UseCompressedOops -XX:-TieredCompilation   TestReferenceCAS
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:-UseCompressedOops -XX:TieredStopAtLevel=1  TestReferenceCAS
- * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCHeuristics=aggressive -XX:+UseShenandoahGC -XX:-UseCompressedOops -XX:TieredStopAtLevel=4  TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:-UseCompressedOops                          TestReferenceCAS
+ * @run main/othervm -Diters=100   -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:-UseCompressedOops -Xint                    TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:-UseCompressedOops -XX:-TieredCompilation   TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:-UseCompressedOops -XX:TieredStopAtLevel=1  TestReferenceCAS
+ * @run main/othervm -Diters=20000 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCHeuristics=aggressive -XX:+UseXenandoahGC -XX:-UseCompressedOops -XX:TieredStopAtLevel=4  TestReferenceCAS
  */
 
 import java.lang.reflect.Field;

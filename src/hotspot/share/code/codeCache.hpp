@@ -76,7 +76,7 @@
 class ExceptionCache;
 class KlassDepChange;
 class OopClosure;
-class ShenandoahParallelCodeHeapIterator;
+class XenandoahParallelCodeHeapIterator;
 class NativePostCallNop;
 class DeoptimizationScope;
 
@@ -86,7 +86,7 @@ class CodeCache : AllStatic {
   template <class T, class Filter, bool is_compiled_method> friend class CodeBlobIterator;
   friend class WhiteBox;
   friend class CodeCacheLoader;
-  friend class ShenandoahParallelCodeHeapIterator;
+  friend class XenandoahParallelCodeHeapIterator;
  private:
   // CodeHeaps of the cache
   static GrowableArray<CodeHeap*>* _heaps;

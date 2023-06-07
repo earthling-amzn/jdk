@@ -27,38 +27,38 @@ package gc.stress.gclocker;
 /*
  * @test id=default
  * @library /
- * @requires vm.gc.Shenandoah
- * @summary Stress Shenandoah's JNI handling by calling GetPrimitiveArrayCritical while concurrently filling up old gen.
+ * @requires vm.gc.Xenandoah
+ * @summary Stress Xenandoah's JNI handling by calling GetPrimitiveArrayCritical while concurrently filling up old gen.
  *
  * @run main/native/othervm/timeout=200 -Xlog:gc*=info -Xms1500m -Xmx1500m -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions
- *      -XX:+UseShenandoahGC
- *      -XX:+ShenandoahVerify
- *      gc.stress.gclocker.TestGCLockerWithShenandoah
+ *      -XX:+UseXenandoahGC
+ *      -XX:+XenandoahVerify
+ *      gc.stress.gclocker.TestGCLockerWithXenandoah
  *
  * @run main/native/othervm/timeout=200 -Xlog:gc*=info -Xms1500m -Xmx1500m -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions
- *      -XX:+UseShenandoahGC
- *      gc.stress.gclocker.TestGCLockerWithShenandoah
+ *      -XX:+UseXenandoahGC
+ *      gc.stress.gclocker.TestGCLockerWithXenandoah
  */
 
 /*
  * @test id=aggressive
  * @library /
- * @requires vm.gc.Shenandoah
- * @summary Stress Shenandoah's JNI handling by calling GetPrimitiveArrayCritical while concurrently filling up old gen.
+ * @requires vm.gc.Xenandoah
+ * @summary Stress Xenandoah's JNI handling by calling GetPrimitiveArrayCritical while concurrently filling up old gen.
  *
  * @run main/native/othervm/timeout=200 -Xlog:gc*=info -Xms1500m -Xmx1500m -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahOOMDuringEvacALot
- *      gc.stress.gclocker.TestGCLockerWithShenandoah
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahOOMDuringEvacALot
+ *      gc.stress.gclocker.TestGCLockerWithXenandoah
  *
  * @run main/native/othervm/timeout=200 -Xlog:gc*=info -Xms1500m -Xmx1500m -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
- *      -XX:+ShenandoahAllocFailureALot
- *      gc.stress.gclocker.TestGCLockerWithShenandoah
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
+ *      -XX:+XenandoahAllocFailureALot
+ *      gc.stress.gclocker.TestGCLockerWithXenandoah
  */
-public class TestGCLockerWithShenandoah {
+public class TestGCLockerWithXenandoah {
     public static void main(String[] args) {
-        String[] testArgs = {"2", "Shenandoah", "0"};
+        String[] testArgs = {"2", "Xenandoah", "0"};
         TestGCLocker.main(testArgs);
     }
 }

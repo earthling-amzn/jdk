@@ -24,7 +24,7 @@
 
 /* @test
  * @summary Test that disabling wrong barriers fails early
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestWrongBarrierDisable
  */
@@ -38,29 +38,29 @@ public class TestWrongBarrierDisable {
 
     public static void main(String[] args) throws Exception {
         String[] concurrent = {
-                "ShenandoahLoadRefBarrier",
-                "ShenandoahSATBBarrier",
-                "ShenandoahCASBarrier",
-                "ShenandoahCloneBarrier",
-                "ShenandoahNMethodBarrier",
-                "ShenandoahStackWatermarkBarrier",
+                "XenandoahLoadRefBarrier",
+                "XenandoahSATBBarrier",
+                "XenandoahCASBarrier",
+                "XenandoahCloneBarrier",
+                "XenandoahNMethodBarrier",
+                "XenandoahStackWatermarkBarrier",
         };
         String[] iu = {
-                "ShenandoahLoadRefBarrier",
-                "ShenandoahIUBarrier",
-                "ShenandoahCASBarrier",
-                "ShenandoahCloneBarrier",
-                "ShenandoahNMethodBarrier",
-                "ShenandoahStackWatermarkBarrier",
+                "XenandoahLoadRefBarrier",
+                "XenandoahIUBarrier",
+                "XenandoahCASBarrier",
+                "XenandoahCloneBarrier",
+                "XenandoahNMethodBarrier",
+                "XenandoahStackWatermarkBarrier",
         };
 
-        shouldFailAll("-XX:ShenandoahGCHeuristics=adaptive",   concurrent);
-        shouldFailAll("-XX:ShenandoahGCHeuristics=static",     concurrent);
-        shouldFailAll("-XX:ShenandoahGCHeuristics=compact",    concurrent);
-        shouldFailAll("-XX:ShenandoahGCHeuristics=aggressive", concurrent);
-        shouldFailAll("-XX:ShenandoahGCMode=iu",               iu);
-        shouldPassAll("-XX:ShenandoahGCMode=passive",          concurrent);
-        shouldPassAll("-XX:ShenandoahGCMode=passive",          iu);
+        shouldFailAll("-XX:XenandoahGCHeuristics=adaptive",   concurrent);
+        shouldFailAll("-XX:XenandoahGCHeuristics=static",     concurrent);
+        shouldFailAll("-XX:XenandoahGCHeuristics=compact",    concurrent);
+        shouldFailAll("-XX:XenandoahGCHeuristics=aggressive", concurrent);
+        shouldFailAll("-XX:XenandoahGCMode=iu",               iu);
+        shouldPassAll("-XX:XenandoahGCMode=passive",          concurrent);
+        shouldPassAll("-XX:XenandoahGCMode=passive",          iu);
     }
 
     private static void shouldFailAll(String h, String[] barriers) throws Exception {
@@ -69,7 +69,7 @@ public class TestWrongBarrierDisable {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-XX:-" + b,
                     "-version"
@@ -87,7 +87,7 @@ public class TestWrongBarrierDisable {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-XX:-" + b,
                     "-version"

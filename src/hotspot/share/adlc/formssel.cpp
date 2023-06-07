@@ -786,8 +786,8 @@ bool InstructForm::captures_bottom_type(FormDict &globals) const {
        !strcmp(_matrule->_rChild->_opType,"RotateLeft")   ||
        !strcmp(_matrule->_rChild->_opType,"RotateRight")   ||
 #if INCLUDE_SHENANDOAHGC
-       !strcmp(_matrule->_rChild->_opType,"ShenandoahCompareAndExchangeP") ||
-       !strcmp(_matrule->_rChild->_opType,"ShenandoahCompareAndExchangeN") ||
+       !strcmp(_matrule->_rChild->_opType,"XenandoahCompareAndExchangeP") ||
+       !strcmp(_matrule->_rChild->_opType,"XenandoahCompareAndExchangeN") ||
 #endif
        !strcmp(_matrule->_rChild->_opType,"StrInflatedCopy") ||
        !strcmp(_matrule->_rChild->_opType,"VectorCmpMasked")||
@@ -3521,7 +3521,7 @@ int MatchNode::needs_ideal_memory_edge(FormDict &globals) const {
     "WeakCompareAndSwapB", "WeakCompareAndSwapS", "WeakCompareAndSwapI", "WeakCompareAndSwapL", "WeakCompareAndSwapP", "WeakCompareAndSwapN",
     "CompareAndExchangeB", "CompareAndExchangeS", "CompareAndExchangeI", "CompareAndExchangeL", "CompareAndExchangeP", "CompareAndExchangeN",
 #if INCLUDE_SHENANDOAHGC
-    "ShenandoahCompareAndSwapN", "ShenandoahCompareAndSwapP", "ShenandoahWeakCompareAndSwapP", "ShenandoahWeakCompareAndSwapN", "ShenandoahCompareAndExchangeP", "ShenandoahCompareAndExchangeN",
+    "XenandoahCompareAndSwapN", "XenandoahCompareAndSwapP", "XenandoahWeakCompareAndSwapP", "XenandoahWeakCompareAndSwapN", "XenandoahCompareAndExchangeP", "XenandoahCompareAndExchangeN",
 #endif
     "StoreCM",
     "GetAndSetB", "GetAndSetS", "GetAndAddI", "GetAndSetI", "GetAndSetP",

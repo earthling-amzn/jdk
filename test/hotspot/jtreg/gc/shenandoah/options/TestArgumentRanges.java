@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah arguments are checked for ranges where applicable
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah arguments are checked for ranges where applicable
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -37,9 +37,9 @@ import jdk.test.lib.process.OutputAnalyzer;
 
 public class TestArgumentRanges {
     public static void main(String[] args) throws Exception {
-        testRange("ShenandoahGarbageThreshold", 0, 100);
-        testRange("ShenandoahMinFreeThreshold", 0, 100);
-        testRange("ShenandoahAllocationThreshold", 0, 100);
+        testRange("XenandoahGarbageThreshold", 0, 100);
+        testRange("XenandoahMinFreeThreshold", 0, 100);
+        testRange("XenandoahAllocationThreshold", 0, 100);
         testHeuristics();
     }
 
@@ -50,8 +50,8 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahGCHeuristics=aggressive",
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahGCHeuristics=aggressive",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -61,8 +61,8 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahGCHeuristics=static",
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahGCHeuristics=static",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -72,11 +72,11 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahGCHeuristics=fluff",
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahGCHeuristics=fluff",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Unknown -XX:ShenandoahGCHeuristics option");
+            output.shouldMatch("Unknown -XX:XenandoahGCHeuristics option");
             output.shouldHaveExitValue(1);
         }
     }
@@ -87,7 +87,7 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-XX:" + option + "=" + (max + 1),
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
@@ -98,7 +98,7 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-XX:" + option + "=" + max,
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
@@ -109,7 +109,7 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-XX:" + option + "=" + (min - 1),
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
@@ -120,7 +120,7 @@ public class TestArgumentRanges {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-XX:" + option + "=" + min,
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());

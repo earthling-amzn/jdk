@@ -47,13 +47,13 @@ import jdk.internal.vm.annotation.Contended;
  */
 
 /*
- * @test TestHumongousReferenceObjectShenandoah
+ * @test TestHumongousReferenceObjectXenandoah
  * @summary Test that verifies that iteration over large, plain Java objects, that potentially cross region boundaries, with references in them works.
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @bug 8151499 8153734
  * @modules java.base/jdk.internal.vm.annotation
- * @run main/othervm -XX:+EnableContended -XX:-RestrictContended -Xms128m -Xmx128m -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahRegionSize=8M -XX:ContendedPaddingWidth=8192 gc.TestHumongousReferenceObject
- * @run main/othervm -XX:+EnableContended -XX:-RestrictContended -Xms128m -Xmx128m -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahRegionSize=8M -XX:ContendedPaddingWidth=8192 -XX:+UnlockDiagnosticVMOptions -XX:+ShenandoahVerify gc.TestHumongousReferenceObject
+ * @run main/othervm -XX:+EnableContended -XX:-RestrictContended -Xms128m -Xmx128m -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahRegionSize=8M -XX:ContendedPaddingWidth=8192 gc.TestHumongousReferenceObject
+ * @run main/othervm -XX:+EnableContended -XX:-RestrictContended -Xms128m -Xmx128m -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahRegionSize=8M -XX:ContendedPaddingWidth=8192 -XX:+UnlockDiagnosticVMOptions -XX:+XenandoahVerify gc.TestHumongousReferenceObject
  */
 public class TestHumongousReferenceObject {
 

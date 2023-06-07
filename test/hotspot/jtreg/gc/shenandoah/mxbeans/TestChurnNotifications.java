@@ -26,16 +26,16 @@
  * @test id=passive
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:+ShenandoahDegeneratedGC -Dprecise=true
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:+XenandoahDegeneratedGC -Dprecise=true
  *      TestChurnNotifications
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:-ShenandoahDegeneratedGC -Dprecise=true
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:-XenandoahDegeneratedGC -Dprecise=true
  *      TestChurnNotifications
  */
 
@@ -43,10 +43,10 @@
  * @test id=aggressive
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
  *      -Dprecise=false
  *      TestChurnNotifications
  */
@@ -55,10 +55,10 @@
  * @test id=adaptive
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=adaptive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=adaptive
  *      -Dprecise=false
  *      TestChurnNotifications
  */
@@ -67,10 +67,10 @@
  * @test id=static
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=static
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=static
  *      -Dprecise=false
  *      TestChurnNotifications
  */
@@ -79,10 +79,10 @@
  * @test id=compact
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=compact
  *      -Dprecise=false
  *      TestChurnNotifications
  */
@@ -91,15 +91,15 @@
  * @test id=iu
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGCHeuristics=aggressive
  *      -Dprecise=false
  *      TestChurnNotifications
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu
  *      -Dprecise=false
  *      TestChurnNotifications
  */
@@ -141,8 +141,8 @@ public class TestChurnNotifications {
                     Map<String, MemoryUsage> mapBefore = info.getGcInfo().getMemoryUsageBeforeGc();
                     Map<String, MemoryUsage> mapAfter = info.getGcInfo().getMemoryUsageAfterGc();
 
-                    MemoryUsage before = mapBefore.get("Shenandoah");
-                    MemoryUsage after = mapAfter.get("Shenandoah");
+                    MemoryUsage before = mapBefore.get("Xenandoah");
+                    MemoryUsage after = mapAfter.get("Xenandoah");
 
                     if ((before != null) && (after != null)) {
                         long diff = before.getUsed() - after.getUsed();

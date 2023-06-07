@@ -27,7 +27,7 @@ package gc.arguments;
  * @test TestNewSizeFlags
  * @bug 8025166
  * @summary Verify that young gen size conforms values specified by NewSize, MaxNewSize and Xmn options
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc

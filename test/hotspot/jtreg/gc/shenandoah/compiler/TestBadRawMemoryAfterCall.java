@@ -24,11 +24,11 @@
 /**
  * @test
  * @bug 8258393 8263376
- * @summary Shenandoah: "graph should be schedulable" assert failure
+ * @summary Xenandoah: "graph should be schedulable" assert failure
  * @requires vm.flavor == "server"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UseShenandoahGC -XX:-BackgroundCompilation TestBadRawMemoryAfterCall
+ * @run main/othervm -XX:+UseXenandoahGC -XX:-BackgroundCompilation TestBadRawMemoryAfterCall
  *
  */
 

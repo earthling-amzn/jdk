@@ -24,14 +24,14 @@
 
 /*
  * @test
- * @summary Check that Shenandoah's AlwaysPreTouch does not fire asserts
- * @requires vm.gc.Shenandoah
+ * @summary Check that Xenandoah's AlwaysPreTouch does not fire asserts
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch                                  -Xmx1g TestAlwaysPreTouch
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:ConcGCThreads=2              -Xmx1g TestAlwaysPreTouch
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch -XX:ParallelGCThreads=2          -Xmx1g TestAlwaysPreTouch
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch                         -Xms128m -Xmx1g TestAlwaysPreTouch
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+AlwaysPreTouch                           -Xms1g -Xmx1g TestAlwaysPreTouch
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+AlwaysPreTouch                                  -Xmx1g TestAlwaysPreTouch
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+AlwaysPreTouch -XX:ConcGCThreads=2              -Xmx1g TestAlwaysPreTouch
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+AlwaysPreTouch -XX:ParallelGCThreads=2          -Xmx1g TestAlwaysPreTouch
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+AlwaysPreTouch                         -Xms128m -Xmx1g TestAlwaysPreTouch
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+AlwaysPreTouch                           -Xms1g -Xmx1g TestAlwaysPreTouch
  */
 
 public class TestAlwaysPreTouch {

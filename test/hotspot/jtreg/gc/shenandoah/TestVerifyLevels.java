@@ -24,13 +24,13 @@
 
 /*
  * @test
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+ShenandoahVerify -XX:ShenandoahVerifyLevel=0 TestVerifyLevels
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+ShenandoahVerify -XX:ShenandoahVerifyLevel=1 TestVerifyLevels
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+ShenandoahVerify -XX:ShenandoahVerifyLevel=2 TestVerifyLevels
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+ShenandoahVerify -XX:ShenandoahVerifyLevel=3 TestVerifyLevels
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+ShenandoahVerify -XX:ShenandoahVerifyLevel=4 TestVerifyLevels
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+XenandoahVerify -XX:XenandoahVerifyLevel=0 TestVerifyLevels
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+XenandoahVerify -XX:XenandoahVerifyLevel=1 TestVerifyLevels
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+XenandoahVerify -XX:XenandoahVerifyLevel=2 TestVerifyLevels
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+XenandoahVerify -XX:XenandoahVerifyLevel=3 TestVerifyLevels
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+UnlockDiagnosticVMOptions -Xmx128m -XX:+XenandoahVerify -XX:XenandoahVerifyLevel=4 TestVerifyLevels
  */
 
 public class TestVerifyLevels {

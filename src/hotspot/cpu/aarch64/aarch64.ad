@@ -1462,8 +1462,8 @@ source %{
     case Op_CompareAndSwapL:
     case Op_CompareAndSwapP:
     case Op_CompareAndSwapN:
-    case Op_ShenandoahCompareAndSwapP:
-    case Op_ShenandoahCompareAndSwapN:
+    case Op_XenandoahCompareAndSwapP:
+    case Op_XenandoahCompareAndSwapN:
     case Op_CompareAndSwapB:
     case Op_CompareAndSwapS:
     case Op_GetAndSetI:
@@ -1485,10 +1485,10 @@ source %{
     case Op_WeakCompareAndSwapL:
     case Op_WeakCompareAndSwapP:
     case Op_WeakCompareAndSwapN:
-    case Op_ShenandoahWeakCompareAndSwapP:
-    case Op_ShenandoahWeakCompareAndSwapN:
-    case Op_ShenandoahCompareAndExchangeP:
-    case Op_ShenandoahCompareAndExchangeN:
+    case Op_XenandoahWeakCompareAndSwapP:
+    case Op_XenandoahWeakCompareAndSwapN:
+    case Op_XenandoahCompareAndExchangeP:
+    case Op_XenandoahCompareAndExchangeN:
       return maybe_volatile;
     default:
       return false;

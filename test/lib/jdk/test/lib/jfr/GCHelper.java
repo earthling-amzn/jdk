@@ -453,7 +453,7 @@ public class GCHelper {
         return g1HeapRegionTypes.contains(type);
     }
 
-    public static boolean assertIsValidShenandoahHeapRegionState(final String state) {
+    public static boolean assertIsValidXenandoahHeapRegionState(final String state) {
         if (!shenandoahHeapRegionStates.contains(state)) {
             throw new AssertionError("Unknown state '" + state + "', valid heap region states are " + shenandoahHeapRegionStates);
         }

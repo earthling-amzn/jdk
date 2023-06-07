@@ -107,8 +107,8 @@ public class EventNames {
     public static final String G1HeapSummary = PREFIX + "G1HeapSummary";
     public static final String G1HeapRegionInformation = PREFIX + "G1HeapRegionInformation";
     public static final String G1HeapRegionTypeChange = PREFIX + "G1HeapRegionTypeChange";
-    public static final String ShenandoahHeapRegionInformation = PREFIX + "ShenandoahHeapRegionInformation";
-    public static final String ShenandoahHeapRegionStateChange = PREFIX + "ShenandoahHeapRegionStateChange";
+    public static final String XenandoahHeapRegionInformation = PREFIX + "XenandoahHeapRegionInformation";
+    public static final String XenandoahHeapRegionStateChange = PREFIX + "XenandoahHeapRegionStateChange";
     public static final String TenuringDistribution = PREFIX + "TenuringDistribution";
     public static final String GarbageCollection = PREFIX + "GarbageCollection";
     public static final String ParallelOldGarbageCollection = PREFIX + "ParallelOldGarbageCollection";

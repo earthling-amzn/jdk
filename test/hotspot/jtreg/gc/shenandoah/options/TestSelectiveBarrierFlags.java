@@ -25,7 +25,7 @@
 /* @test
  * @summary Test selective barrier enabling works, by aggressively compiling HelloWorld with combinations
  *          of barrier flags
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestSelectiveBarrierFlags -Xint
  * @run driver TestSelectiveBarrierFlags -Xbatch -XX:CompileThreshold=100 -XX:TieredStopAtLevel=1
@@ -34,10 +34,10 @@
 /* @test
  * @summary Test selective barrier enabling works, by aggressively compiling HelloWorld with combinations
  *          of barrier flags
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.debug
  * @library /test/lib
- * @run driver TestSelectiveBarrierFlags -Xbatch -XX:CompileThreshold=100 -XX:-TieredCompilation -XX:+ShenandoahVerifyOptoBarriers
+ * @run driver TestSelectiveBarrierFlags -Xbatch -XX:CompileThreshold=100 -XX:-TieredCompilation -XX:+XenandoahVerifyOptoBarriers
  */
 
 import java.util.*;
@@ -50,12 +50,12 @@ public class TestSelectiveBarrierFlags {
 
     public static void main(String[] args) throws Exception {
         String[][] opts = {
-                new String[] { "ShenandoahLoadRefBarrier" },
-                new String[] { "ShenandoahSATBBarrier", "ShenandoahIUBarrier" },
-                new String[] { "ShenandoahCASBarrier" },
-                new String[] { "ShenandoahCloneBarrier" },
-                new String[] { "ShenandoahNMethodBarrier" },
-                new String[] { "ShenandoahStackWatermarkBarrier" }
+                new String[] { "XenandoahLoadRefBarrier" },
+                new String[] { "XenandoahSATBBarrier", "XenandoahIUBarrier" },
+                new String[] { "XenandoahCASBarrier" },
+                new String[] { "XenandoahCloneBarrier" },
+                new String[] { "XenandoahNMethodBarrier" },
+                new String[] { "XenandoahStackWatermarkBarrier" }
         };
 
         int size = 1;
@@ -73,8 +73,8 @@ public class TestSelectiveBarrierFlags {
             conf.add("-Xmx128m");
             conf.add("-XX:+UnlockDiagnosticVMOptions");
             conf.add("-XX:+UnlockExperimentalVMOptions");
-            conf.add("-XX:+UseShenandoahGC");
-            conf.add("-XX:ShenandoahGCMode=passive");
+            conf.add("-XX:+UseXenandoahGC");
+            conf.add("-XX:XenandoahGCMode=passive");
 
             StringBuilder sb = new StringBuilder();
             for (String[] l : opts) {

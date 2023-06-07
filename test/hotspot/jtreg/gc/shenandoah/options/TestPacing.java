@@ -24,10 +24,10 @@
 
 /*
  * @test
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:-ShenandoahPacing -Xmx128m TestPacing
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+ShenandoahPacing -Xmx128m TestPacing
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:-XenandoahPacing -Xmx128m TestPacing
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+XenandoahPacing -Xmx128m TestPacing
  */
 
 public class TestPacing {

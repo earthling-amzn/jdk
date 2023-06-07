@@ -25,10 +25,10 @@
  * @test
  * @key stress randomness
  * @summary Logic that moves a null check in the expanded barrier may cause a memory access that doesn't depend on the barrier to bypass the null check
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.flavor == "server"
  * @run main/othervm -XX:-BackgroundCompilation -XX:-UseOnStackReplacement -XX:-TieredCompilation
- *                   -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ *                   -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  *                   -XX:+StressGCM -XX:+StressLCM TestExpandedWBLostNullCheckDep
  */
 

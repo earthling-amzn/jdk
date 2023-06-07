@@ -25,7 +25,7 @@
 /**
  * @test
  * @summary Test that allocation of the object larger than heap fails predictably
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestAllocLargerThanHeap
  */
@@ -53,7 +53,7 @@ public class TestAllocLargerThanHeap {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx16m",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     TestAllocLargerThanHeap.class.getName(),
                     "test");
 
@@ -66,7 +66,7 @@ public class TestAllocLargerThanHeap {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx1g",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     TestAllocLargerThanHeap.class.getName(),
                     "test");
 

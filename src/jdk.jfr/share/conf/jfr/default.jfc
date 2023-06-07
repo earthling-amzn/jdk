@@ -512,12 +512,12 @@
       <setting name="enabled" control="gc-enabled-high">false</setting>
     </event>
 
-    <event name="jdk.ShenandoahHeapRegionInformation">
+    <event name="jdk.XenandoahHeapRegionInformation">
       <setting name="enabled" control="gc-enabled-high">false</setting>
       <setting name="period">everyChunk</setting>
     </event>
 
-    <event name="jdk.ShenandoahHeapRegionStateChange">
+    <event name="jdk.XenandoahHeapRegionStateChange">
       <setting name="enabled" control="gc-enabled-high">false</setting>
     </event>
 

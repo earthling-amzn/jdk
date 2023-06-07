@@ -24,14 +24,14 @@
 /**
  * @test
  * @summary cast before unsafe access moved in dominating null check null path causes crash
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @modules java.base/jdk.internal.misc:+open
  *
  * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation
  *                   TestMaybeNullUnsafeAccess
  *
  * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation
- *                   -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ *                   -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  *                   TestMaybeNullUnsafeAccess
  *
  */

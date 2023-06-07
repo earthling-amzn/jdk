@@ -24,23 +24,23 @@
 package gc.startup_warnings;
 
 /*
-* @test TestShenandoah
-* @requires vm.gc.Shenandoah
+* @test TestXenandoah
+* @requires vm.gc.Xenandoah
 * @bug 8006398
-* @summary Test that the Shenandoah collector does not print a warning message
+* @summary Test that the Xenandoah collector does not print a warning message
 * @library /test/lib
 * @modules java.base/jdk.internal.misc
 *          java.management
-* @run driver gc.startup_warnings.TestShenandoah
+* @run driver gc.startup_warnings.TestXenandoah
 */
 
 import jdk.test.lib.process.ProcessTools;
 import jdk.test.lib.process.OutputAnalyzer;
 
-public class TestShenandoah {
+public class TestXenandoah {
 
   public static void main(String args[]) throws Exception {
-    ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions", "-XX:+UseShenandoahGC", "-version");
+    ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions", "-XX:+UseXenandoahGC", "-version");
     OutputAnalyzer output = new OutputAnalyzer(pb.start());
     output.shouldNotContain("deprecated");
     output.shouldNotContain("error");

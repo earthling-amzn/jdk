@@ -37,14 +37,14 @@ import jdk.test.lib.jfr.GCHelper;
 /**
  * @test
  * @bug 8221507
- * @requires vm.hasJFR & vm.gc.Shenandoah
+ * @requires vm.hasJFR & vm.gc.Xenandoah
  * @key jfr
  * @library /test/lib /test/jdk
- * @run main/othervm  -Xmx32m -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGarbageThreshold=1 jdk.jfr.event.gc.detailed.TestShenandoahHeapRegionStateChangeEvent
+ * @run main/othervm  -Xmx32m -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGarbageThreshold=1 jdk.jfr.event.gc.detailed.TestXenandoahHeapRegionStateChangeEvent
  */
 
-public class TestShenandoahHeapRegionStateChangeEvent {
-    private final static String EVENT_NAME = EventNames.ShenandoahHeapRegionStateChange;
+public class TestXenandoahHeapRegionStateChangeEvent {
+    private final static String EVENT_NAME = EventNames.XenandoahHeapRegionStateChange;
 
     public static void main(String[] args) throws Exception {
         try (Recording recording = new Recording()) {
@@ -64,8 +64,8 @@ public class TestShenandoahHeapRegionStateChangeEvent {
 
             for (RecordedEvent event : events) {
                 Events.assertField(event, "index").notEqual(-1);
-                GCHelper.assertIsValidShenandoahHeapRegionState(Events.assertField(event, "from").getValue());
-                GCHelper.assertIsValidShenandoahHeapRegionState(Events.assertField(event, "to").getValue());
+                GCHelper.assertIsValidXenandoahHeapRegionState(Events.assertField(event, "from").getValue());
+                GCHelper.assertIsValidXenandoahHeapRegionState(Events.assertField(event, "to").getValue());
                 Events.assertField(event, "used").atMost(1L*1024*1024);
             }
         }

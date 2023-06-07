@@ -26,7 +26,7 @@
  * @test
  * @summary Test heap dump triggered heap object iteration
  * @bug 8225014
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestObjItrWithHeapDump
  */
@@ -67,10 +67,10 @@ public class TestObjItrWithHeapDump {
             for (String h : heuristics) {
                 testWith("-XX:+UnlockDiagnosticVMOptions",
                          "-XX:+UnlockExperimentalVMOptions",
-                         "-XX:+UseShenandoahGC",
-                         "-XX:-ShenandoahDegeneratedGC",
-                         "-XX:ShenandoahGCMode=" + mode,
-                         "-XX:ShenandoahGCHeuristics=" + h,
+                         "-XX:+UseXenandoahGC",
+                         "-XX:-XenandoahDegeneratedGC",
+                         "-XX:XenandoahGCMode=" + mode,
+                         "-XX:XenandoahGCHeuristics=" + h,
                          "-Xlog:gc+classhisto=trace",
                          "-XX:-ExplicitGCInvokesConcurrent",
                          "-Xmx512M"

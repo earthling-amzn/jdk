@@ -24,31 +24,31 @@
 package gc.shenandoah;
 
 /* @test id=satb
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @run driver jdk.test.lib.helpers.ClassFileInstaller jdk.test.whitebox.WhiteBox
  * @run main/othervm
  *      -Xbootclasspath/a:.
  *      -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *      -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=satb
- *      gc.shenandoah.TestReferenceRefersToShenandoah
+ *      -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=satb
+ *      gc.shenandoah.TestReferenceRefersToXenandoah
  */
 
 /* @test id=iu
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @run driver jdk.test.lib.helpers.ClassFileInstaller jdk.test.whitebox.WhiteBox
  * @run main/othervm
  *      -Xbootclasspath/a:.
  *      -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *      -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu
- *      gc.shenandoah.TestReferenceRefersToShenandoah
+ *      -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu
+ *      gc.shenandoah.TestReferenceRefersToXenandoah
  */
 
 /* @test id=satb-100
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @modules java.base
@@ -56,12 +56,12 @@ package gc.shenandoah;
  * @run main/othervm
  *      -Xbootclasspath/a:.
  *      -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *      -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=satb -XX:ShenandoahGarbageThreshold=100 -Xmx100m
- *      gc.shenandoah.TestReferenceRefersToShenandoah
+ *      -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=satb -XX:XenandoahGarbageThreshold=100 -Xmx100m
+ *      gc.shenandoah.TestReferenceRefersToXenandoah
  */
 
 /* @test id=iu-100
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @modules java.base
@@ -69,8 +69,8 @@ package gc.shenandoah;
  * @run main/othervm
  *      -Xbootclasspath/a:.
  *      -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *      -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGarbageThreshold=100 -Xmx100m
- *      gc.shenandoah.TestReferenceRefersToShenandoah
+ *      -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGarbageThreshold=100 -Xmx100m
+ *      gc.shenandoah.TestReferenceRefersToXenandoah
  */
 
 import java.lang.ref.PhantomReference;
@@ -79,7 +79,7 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import jdk.test.whitebox.WhiteBox;
 
-public class TestReferenceRefersToShenandoah {
+public class TestReferenceRefersToXenandoah {
     private static final WhiteBox WB = WhiteBox.getWhiteBox();
 
     private static final class TestObject {
@@ -200,8 +200,8 @@ public class TestReferenceRefersToShenandoah {
         testObject4 = null;
     }
 
-    private static boolean isShenandoahIUMode() {
-        return "iu".equals(WB.getStringVMFlag("ShenandoahGCMode"));
+    private static boolean isXenandoahIUMode() {
+        return "iu".equals(WB.getStringVMFlag("XenandoahGCMode"));
     }
 
     private static void testConcurrentCollection() throws Exception {
@@ -240,9 +240,9 @@ public class TestReferenceRefersToShenandoah {
             expectCleared(testWeak2, "testWeak2");
             expectValue(testWeak3, testObject3, "testWeak3");
             // This is true for all currently supported concurrent collectors,
-            // except Shenandoah+IU, which allows clearing refs even when
+            // except Xenandoah+IU, which allows clearing refs even when
             // accessed during concurrent marking.
-            if (isShenandoahIUMode()) {
+            if (isXenandoahIUMode()) {
               expectCleared(testWeak4, "testWeak4");
             } else {
               expectNotCleared(testWeak4, "testWeak4");
@@ -261,7 +261,7 @@ public class TestReferenceRefersToShenandoah {
             }
 
             TestObject obj4 = testWeak4.get();
-            if (!isShenandoahIUMode()) {
+            if (!isXenandoahIUMode()) {
                 if (obj4 == null) {
                     fail("testWeak4.get() returned null");
                 } else if (obj4.value != 4) {

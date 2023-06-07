@@ -24,11 +24,11 @@
 /**
  * @test
  * @bug 8237007 8260637
- * @summary Shenandoah: assert(_base == Tuple) failure during C2 compilation
+ * @summary Xenandoah: assert(_base == Tuple) failure during C2 compilation
  * @requires vm.flavor == "server"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:-BackgroundCompilation -XX:+UseShenandoahGC LRBRightAfterMemBar
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:-BackgroundCompilation -XX:+UseXenandoahGC LRBRightAfterMemBar
  *
  */
 

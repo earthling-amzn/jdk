@@ -24,10 +24,10 @@
 /*
  * @test
  * bug 8280885
- * @summary Shenandoah: Some tests failed with "EA: missing allocation reference path"
- * @requires vm.gc.Shenandoah
+ * @summary Xenandoah: Some tests failed with "EA: missing allocation reference path"
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:-BackgroundCompilation -XX:+UseShenandoahGC -XX:+UnlockExperimentalVMOptions -XX:ShenandoahGCMode=iu
+ * @run main/othervm -XX:-BackgroundCompilation -XX:+UseXenandoahGC -XX:+UnlockExperimentalVMOptions -XX:XenandoahGCMode=iu
  *                   -XX:CompileCommand=dontinline,TestUnexpectedIUBarrierEA::notInlined TestUnexpectedIUBarrierEA
  */
 

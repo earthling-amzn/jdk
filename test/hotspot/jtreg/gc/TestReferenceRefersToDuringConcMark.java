@@ -24,7 +24,7 @@
 package gc;
 
 /* @test
- * @requires vm.gc != "Shenandoah" | vm.opt.ShenandoahGCMode != "iu"
+ * @requires vm.gc != "Xenandoah" | vm.opt.XenandoahGCMode != "iu"
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @run driver jdk.test.lib.helpers.ClassFileInstaller jdk.test.whitebox.WhiteBox

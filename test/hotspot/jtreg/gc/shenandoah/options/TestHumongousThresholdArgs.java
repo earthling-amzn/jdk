@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah humongous threshold args are checked
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah humongous threshold args are checked
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -41,7 +41,7 @@ public class TestHumongousThresholdArgs {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx128m",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -54,8 +54,8 @@ public class TestHumongousThresholdArgs {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx128m",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahHumongousThreshold=" + v,
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahHumongousThreshold=" + v,
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -65,8 +65,8 @@ public class TestHumongousThresholdArgs {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx128m",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahHumongousThreshold=" + v,
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahHumongousThreshold=" + v,
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(1);

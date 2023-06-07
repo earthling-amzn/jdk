@@ -30,7 +30,7 @@ package gc.stress.gclocker;
  * GC and so have very little needing to be collected.
  * @requires vm.gc != "Z"
  * @requires vm.gc != "Epsilon"
- * @requires vm.gc != "Shenandoah"
+ * @requires vm.gc != "Xenandoah"
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  * @run driver/timeout=1000 gc.stress.gclocker.TestExcessGCLockerCollections 300 4 2

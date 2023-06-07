@@ -49,11 +49,11 @@ package gc.arguments;
  */
 
 /**
- * @test TestAlignmentToUseLargePagesShenandoah
+ * @test TestAlignmentToUseLargePagesXenandoah
  * @bug 8024396
- * @requires vm.gc.Shenandoah
- * @run main/othervm -Xms71M -Xmx91M -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+UseLargePages gc.arguments.TestAlignmentToUseLargePages
- * @run main/othervm -Xms71M -Xmx91M -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:-UseLargePages gc.arguments.TestAlignmentToUseLargePages
+ * @requires vm.gc.Xenandoah
+ * @run main/othervm -Xms71M -Xmx91M -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+UseLargePages gc.arguments.TestAlignmentToUseLargePages
+ * @run main/othervm -Xms71M -Xmx91M -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:-UseLargePages gc.arguments.TestAlignmentToUseLargePages
  */
 
 public class TestAlignmentToUseLargePages {

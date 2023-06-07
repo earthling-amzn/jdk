@@ -31,7 +31,7 @@
  * @requires vm.flagless
  * @requires os.arch=="aarch64" & vm.debug == true &
  *           vm.flavor == "server" &
- *           vm.gc.Shenandoah
+ *           vm.gc.Xenandoah
  *
  * @build compiler.c2.aarch64.TestVolatiles
  *        compiler.c2.aarch64.TestVolatileLoad
@@ -44,65 +44,65 @@
  *        compiler.c2.aarch64.TestUnsafeVolatileGAS
  *        compiler.c2.aarch64.TestUnsafeVolatileGAA
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestVolatileLoad Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestVolatileLoad Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestVolatileStore Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestVolatileStore Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileLoad Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileLoad Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileStore Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileStore Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileCAS Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileCAS Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileWeakCAS Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileWeakCAS Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileCAE Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileCAE Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileGAS Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileGAS Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileGAA Shenandoah
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileGAA Xenandoah
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestVolatileLoad ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestVolatileLoad XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestVolatileStore ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestVolatileStore XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileLoad ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileLoad XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileStore ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileStore XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileCAS ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileCAS XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileWeakCAS ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileWeakCAS XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileCAE ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileCAE XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileGAS ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileGAS XenandoahIU
  *
- * @run driver compiler.c2.aarch64.TestVolatilesShenandoah
- *      TestUnsafeVolatileGAA ShenandoahIU
+ * @run driver compiler.c2.aarch64.TestVolatilesXenandoah
+ *      TestUnsafeVolatileGAA XenandoahIU
  *
  */
 
 package compiler.c2.aarch64;
 
-public class TestVolatilesShenandoah {
+public class TestVolatilesXenandoah {
     public static void main(String args[]) throws Throwable
     {
         // delegate work to shared code

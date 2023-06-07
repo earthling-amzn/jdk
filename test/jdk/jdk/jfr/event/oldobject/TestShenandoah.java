@@ -35,13 +35,13 @@ import jdk.test.lib.jfr.Events;
 /**
  * @test
  * @key jfr
- * @requires vm.hasJFR & vm.gc.Shenandoah
- * @summary Test leak profiler with Shenandoah
+ * @requires vm.hasJFR & vm.gc.Xenandoah
+ * @summary Test leak profiler with Xenandoah
  * @library /test/lib /test/jdk
  * @modules jdk.jfr/jdk.jfr.internal.test
- * @run main/othervm  -XX:TLABSize=2k -XX:+UseShenandoahGC jdk.jfr.event.oldobject.TestShenandoah
+ * @run main/othervm  -XX:TLABSize=2k -XX:+UseXenandoahGC jdk.jfr.event.oldobject.TestXenandoah
  */
-public class TestShenandoah {
+public class TestXenandoah {
 
     static private class FindMe {
     }

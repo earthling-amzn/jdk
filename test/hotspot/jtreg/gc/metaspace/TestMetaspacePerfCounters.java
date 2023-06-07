@@ -82,9 +82,9 @@ import gc.testlibrary.PerfCounters;
  * @run main/othervm -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -XX:+UsePerfData -XX:+UseG1GC gc.metaspace.TestMetaspacePerfCounters
  */
 
-/* @test id=Shenandoah-64
+/* @test id=Xenandoah-64
  * @bug 8014659
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.bits == "64"
  * @library /test/lib /
  * @summary Tests that performance counters for metaspace and compressed class
@@ -93,8 +93,8 @@ import gc.testlibrary.PerfCounters;
  *          java.compiler
  *          java.management/sun.management
  *          jdk.internal.jvmstat/sun.jvmstat.monitor
- * @run main/othervm -XX:-UseCompressedOops -XX:-UseCompressedClassPointers -XX:+UsePerfData -XX:+UseShenandoahGC gc.metaspace.TestMetaspacePerfCounters
- * @run main/othervm -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -XX:+UsePerfData -XX:+UseShenandoahGC gc.metaspace.TestMetaspacePerfCounters
+ * @run main/othervm -XX:-UseCompressedOops -XX:-UseCompressedClassPointers -XX:+UsePerfData -XX:+UseXenandoahGC gc.metaspace.TestMetaspacePerfCounters
+ * @run main/othervm -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -XX:+UsePerfData -XX:+UseXenandoahGC gc.metaspace.TestMetaspacePerfCounters
  */
 
 /* @test id=Epsilon-64
@@ -154,9 +154,9 @@ import gc.testlibrary.PerfCounters;
  * @run main/othervm -XX:+UsePerfData -XX:+UseG1GC gc.metaspace.TestMetaspacePerfCounters
  */
 
-/* @test id=Shenandoah-32
+/* @test id=Xenandoah-32
  * @bug 8014659
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.bits == "32"
  * @library /test/lib /
  * @summary Tests that performance counters for metaspace and compressed class
@@ -165,7 +165,7 @@ import gc.testlibrary.PerfCounters;
  *          java.compiler
  *          java.management/sun.management
  *          jdk.internal.jvmstat/sun.jvmstat.monitor
- * @run main/othervm -XX:+UsePerfData -XX:+UseShenandoahGC gc.metaspace.TestMetaspacePerfCounters
+ * @run main/othervm -XX:+UsePerfData -XX:+UseXenandoahGC gc.metaspace.TestMetaspacePerfCounters
  */
 
 

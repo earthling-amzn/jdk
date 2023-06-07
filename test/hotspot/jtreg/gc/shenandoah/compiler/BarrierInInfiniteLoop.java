@@ -24,13 +24,13 @@
 /**
  * @test
  * @bug 8237837 8244721
- * @summary  Shenandoah: assert(mem == __null) failed: only one safepoint
+ * @summary  Xenandoah: assert(mem == __null) failed: only one safepoint
  * @requires vm.flavor == "server"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xcomp -XX:CompileOnly=BarrierInInfiniteLoop::test1
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xcomp -XX:CompileOnly=BarrierInInfiniteLoop::test1
  *                   -XX:CompileOnly=BarrierInInfiniteLoop::test2 -XX:CompileOnly=BarrierInInfiniteLoop::test3 -XX:CompileCommand=quiet BarrierInInfiniteLoop
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -Xcomp -XX:CompileOnly=BarrierInInfiniteLoop::test1
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -Xcomp -XX:CompileOnly=BarrierInInfiniteLoop::test1
  *                   -XX:CompileOnly=BarrierInInfiniteLoop::test2 -XX:CompileOnly=BarrierInInfiniteLoop::test3 -XX:CompileCommand=quiet BarrierInInfiniteLoop
  *
  */

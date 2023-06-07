@@ -25,7 +25,7 @@
 /*
  * @test
  * @summary Test that periodic GC is working
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestPeriodicGC
  */
@@ -72,9 +72,9 @@ public class TestPeriodicGC {
                     "-Xlog:gc",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahGCHeuristics=" + h,
-                    "-XX:ShenandoahGuaranteedGCInterval=0"
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahGCHeuristics=" + h,
+                    "-XX:XenandoahGuaranteedGCInterval=0"
             );
 
             testWith("Short interval with " + h,
@@ -82,9 +82,9 @@ public class TestPeriodicGC {
                     "-Xlog:gc",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahGCHeuristics=" + h,
-                    "-XX:ShenandoahGuaranteedGCInterval=1000"
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahGCHeuristics=" + h,
+                    "-XX:XenandoahGuaranteedGCInterval=1000"
             );
 
             testWith("Long interval with " + h,
@@ -92,9 +92,9 @@ public class TestPeriodicGC {
                     "-Xlog:gc",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
-                    "-XX:ShenandoahGCHeuristics=" + h,
-                    "-XX:ShenandoahGuaranteedGCInterval=100000" // deliberately too long
+                    "-XX:+UseXenandoahGC",
+                    "-XX:XenandoahGCHeuristics=" + h,
+                    "-XX:XenandoahGuaranteedGCInterval=100000" // deliberately too long
             );
         }
 
@@ -103,9 +103,9 @@ public class TestPeriodicGC {
                  "-Xlog:gc",
                  "-XX:+UnlockDiagnosticVMOptions",
                  "-XX:+UnlockExperimentalVMOptions",
-                 "-XX:+UseShenandoahGC",
-                 "-XX:ShenandoahGCMode=iu",
-                 "-XX:ShenandoahGuaranteedGCInterval=0"
+                 "-XX:+UseXenandoahGC",
+                 "-XX:XenandoahGCMode=iu",
+                 "-XX:XenandoahGuaranteedGCInterval=0"
         );
 
         testWith("Short interval with iu mode",
@@ -113,9 +113,9 @@ public class TestPeriodicGC {
                  "-Xlog:gc",
                  "-XX:+UnlockDiagnosticVMOptions",
                  "-XX:+UnlockExperimentalVMOptions",
-                 "-XX:+UseShenandoahGC",
-                 "-XX:ShenandoahGCMode=iu",
-                 "-XX:ShenandoahGuaranteedGCInterval=1000"
+                 "-XX:+UseXenandoahGC",
+                 "-XX:XenandoahGCMode=iu",
+                 "-XX:XenandoahGuaranteedGCInterval=1000"
         );
 
         testWith("Long interval with iu mode",
@@ -123,9 +123,9 @@ public class TestPeriodicGC {
                  "-Xlog:gc",
                  "-XX:+UnlockDiagnosticVMOptions",
                  "-XX:+UnlockExperimentalVMOptions",
-                 "-XX:+UseShenandoahGC",
-                 "-XX:ShenandoahGCMode=iu",
-                 "-XX:ShenandoahGuaranteedGCInterval=100000" // deliberately too long
+                 "-XX:+UseXenandoahGC",
+                 "-XX:XenandoahGCMode=iu",
+                 "-XX:XenandoahGuaranteedGCInterval=100000" // deliberately too long
         );
 
         testWith("Short interval with aggressive",
@@ -133,9 +133,9 @@ public class TestPeriodicGC {
                  "-Xlog:gc",
                  "-XX:+UnlockDiagnosticVMOptions",
                  "-XX:+UnlockExperimentalVMOptions",
-                 "-XX:+UseShenandoahGC",
-                 "-XX:ShenandoahGCHeuristics=aggressive",
-                 "-XX:ShenandoahGuaranteedGCInterval=1000"
+                 "-XX:+UseXenandoahGC",
+                 "-XX:XenandoahGCHeuristics=aggressive",
+                 "-XX:XenandoahGuaranteedGCInterval=1000"
         );
 
         testWith("Zero interval with passive",
@@ -143,9 +143,9 @@ public class TestPeriodicGC {
                  "-Xlog:gc",
                  "-XX:+UnlockDiagnosticVMOptions",
                  "-XX:+UnlockExperimentalVMOptions",
-                 "-XX:+UseShenandoahGC",
-                 "-XX:ShenandoahGCMode=passive",
-                 "-XX:ShenandoahGuaranteedGCInterval=0"
+                 "-XX:+UseXenandoahGC",
+                 "-XX:XenandoahGCMode=passive",
+                 "-XX:XenandoahGuaranteedGCInterval=0"
         );
 
         testWith("Short interval with passive",
@@ -153,9 +153,9 @@ public class TestPeriodicGC {
                  "-Xlog:gc",
                  "-XX:+UnlockDiagnosticVMOptions",
                  "-XX:+UnlockExperimentalVMOptions",
-                 "-XX:+UseShenandoahGC",
-                 "-XX:ShenandoahGCMode=passive",
-                 "-XX:ShenandoahGuaranteedGCInterval=1000"
+                 "-XX:+UseXenandoahGC",
+                 "-XX:XenandoahGCMode=passive",
+                 "-XX:XenandoahGuaranteedGCInterval=1000"
         );
     }
 

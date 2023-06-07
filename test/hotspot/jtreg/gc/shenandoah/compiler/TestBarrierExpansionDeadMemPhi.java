@@ -25,10 +25,10 @@
  * @test
  * @bug 8255400
  * @summary C2 failures after JDK-8255000
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @modules java.base/jdk.internal.misc:+open
  *
- * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation -XX:+UseShenandoahGC TestBarrierExpansionDeadMemPhi
+ * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation -XX:+UseXenandoahGC TestBarrierExpansionDeadMemPhi
  *
  *
  */

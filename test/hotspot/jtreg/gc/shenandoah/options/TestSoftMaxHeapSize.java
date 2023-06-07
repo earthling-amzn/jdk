@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah checks SoftMaxHeapSize
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah checks SoftMaxHeapSize
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -39,7 +39,7 @@ public class TestSoftMaxHeapSize {
     public static void main(String[] args) throws Exception {
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms4m",
                     "-Xmx128m",
                     "-XX:SoftMaxHeapSize=4m",
@@ -50,7 +50,7 @@ public class TestSoftMaxHeapSize {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms4m",
                     "-Xmx128m",
                     "-XX:SoftMaxHeapSize=128m",
@@ -61,7 +61,7 @@ public class TestSoftMaxHeapSize {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms4m",
                     "-Xmx128m",
                     "-XX:SoftMaxHeapSize=129m",

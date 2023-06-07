@@ -24,21 +24,21 @@
 
 /*
  * @test
- * @summary Check Shenandoah reacts on setting humongous moves correctly
+ * @summary Check Xenandoah reacts on setting humongous moves correctly
  * @key randomness
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  *
  * @run main/othervm -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -Xmx1g -Xms1g
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:-ShenandoahHumongousMoves
- *      -XX:-ShenandoahDegeneratedGC -XX:+ShenandoahVerify
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:-XenandoahHumongousMoves
+ *      -XX:-XenandoahDegeneratedGC -XX:+XenandoahVerify
  *      TestHumongousMoves
  *
  * @run main/othervm -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -Xmx1g -Xms1g
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:+ShenandoahHumongousMoves
- *      -XX:-ShenandoahDegeneratedGC -XX:+ShenandoahVerify
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:+XenandoahHumongousMoves
+ *      -XX:-XenandoahDegeneratedGC -XX:+XenandoahVerify
  *      TestHumongousMoves
  */
 

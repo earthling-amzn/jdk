@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah GC thread counts are overridable
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah GC thread counts are overridable
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -42,7 +42,7 @@ public class TestThreadCountsOverride {
                 "-Xmx128m",
                 "-XX:+UnlockDiagnosticVMOptions",
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:ParallelGCThreads=1",
                 "-XX:+PrintFlagsFinal",
                 "-version");
@@ -57,7 +57,7 @@ public class TestThreadCountsOverride {
                 "-Xmx128m",
                 "-XX:+UnlockDiagnosticVMOptions",
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:ConcGCThreads=1",
                 "-XX:+PrintFlagsFinal",
                 "-version");

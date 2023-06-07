@@ -49,12 +49,12 @@ package gc;
  */
 
 /*
- * @test id=Shenandoah
- * @requires vm.gc.Shenandoah
+ * @test id=Xenandoah
+ * @requires vm.gc.Xenandoah
  * @summary Runs System.gc() with different flags.
- * @run main/othervm -XX:+UseShenandoahGC gc.TestSystemGC
- * @run main/othervm -XX:+UseShenandoahGC -XX:+ExplicitGCInvokesConcurrent gc.TestSystemGC
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages gc.TestSystemGC
+ * @run main/othervm -XX:+UseXenandoahGC gc.TestSystemGC
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+ExplicitGCInvokesConcurrent gc.TestSystemGC
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages gc.TestSystemGC
  */
 
 /*

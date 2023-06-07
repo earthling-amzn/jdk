@@ -35,7 +35,7 @@ import sun.jvm.hotspot.gc.g1.G1CollectedHeap;
 import sun.jvm.hotspot.gc.parallel.ParallelScavengeHeap;
 import sun.jvm.hotspot.gc.serial.SerialHeap;
 import sun.jvm.hotspot.gc.shared.CollectedHeap;
-import sun.jvm.hotspot.gc.shenandoah.ShenandoahHeap;
+import sun.jvm.hotspot.gc.shenandoah.XenandoahHeap;
 import sun.jvm.hotspot.gc.x.XCollectedHeap;
 import sun.jvm.hotspot.gc.z.ZCollectedHeap;
 import sun.jvm.hotspot.oops.Oop;
@@ -89,7 +89,7 @@ public class Universe {
     addHeapTypeIfInDB(db, EpsilonHeap.class);
     addHeapTypeIfInDB(db, XCollectedHeap.class);
     addHeapTypeIfInDB(db, ZCollectedHeap.class);
-    addHeapTypeIfInDB(db, ShenandoahHeap.class);
+    addHeapTypeIfInDB(db, XenandoahHeap.class);
 
     UniverseExt.initialize(heapConstructor);
   }

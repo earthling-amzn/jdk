@@ -54,12 +54,12 @@ import static org.testng.Assert.assertTrue;
  */
 
 /*
- * @test id=Shenandoah
- * @requires vm.gc.Shenandoah
+ * @test id=Xenandoah
+ * @requires vm.gc.Xenandoah
  * @bug 8277072
  * @library /test/lib/
- * @summary ObjectStreamClass caches keep ClassLoaders alive (Shenandoah GC)
- * @run testng/othervm -Xmx64m -XX:+UseShenandoahGC ObjectStreamClassCaching
+ * @summary ObjectStreamClass caches keep ClassLoaders alive (Xenandoah GC)
+ * @run testng/othervm -Xmx64m -XX:+UseXenandoahGC ObjectStreamClassCaching
  */
 
 /*

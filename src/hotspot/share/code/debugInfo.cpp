@@ -56,7 +56,7 @@ oop DebugInfoReadStream::read_oop() {
   oop o;
   if (nm != nullptr) {
     // Despite these oops being found inside nmethods that are on-stack,
-    // they are not kept alive by all GCs (e.g. G1 and Shenandoah).
+    // they are not kept alive by all GCs (e.g. G1 and Xenandoah).
     o = nm->oop_at_phantom(read_int());
   } else {
     o = code()->oop_at(read_int());

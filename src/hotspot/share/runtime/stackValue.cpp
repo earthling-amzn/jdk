@@ -83,12 +83,12 @@ static oop oop_from_oop_location(stackChunkOop chunk, void* addr) {
   oop val = *(oop*)addr;
 
 #if INCLUDE_SHENANDOAHGC
-  if (UseShenandoahGC) {
+  if (UseXenandoahGC) {
     // Pass the value through the barrier to avoid capturing bad oops as
     // stack values. Note: do not heal the location, to avoid accidentally
     // corrupting the stack. Stack watermark barriers are supposed to handle
     // the healing.
-    val = ShenandoahBarrierSet::barrier_set()->load_reference_barrier(val);
+    val = XenandoahBarrierSet::barrier_set()->load_reference_barrier(val);
   }
 #endif
 
@@ -120,12 +120,12 @@ static oop oop_from_narrowOop_location(stackChunkOop chunk, void* addr, bool is_
   oop val = CompressedOops::decode(*narrow_addr);
 
 #if INCLUDE_SHENANDOAHGC
-  if (UseShenandoahGC) {
+  if (UseXenandoahGC) {
     // Pass the value through the barrier to avoid capturing bad oops as
     // stack values. Note: do not heal the location, to avoid accidentally
     // corrupting the stack. Stack watermark barriers are supposed to handle
     // the healing.
-    val = ShenandoahBarrierSet::barrier_set()->load_reference_barrier(val);
+    val = XenandoahBarrierSet::barrier_set()->load_reference_barrier(val);
   }
 #endif
 

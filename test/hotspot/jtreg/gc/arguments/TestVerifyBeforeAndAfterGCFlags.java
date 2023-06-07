@@ -29,7 +29,7 @@ package gc.arguments;
  * @summary Runs an simple application (GarbageProducer) with various
          combinations of -XX:{+|-}Verify{After|Before}GC flags and checks that
          output contain or doesn't contain expected patterns
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @modules java.base/jdk.internal.misc
  * @modules java.management
  * @library /test/lib

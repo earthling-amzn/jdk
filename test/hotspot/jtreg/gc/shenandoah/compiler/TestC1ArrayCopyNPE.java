@@ -24,8 +24,8 @@
 
 /* @test
  * @summary test C1 arraycopy intrinsic
- * @requires vm.gc.Shenandoah
- * @run main/othervm -XX:TieredStopAtLevel=1 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive TestC1ArrayCopyNPE
+ * @requires vm.gc.Xenandoah
+ * @run main/othervm -XX:TieredStopAtLevel=1 -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive TestC1ArrayCopyNPE
  */
 
 public class TestC1ArrayCopyNPE {

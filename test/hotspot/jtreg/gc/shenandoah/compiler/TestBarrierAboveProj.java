@@ -25,8 +25,8 @@
  * @test
  * bug 8281811
  * @summary assert(_base == Tuple) failed: Not a Tuple after JDK-8280799
- * @requires vm.gc.Shenandoah
- * @run main/othervm -XX:+UseShenandoahGC -XX:-BackgroundCompilation -XX:LoopMaxUnroll=1 TestBarrierAboveProj
+ * @requires vm.gc.Xenandoah
+ * @run main/othervm -XX:+UseXenandoahGC -XX:-BackgroundCompilation -XX:LoopMaxUnroll=1 TestBarrierAboveProj
  */
 
 

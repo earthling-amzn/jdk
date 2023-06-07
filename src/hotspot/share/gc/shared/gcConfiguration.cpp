@@ -50,7 +50,7 @@ GCName GCConfiguration::young_collector() const {
     }
   }
 
-  if (UseShenandoahGC) {
+  if (UseXenandoahGC) {
     return NA;
   }
 
@@ -74,8 +74,8 @@ GCName GCConfiguration::old_collector() const {
     }
   }
 
-  if (UseShenandoahGC) {
-    return Shenandoah;
+  if (UseXenandoahGC) {
+    return Xenandoah;
   }
 
   return SerialOld;

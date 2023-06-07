@@ -92,13 +92,13 @@
   template(HeapIterateOperation)                  \
   template(ReportJavaOutOfMemory)                 \
   template(JFRCheckpoint)                         \
-  template(ShenandoahFullGC)                      \
-  template(ShenandoahInitMark)                    \
-  template(ShenandoahFinalMarkStartEvac)          \
-  template(ShenandoahInitUpdateRefs)              \
-  template(ShenandoahFinalUpdateRefs)             \
-  template(ShenandoahFinalRoots)                  \
-  template(ShenandoahDegeneratedGC)               \
+  template(XenandoahFullGC)                      \
+  template(XenandoahInitMark)                    \
+  template(XenandoahFinalMarkStartEvac)          \
+  template(XenandoahInitUpdateRefs)              \
+  template(XenandoahFinalUpdateRefs)             \
+  template(XenandoahFinalRoots)                  \
+  template(XenandoahDegeneratedGC)               \
   template(Exit)                                  \
   template(LinuxDllLoad)                          \
   template(WhiteBoxOperation)                     \

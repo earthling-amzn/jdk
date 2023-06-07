@@ -27,7 +27,7 @@ package gc.arguments;
  * @test TestNewRatioFlag
  * @bug 8025166
  * @summary Verify that heap devided among generations according to NewRatio
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc

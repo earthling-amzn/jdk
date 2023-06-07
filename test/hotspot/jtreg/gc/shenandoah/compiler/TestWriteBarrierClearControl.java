@@ -25,10 +25,10 @@
  * @test
  * @key stress randomness
  * @summary Clearing control during final graph reshape causes memory barrier to loose dependency on null check
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.flavor == "server"
  * @run main/othervm -XX:-BackgroundCompilation -XX:-UseOnStackReplacement -XX:-TieredCompilation
- *                   -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ *                   -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  *                   -XX:+UnlockDiagnosticVMOptions -XX:+StressLCM -XX:+StressGCM
  *                   TestWriteBarrierClearControl
  *

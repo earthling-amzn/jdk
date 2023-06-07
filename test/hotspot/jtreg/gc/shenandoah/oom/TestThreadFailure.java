@@ -25,7 +25,7 @@
 /**
  * @test
  * @summary Test OOME in separate thread is recoverable
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestThreadFailure
  */
@@ -65,7 +65,7 @@ public class TestThreadFailure {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder(
                     "-Xmx32m",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     TestThreadFailure.class.getName(),
                     "test");
 

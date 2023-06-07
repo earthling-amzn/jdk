@@ -91,7 +91,7 @@ public class StringTableCleaningTest {
     private static final String xStartSuffix = "Garbage Collection (.*)$";
     private static final String xEndSuffix = "Garbage Collection (.*) .*->.*$";
 
-    // Suffix for Shenandoah.
+    // Suffix for Xenandoah.
     private static final String shenSuffix = "Concurrent weak roots";
 
     private static String getGcStartString() {
@@ -101,7 +101,7 @@ public class StringTableCleaningTest {
             return gcStartPrefix + g1Suffix;
         } else if (GC.Z.isSelected()) {
             return "(" + zStartPrefix + zStartSuffix + ")|(" + gcStartPrefix + xStartSuffix + ")";
-        } else if (GC.Shenandoah.isSelected()) {
+        } else if (GC.Xenandoah.isSelected()) {
             return gcStartPrefix + shenSuffix;
         } else {
             return "unsupported GC";
@@ -115,7 +115,7 @@ public class StringTableCleaningTest {
             return gcEndPrefix + g1Suffix;
         } else if (GC.Z.isSelected()) {
             return gcEndPrefix + "(" + zEndSuffix + ")|(" + xEndSuffix + ")";
-        } else if (GC.Shenandoah.isSelected()) {
+        } else if (GC.Xenandoah.isSelected()) {
             return gcEndPrefix + shenSuffix;
         } else {
             return "unsupported GC";

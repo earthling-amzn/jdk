@@ -25,13 +25,13 @@
 /**
  * @test id=aggressive
  * @summary Tests JVMTI heap dumps
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.jvmti
  * @compile TestHeapDump.java
  * @run main/othervm/native/timeout=300 -agentlib:TestHeapDump
  *      -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -Xmx128m
- *      -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -Xmx128m
+ *      -XX:XenandoahGCHeuristics=aggressive
  *      TestHeapDump
  *
  */
@@ -39,27 +39,27 @@
 /**
  * @test id=no-coops-aggressive
  * @summary Tests JVMTI heap dumps
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.jvmti
  * @requires vm.bits == "64"
  * @compile TestHeapDump.java
  * @run main/othervm/native/timeout=300 -agentlib:TestHeapDump
  *      -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -Xmx128m
- *      -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -Xmx128m
+ *      -XX:XenandoahGCHeuristics=aggressive
  *      -XX:-UseCompressedOops TestHeapDump
  */
 
 /**
  * @test id=aggressive-strdedup
  * @summary Tests JVMTI heap dumps
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.jvmti
  * @compile TestHeapDump.java
  * @run main/othervm/native/timeout=300 -agentlib:TestHeapDump
  *      -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -Xmx128m
- *      -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -Xmx128m
+ *      -XX:XenandoahGCHeuristics=aggressive
  *      -XX:+UseStringDeduplication TestHeapDump
  */
 

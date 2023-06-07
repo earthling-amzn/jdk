@@ -24,10 +24,10 @@
 /**
  * @test
  * @summary implicit null check on brooks pointer must not cause crash
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.bits == "64"
  * @run main/othervm -XX:-BackgroundCompilation -XX:-UseOnStackReplacement -XX:-TieredCompilation
- *                   -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ *                   -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  *                   -Xmx4G -XX:HeapBaseMinAddress=0x800000000 TestNullCheck
  */
 

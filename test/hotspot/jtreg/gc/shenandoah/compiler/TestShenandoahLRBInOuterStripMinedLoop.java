@@ -24,17 +24,17 @@
 /**
  * @test
  * @bug 8247824
- * @summary CTW: C2 (Shenandoah) compilation fails with SEGV in SBC2Support::pin_and_expand
+ * @summary CTW: C2 (Xenandoah) compilation fails with SEGV in SBC2Support::pin_and_expand
  * @requires vm.flavor == "server"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:-BackgroundCompilation -XX:+UseShenandoahGC -XX:LoopMaxUnroll=0 TestShenandoahLRBInOuterStripMinedLoop
+ * @run main/othervm -XX:-BackgroundCompilation -XX:+UseXenandoahGC -XX:LoopMaxUnroll=0 TestXenandoahLRBInOuterStripMinedLoop
  *
  */
 
 import java.util.Arrays;
 
-public class TestShenandoahLRBInOuterStripMinedLoop {
+public class TestXenandoahLRBInOuterStripMinedLoop {
     public static void main(String[] args) {
         A[] array = new A[4000];
         Arrays.fill(array, new A());

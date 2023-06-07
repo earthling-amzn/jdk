@@ -146,7 +146,7 @@ public:
 };
 
 void InstanceStackChunkKlass::oop_oop_iterate_stack_slow(stackChunkOop chunk, OopIterateClosure* closure, MemRegion mr) {
-  if (UseZGC || UseShenandoahGC) {
+  if (UseZGC || UseXenandoahGC) {
     // An OopClosure could apply barriers to a stack chunk. The side effects
     // of the load barriers could destroy derived pointers, which must be
     // processed before their base oop is processed. So we force processing

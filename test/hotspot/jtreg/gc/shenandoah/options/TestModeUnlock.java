@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah modes are unlocked properly
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah modes are unlocked properly
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -44,9 +44,9 @@ public class TestModeUnlock {
     }
 
     public static void main(String[] args) throws Exception {
-        testWith("-XX:ShenandoahGCMode=satb",    Mode.PRODUCT);
-        testWith("-XX:ShenandoahGCMode=iu",      Mode.EXPERIMENTAL);
-        testWith("-XX:ShenandoahGCMode=passive", Mode.DIAGNOSTIC);
+        testWith("-XX:XenandoahGCMode=satb",    Mode.PRODUCT);
+        testWith("-XX:XenandoahGCMode=iu",      Mode.EXPERIMENTAL);
+        testWith("-XX:XenandoahGCMode=passive", Mode.DIAGNOSTIC);
     }
 
     private static void testWith(String h, Mode mode) throws Exception {
@@ -55,7 +55,7 @@ public class TestModeUnlock {
                     "-Xmx128m",
                     "-XX:-UnlockDiagnosticVMOptions",
                     "-XX:-UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-version"
             );
@@ -76,7 +76,7 @@ public class TestModeUnlock {
                     "-Xmx128m",
                     "-XX:+UnlockDiagnosticVMOptions",
                     "-XX:-UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-version"
             );
@@ -97,7 +97,7 @@ public class TestModeUnlock {
                     "-Xmx128m",
                     "-XX:-UnlockDiagnosticVMOptions",
                     "-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     h,
                     "-version"
             );

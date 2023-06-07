@@ -24,14 +24,14 @@
 
  /*
  * @test
- * @summary Test Shenandoah with different log levels
- * @requires vm.gc.Shenandoah
+ * @summary Test Xenandoah with different log levels
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xms256M -Xmx1G -Xlog:gc*=error   TestWithLogLevel
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xms256M -Xmx1G -Xlog:gc*=warning TestWithLogLevel
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xms256M -Xmx1G -Xlog:gc*=info    TestWithLogLevel
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xms256M -Xmx1G -Xlog:gc*=debug   TestWithLogLevel
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xms256M -Xmx1G -Xlog:gc*=trace   TestWithLogLevel
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xms256M -Xmx1G -Xlog:gc*=error   TestWithLogLevel
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xms256M -Xmx1G -Xlog:gc*=warning TestWithLogLevel
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xms256M -Xmx1G -Xlog:gc*=info    TestWithLogLevel
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xms256M -Xmx1G -Xlog:gc*=debug   TestWithLogLevel
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xms256M -Xmx1G -Xlog:gc*=trace   TestWithLogLevel
  */
 
 import java.util.*;

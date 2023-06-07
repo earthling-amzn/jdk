@@ -23,13 +23,13 @@
  */
 
 /* @test
- * @summary test JNI critical arrays support in Shenandoah
+ * @summary test JNI critical arrays support in Xenandoah
  * @key randomness
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  *
- * @run main/othervm/native -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:+ShenandoahVerify                 TestJNICritical
- * @run main/othervm/native -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive TestJNICritical
+ * @run main/othervm/native -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:+XenandoahVerify                 TestJNICritical
+ * @run main/othervm/native -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive TestJNICritical
  */
 
 import java.util.Arrays;

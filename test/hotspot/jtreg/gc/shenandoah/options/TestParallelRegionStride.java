@@ -24,12 +24,12 @@
 
 /*
  * @test
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahParallelRegionStride=1    -Xmx128m TestParallelRegionStride
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahParallelRegionStride=10   -Xmx128m TestParallelRegionStride
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahParallelRegionStride=100  -Xmx128m TestParallelRegionStride
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahParallelRegionStride=1024 -Xmx128m TestParallelRegionStride
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahParallelRegionStride=1    -Xmx128m TestParallelRegionStride
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahParallelRegionStride=10   -Xmx128m TestParallelRegionStride
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahParallelRegionStride=100  -Xmx128m TestParallelRegionStride
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahParallelRegionStride=1024 -Xmx128m TestParallelRegionStride
  */
 
 public class TestParallelRegionStride {

@@ -54,11 +54,11 @@
  */
 
 /*
- * @test id=with_ShenandoahGC
- * @requires vm.gc.Shenandoah
+ * @test id=with_XenandoahGC
+ * @requires vm.gc.Xenandoah
  * @bug 8198540
- * @summary Test TypeConverterFactory is not leaking method handles (Shenandoah GC)
- * @run main/othervm -XX:+UseShenandoahGC TypeConverterFactoryMemoryLeakTest
+ * @summary Test TypeConverterFactory is not leaking method handles (Xenandoah GC)
+ * @run main/othervm -XX:+UseXenandoahGC TypeConverterFactoryMemoryLeakTest
  */
 
 import java.lang.invoke.MethodHandles;

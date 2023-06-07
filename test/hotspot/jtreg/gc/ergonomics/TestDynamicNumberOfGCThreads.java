@@ -53,13 +53,13 @@ public class TestDynamicNumberOfGCThreads {
       testDynamicNumberOfGCThreads("UseParallelGC");
     }
 
-    if (GC.Shenandoah.isSupported()) {
+    if (GC.Xenandoah.isSupported()) {
       noneGCSupported = false;
-      testDynamicNumberOfGCThreads("UseShenandoahGC");
+      testDynamicNumberOfGCThreads("UseXenandoahGC");
     }
 
     if (noneGCSupported) {
-      throw new SkippedException("Skipping test because none of G1/Parallel/Shenandoah is supported.");
+      throw new SkippedException("Skipping test because none of G1/Parallel/Xenandoah is supported.");
     }
   }
 

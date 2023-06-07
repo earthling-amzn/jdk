@@ -863,7 +863,7 @@ void StringTable::verify_secondary_array_index_bits() {
     }
   }
   // Currently max is 17 for +UseCompressedOops, 16 for -UseCompressedOops.
-  // When we add support for Shenandoah (which has a smaller mininum region size than G1),
+  // When we add support for Xenandoah (which has a smaller mininum region size than G1),
   // max will become 15/14.
   //
   // We use _secondary_array_index_bits==14 as that will be the eventual value, and will

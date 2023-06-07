@@ -24,11 +24,11 @@
 /**
  * @test
  * @summary Miscompilation in Unsafe off-heap swap routines
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @modules java.base/jdk.internal.misc:+open
  *
  * @run main/othervm -XX:-UseOnStackReplacement -XX:-BackgroundCompilation -XX:-TieredCompilation
- *                   -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC
+ *                   -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC
  *                   TestUnsafeOffheapSwap
  */
 

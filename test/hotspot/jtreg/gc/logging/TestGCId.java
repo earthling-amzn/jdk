@@ -56,13 +56,13 @@ public class TestGCId {
       noneGCSupported = false;
       testGCId("UseSerialGC");
     }
-    if (GC.Shenandoah.isSupported()) {
+    if (GC.Xenandoah.isSupported()) {
       noneGCSupported = false;
-      testGCId("UseShenandoahGC");
+      testGCId("UseXenandoahGC");
     }
 
     if (noneGCSupported) {
-      throw new SkippedException("Skipping test because none of Parallel/G1/Serial/Shenandoah is supported.");
+      throw new SkippedException("Skipping test because none of Parallel/G1/Serial/Xenandoah is supported.");
     }
   }
 

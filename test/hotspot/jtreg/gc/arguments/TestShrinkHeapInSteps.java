@@ -26,7 +26,7 @@ package gc.arguments;
 /*
  * @test TestShrinkHeapInSteps
  * @summary Verify that -XX:-ShrinkHeapInSteps works properly.
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc

@@ -25,7 +25,7 @@
 /*
  * @test
  * @summary Test that loop mining arguments are sane
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @run driver TestClassUnloadingArguments
  */
@@ -59,7 +59,7 @@ public class TestClassUnloadingArguments {
 
     public static void main(String[] args) throws Exception {
         testDefaultGC();
-        testShenandoah();
+        testXenandoah();
     }
 
     public static void testDefaultGC() throws Exception {
@@ -80,28 +80,28 @@ public class TestClassUnloadingArguments {
                 "-XX:+ClassUnloadingWithConcurrentMark");
     }
 
-    public static void testShenandoah() throws Exception {
-        testWith("Shenandoah GC should have class unloading enabled",
+    public static void testXenandoah() throws Exception {
+        testWith("Xenandoah GC should have class unloading enabled",
                 true, true,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC");
+                "-XX:+UseXenandoahGC");
 
-        testWith("Shenandoah GC should disable everything",
+        testWith("Xenandoah GC should disable everything",
                 false, false,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:-ClassUnloading");
 
-        testWith("Shenandoah GC should enable conc unload",
+        testWith("Xenandoah GC should enable conc unload",
                 true, true,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:+ClassUnloadingWithConcurrentMark");
 
-        testWith("Shenandoah GC should not let conc unload to be enabled separately",
+        testWith("Xenandoah GC should not let conc unload to be enabled separately",
                 false, false,
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:-ClassUnloading",
                 "-XX:+ClassUnloadingWithConcurrentMark");
     }

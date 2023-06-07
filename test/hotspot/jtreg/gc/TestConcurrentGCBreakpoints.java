@@ -130,7 +130,7 @@ public class TestConcurrentGCBreakpoints {
     private static boolean expectSupported() {
         return GC.G1.isSelected() ||
                GC.Z.isSelected() ||
-               GC.Shenandoah.isSelected();
+               GC.Xenandoah.isSelected();
     }
 
     private static boolean expectUnsupported() {

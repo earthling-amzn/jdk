@@ -1151,24 +1151,24 @@
     <Field type="ulong" contentType="bytes" name="unmapped" label="Unmapped" />
   </Event>
 
-  <Event name="ShenandoahHeapRegionStateChange" category="Java Virtual Machine, GC, Detailed" label="Shenandoah Heap Region State Change" description="Information about a Shenandoah heap region state change"
+  <Event name="XenandoahHeapRegionStateChange" category="Java Virtual Machine, GC, Detailed" label="Xenandoah Heap Region State Change" description="Information about a Xenandoah heap region state change"
     startTime="false">
     <Field type="uint" name="index" label="Index" />
-    <Field type="ShenandoahHeapRegionState" name="from" label="From" />
-    <Field type="ShenandoahHeapRegionState" name="to" label="To" />
+    <Field type="XenandoahHeapRegionState" name="from" label="From" />
+    <Field type="XenandoahHeapRegionState" name="to" label="To" />
     <Field type="ulong" contentType="address" name="start" label="Start" />
     <Field type="ulong" contentType="bytes" name="used" label="Used" />
   </Event>
 
-  <Event name="ShenandoahHeapRegionInformation" category="Java Virtual Machine, GC, Detailed" label="Shenandoah Heap Region Information" description="Information about a specific heap region in the Shenandoah GC"
+  <Event name="XenandoahHeapRegionInformation" category="Java Virtual Machine, GC, Detailed" label="Xenandoah Heap Region Information" description="Information about a specific heap region in the Xenandoah GC"
     period="everyChunk">
     <Field type="uint" name="index" label="Index" />
-    <Field type="ShenandoahHeapRegionState" name="state" label="State" />
+    <Field type="XenandoahHeapRegionState" name="state" label="State" />
     <Field type="ulong" contentType="address" name="start" label="Start" />
     <Field type="ulong" contentType="bytes" name="used" label="Used" />
   </Event>
 
-  <Type name="ShenandoahHeapRegionState" label="Shenandoah Heap Region State">
+  <Type name="XenandoahHeapRegionState" label="Xenandoah Heap Region State">
     <Field type="string" name="state" label="State" />
   </Type>
 

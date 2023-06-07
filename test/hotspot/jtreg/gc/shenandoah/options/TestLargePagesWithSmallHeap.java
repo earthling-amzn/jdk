@@ -24,44 +24,44 @@
 
 /*
  * @test id=default
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @bug 8268127
  * @summary when heap is too small for regions to align to large page size, should fallback to regular page size
  *
- * @run main/othervm -XX:+UseShenandoahGC -Xms17m -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC         -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -Xms17m         TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -Xms17m -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC         -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -Xms17m         TestLargePagesWithSmallHeap
  *
- * @run main/othervm -XX:+UseShenandoahGC -Xms17m -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC         -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -Xms17m         TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -Xms17m -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC         -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -Xms17m         TestLargePagesWithSmallHeap
  */
 
 /*
  * @test id=lp
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages         -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages -Xms17m         TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages         -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages -Xms17m         TestLargePagesWithSmallHeap
  *
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages         -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseLargePages -Xms17m         TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages         -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseLargePages -Xms17m         TestLargePagesWithSmallHeap
  */
 
 /*
  * @test id=thp
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires os.family == "linux"
  *
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseTransparentHugePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseTransparentHugePages         -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseTransparentHugePages -Xms17m         TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseTransparentHugePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseTransparentHugePages         -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseTransparentHugePages -Xms17m         TestLargePagesWithSmallHeap
  *
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseTransparentHugePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseTransparentHugePages         -Xmx17m TestLargePagesWithSmallHeap
- * @run main/othervm -XX:+UseShenandoahGC -XX:+UseTransparentHugePages -Xms17m         TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseTransparentHugePages -Xms17m -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseTransparentHugePages         -Xmx17m TestLargePagesWithSmallHeap
+ * @run main/othervm -XX:+UseXenandoahGC -XX:+UseTransparentHugePages -Xms17m         TestLargePagesWithSmallHeap
  */
 
 public class TestLargePagesWithSmallHeap {

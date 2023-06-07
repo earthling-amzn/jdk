@@ -24,7 +24,7 @@
 package gc.shenandoah;
 
 /* @test id=satb-100
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @modules java.base
@@ -32,12 +32,12 @@ package gc.shenandoah;
  * @run main/othervm
  *      -Xbootclasspath/a:.
  *      -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *      -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=satb -XX:ShenandoahGarbageThreshold=100 -Xmx100m
+ *      -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=satb -XX:XenandoahGarbageThreshold=100 -Xmx100m
  *      gc.shenandoah.TestReferenceShortcutCycle
  */
 
 /* @test id=iu-100
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @build jdk.test.whitebox.WhiteBox
  * @modules java.base
@@ -45,7 +45,7 @@ package gc.shenandoah;
  * @run main/othervm
  *      -Xbootclasspath/a:.
  *      -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *      -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGarbageThreshold=100 -Xmx100m
+ *      -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGarbageThreshold=100 -Xmx100m
  *      gc.shenandoah.TestReferenceShortcutCycle
  */
 

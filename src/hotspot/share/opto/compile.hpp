@@ -100,8 +100,8 @@ enum LoopOptsMode {
   LoopOptsDefault,
   LoopOptsNone,
   LoopOptsMaxUnroll,
-  LoopOptsShenandoahExpand,
-  LoopOptsShenandoahPostExpand,
+  LoopOptsXenandoahExpand,
+  LoopOptsXenandoahPostExpand,
   LoopOptsSkipSplitIf,
   LoopOptsVerify
 };

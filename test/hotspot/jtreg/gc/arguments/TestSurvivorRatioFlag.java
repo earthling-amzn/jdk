@@ -26,7 +26,7 @@ package gc.arguments;
 /*
  * @test TestSurvivorRatioFlag
  * @summary Verify that actual survivor ratio is equal to specified SurvivorRatio value
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @library /test/lib
  * @library /
  * @modules java.base/jdk.internal.misc

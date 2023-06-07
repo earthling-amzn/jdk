@@ -24,16 +24,16 @@
 /**
  * @test
  * @bug 8244663
- * @summary Shenandoah: C2 assertion fails in Matcher::collect_null_checks
+ * @summary Xenandoah: C2 assertion fails in Matcher::collect_null_checks
  * @requires vm.flavor == "server"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:-TieredCompilation -XX:-BackgroundCompilation -XX:-UseOnStackReplacement
- *                   -XX:CompileCommand=dontinline,TestShenandoahCmpPAfterCall::not_inlined TestShenandoahCmpPAfterCall
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:-TieredCompilation -XX:-BackgroundCompilation -XX:-UseOnStackReplacement
+ *                   -XX:CompileCommand=dontinline,TestXenandoahCmpPAfterCall::not_inlined TestXenandoahCmpPAfterCall
  *
  */
 
-public class TestShenandoahCmpPAfterCall {
+public class TestXenandoahCmpPAfterCall {
     private static Object field1 = new Object();
     private static Object field2 = new Object();
     private static Object o3;

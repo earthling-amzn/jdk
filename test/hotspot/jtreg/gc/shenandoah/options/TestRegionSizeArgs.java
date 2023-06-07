@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah region size args are checked
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah region size args are checked
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -46,7 +46,7 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms4m",
                     "-Xmx1g",
                     "-version");
@@ -56,7 +56,7 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms8m",
                     "-Xmx1g",
                     "-version");
@@ -66,22 +66,22 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=200m",
+                    "-XX:XenandoahRegionSize=200m",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahRegionSize option");
             output.shouldHaveExitValue(1);
         }
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=9m",
+                    "-XX:XenandoahRegionSize=9m",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -89,22 +89,22 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=255K",
+                    "-XX:XenandoahRegionSize=255K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahRegionSize option");
             output.shouldHaveExitValue(1);
         }
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=260K",
+                    "-XX:XenandoahRegionSize=260K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -112,10 +112,10 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms1g",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=32M",
+                    "-XX:XenandoahRegionSize=32M",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -123,22 +123,22 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms1g",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=64M",
+                    "-XX:XenandoahRegionSize=64M",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahRegionSize option");
             output.shouldHaveExitValue(1);
         }
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms1g",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=256K",
+                    "-XX:XenandoahRegionSize=256K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -146,13 +146,13 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms1g",
                     "-Xmx1g",
-                    "-XX:ShenandoahRegionSize=128K",
+                    "-XX:XenandoahRegionSize=128K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahRegionSize option");
             output.shouldHaveExitValue(1);
         }
     }
@@ -161,46 +161,46 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahMinRegionSize=255K",
+                    "-XX:XenandoahMinRegionSize=255K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahMinRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahMinRegionSize option");
             output.shouldHaveExitValue(1);
         }
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahMinRegionSize=1M",
-                    "-XX:ShenandoahMaxRegionSize=260K",
+                    "-XX:XenandoahMinRegionSize=1M",
+                    "-XX:XenandoahMaxRegionSize=260K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahMinRegionSize or -XX:ShenandoahMaxRegionSize");
+            output.shouldMatch("Invalid -XX:XenandoahMinRegionSize or -XX:XenandoahMaxRegionSize");
             output.shouldHaveExitValue(1);
         }
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahMinRegionSize=200m",
+                    "-XX:XenandoahMinRegionSize=200m",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahMinRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahMinRegionSize option");
             output.shouldHaveExitValue(1);
         }
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahMinRegionSize=9m",
+                    "-XX:XenandoahMinRegionSize=9m",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
             output.shouldHaveExitValue(0);
@@ -212,26 +212,26 @@ public class TestRegionSizeArgs {
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahMaxRegionSize=255K",
+                    "-XX:XenandoahMaxRegionSize=255K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahMaxRegionSize option");
+            output.shouldMatch("Invalid -XX:XenandoahMaxRegionSize option");
             output.shouldHaveExitValue(1);
         }
 
         {
             ProcessBuilder pb = ProcessTools.createJavaProcessBuilder("-XX:+UnlockExperimentalVMOptions",
-                    "-XX:+UseShenandoahGC",
+                    "-XX:+UseXenandoahGC",
                     "-Xms100m",
                     "-Xmx1g",
-                    "-XX:ShenandoahMinRegionSize=1M",
-                    "-XX:ShenandoahMaxRegionSize=260K",
+                    "-XX:XenandoahMinRegionSize=1M",
+                    "-XX:XenandoahMaxRegionSize=260K",
                     "-version");
             OutputAnalyzer output = new OutputAnalyzer(pb.start());
-            output.shouldMatch("Invalid -XX:ShenandoahMinRegionSize or -XX:ShenandoahMaxRegionSize");
+            output.shouldMatch("Invalid -XX:XenandoahMinRegionSize or -XX:XenandoahMaxRegionSize");
             output.shouldHaveExitValue(1);
         }
     }

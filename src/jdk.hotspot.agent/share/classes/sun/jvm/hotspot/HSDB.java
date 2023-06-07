@@ -1121,9 +1121,9 @@ public class HSDB implements ObjectHistogramPanel.Listener, SAListener {
                         } else if (collHeap instanceof EpsilonHeap) {
                           anno = "Epsilon ";
                           bad = false;
-                        } else if (collHeap instanceof ShenandoahHeap) {
-                          ShenandoahHeap heap = (ShenandoahHeap) collHeap;
-                          anno = "ShenandoahHeap ";
+                        } else if (collHeap instanceof XenandoahHeap) {
+                          XenandoahHeap heap = (XenandoahHeap) collHeap;
+                          anno = "XenandoahHeap ";
                           bad = false;
                         } else if (collHeap instanceof XCollectedHeap) {
                           XCollectedHeap heap = (XCollectedHeap) collHeap;

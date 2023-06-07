@@ -28,10 +28,10 @@ import jdk.test.lib.Utils;
 /*
  * @test
  * @key randomness
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  *
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:TieredStopAtLevel=0 -Xmx16m TestArrayCopyStress
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -XX:TieredStopAtLevel=0 -Xmx16m TestArrayCopyStress
  */
 public class TestArrayCopyStress {
 

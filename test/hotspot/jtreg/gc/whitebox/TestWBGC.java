@@ -27,7 +27,7 @@ package gc.whitebox;
  * @test
  * @bug 8055098
  * @summary Test to verify that WB methods isObjectInOldGen and youngGC work correctly.
- * @requires vm.gc != "Z" & vm.gc != "Shenandoah"
+ * @requires vm.gc != "Z" & vm.gc != "Xenandoah"
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management

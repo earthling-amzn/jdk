@@ -76,16 +76,16 @@ import jdk.test.lib.process.ProcessTools;
  */
 
 /*
- * @test id=Shenandoah
- * @requires vm.gc.Shenandoah
- * @summary Unit test for jmap utility (Shenandoah GC)
+ * @test id=Xenandoah
+ * @requires vm.gc.Xenandoah
+ * @summary Unit test for jmap utility (Xenandoah GC)
  * @key intermittent
  * @library /test/lib
  * @build jdk.test.lib.hprof.*
  * @build jdk.test.lib.hprof.model.*
  * @build jdk.test.lib.hprof.parser.*
  * @build jdk.test.lib.hprof.util.*
- * @run main/othervm/timeout=240 -XX:+UseShenandoahGC BasicJMapTest
+ * @run main/othervm/timeout=240 -XX:+UseXenandoahGC BasicJMapTest
  */
 
 /*

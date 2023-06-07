@@ -24,8 +24,8 @@
 
 /*
  * @test
- * @summary Test that Shenandoah GC thread counts are handled well
- * @requires vm.gc.Shenandoah
+ * @summary Test that Xenandoah GC thread counts are handled well
+ * @requires vm.gc.Xenandoah
  * @library /test/lib
  * @modules java.base/jdk.internal.misc
  *          java.management
@@ -49,23 +49,23 @@ public class TestThreadCounts {
                 "-Xmx128m",
                 "-XX:+UnlockDiagnosticVMOptions",
                 "-XX:+UnlockExperimentalVMOptions",
-                "-XX:+UseShenandoahGC",
+                "-XX:+UseXenandoahGC",
                 "-XX:ConcGCThreads=" + conc,
                 "-XX:ParallelGCThreads=" + par,
                 "-version");
         OutputAnalyzer output = new OutputAnalyzer(pb.start());
 
         if (conc == 0) {
-            output.shouldContain("Shenandoah expects ConcGCThreads > 0");
+            output.shouldContain("Xenandoah expects ConcGCThreads > 0");
             output.shouldHaveExitValue(1);
         } else if (par == 0) {
-            output.shouldContain("Shenandoah expects ParallelGCThreads > 0");
+            output.shouldContain("Xenandoah expects ParallelGCThreads > 0");
             output.shouldHaveExitValue(1);
         } else if (conc > par) {
-            output.shouldContain("Shenandoah expects ConcGCThreads <= ParallelGCThreads");
+            output.shouldContain("Xenandoah expects ConcGCThreads <= ParallelGCThreads");
             output.shouldHaveExitValue(1);
         } else {
-            output.shouldNotContain("Shenandoah expects ConcGCThreads <= ParallelGCThreads");
+            output.shouldNotContain("Xenandoah expects ConcGCThreads <= ParallelGCThreads");
             output.shouldHaveExitValue(0);
         }
     }

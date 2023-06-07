@@ -50,8 +50,8 @@ import jdk.test.lib.jfr.Events;
  * @test TestGCPhaseConcurrent
  * @key jfr
  * @library /test/lib /test/jdk /test/hotspot/jtreg
- * @requires vm.hasJFR & vm.gc.Shenandoah
- * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -Xmx32M jdk.jfr.event.gc.detailed.TestGCPhaseConcurrent Shenandoah
+ * @requires vm.hasJFR & vm.gc.Xenandoah
+ * @run main/othervm -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC -Xmx32M jdk.jfr.event.gc.detailed.TestGCPhaseConcurrent Xenandoah
  */
 public class TestGCPhaseConcurrent {
     public static void main(String[] args) throws Exception {

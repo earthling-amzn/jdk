@@ -1233,7 +1233,7 @@ NOINLINE void FreezeBase::finish_freeze(const frame& f, const frame& top) {
     // old chunks are all in GC mode.
     assert(!UseG1GC, "G1 can not deal with allocating outside of eden");
     assert(!UseZGC, "ZGC can not deal with allocating chunks visible to marking");
-    if (UseShenandoahGC) {
+    if (UseXenandoahGC) {
       _cont.tail()->relativize_derived_pointers_concurrently();
     } else {
       ContinuationGCSupport::transform_stack_chunk(_cont.tail());
@@ -1404,7 +1404,7 @@ stackChunkOop Freeze<ConfigT>::allocate_chunk(size_t stack_size) {
   } else
 #endif
 #if INCLUDE_SHENANDOAHGC
-  if (UseShenandoahGC) {
+  if (UseXenandoahGC) {
     _barriers = chunk->requires_barriers();
   } else
 #endif
@@ -1991,7 +1991,7 @@ NOINLINE intptr_t* ThawBase::thaw_slow(stackChunkOop chunk, bool return_barrier)
   }
 
 #if INCLUDE_ZGC || INCLUDE_SHENANDOAHGC
-  if (UseZGC || UseShenandoahGC) {
+  if (UseZGC || UseXenandoahGC) {
     _cont.tail()->relativize_derived_pointers_concurrently();
   }
 #endif

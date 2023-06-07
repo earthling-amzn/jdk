@@ -56,7 +56,7 @@ requires.properties= \
     vm.gc.G1 \
     vm.gc.Serial \
     vm.gc.Parallel \
-    vm.gc.Shenandoah \
+    vm.gc.Xenandoah \
     vm.gc.Epsilon \
     vm.gc.Z \
     vm.graal.enabled \

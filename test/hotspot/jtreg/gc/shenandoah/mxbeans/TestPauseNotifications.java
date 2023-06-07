@@ -26,16 +26,16 @@
  * @test id=passive
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:+ShenandoahDegeneratedGC
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:+XenandoahDegeneratedGC
  *      TestPauseNotifications
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=passive
- *      -XX:-ShenandoahDegeneratedGC
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=passive
+ *      -XX:-XenandoahDegeneratedGC
  *      TestPauseNotifications
  */
 
@@ -43,10 +43,10 @@
  * @test id=aggressive
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive
  *      TestPauseNotifications
  */
 
@@ -54,10 +54,10 @@
  * @test id=adaptive
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=adaptive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=adaptive
  *      TestPauseNotifications
  */
 
@@ -65,10 +65,10 @@
  * @test id=static
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=static
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=static
  *      TestPauseNotifications
  */
 
@@ -76,10 +76,10 @@
  * @test id=compact
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=compact
  *      TestPauseNotifications
  */
 
@@ -87,14 +87,14 @@
  * @test id=iu
  * @summary Check that MX notifications are reported for all cycles
  * @library /test/lib /
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu -XX:ShenandoahGCHeuristics=aggressive
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu -XX:XenandoahGCHeuristics=aggressive
  *      TestPauseNotifications
  *
  * @run main/othervm -Xmx128m -XX:+UnlockDiagnosticVMOptions -XX:+UnlockExperimentalVMOptions
- *      -XX:+UseShenandoahGC -XX:ShenandoahGCMode=iu
+ *      -XX:+UseXenandoahGC -XX:XenandoahGCMode=iu
  *      TestPauseNotifications
  */
 
@@ -141,14 +141,14 @@ public class TestPauseNotifications {
                     long d = info.getGcInfo().getDuration();
 
                     String name = info.getGcName();
-                    if (name.contains("Shenandoah")) {
-                        if (name.equals("Shenandoah Pauses")) {
+                    if (name.contains("Xenandoah")) {
+                        if (name.equals("Xenandoah Pauses")) {
                             pausesCount.incrementAndGet();
                             pausesDuration.addAndGet(d);
                             if (!isExpectedPauseAction(info.getGcAction())) {
                                 throw new IllegalStateException("Unknown action: " + info.getGcAction());
                             }
-                        } else if (name.equals("Shenandoah Cycles")) {
+                        } else if (name.equals("Xenandoah Cycles")) {
                             cyclesCount.incrementAndGet();
                             cyclesDuration.addAndGet(d);
                         } else {

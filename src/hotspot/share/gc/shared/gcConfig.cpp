@@ -61,7 +61,7 @@ struct IncludedGC {
         G1GC_ONLY(static G1Arguments         g1Arguments;)
   PARALLELGC_ONLY(static ParallelArguments   parallelArguments;)
     SERIALGC_ONLY(static SerialArguments     serialArguments;)
-SHENANDOAHGC_ONLY(static ShenandoahArguments shenandoahArguments;)
+SHENANDOAHGC_ONLY(static XenandoahArguments shenandoahArguments;)
          ZGC_ONLY(static ZSharedArguments    zArguments;)
 
 // Table of included GCs, for translating between command
@@ -71,7 +71,7 @@ static const IncludedGC IncludedGCs[] = {
         G1GC_ONLY_ARG(IncludedGC(UseG1GC,            CollectedHeap::G1,         g1Arguments,         "g1 gc"))
   PARALLELGC_ONLY_ARG(IncludedGC(UseParallelGC,      CollectedHeap::Parallel,   parallelArguments,   "parallel gc"))
     SERIALGC_ONLY_ARG(IncludedGC(UseSerialGC,        CollectedHeap::Serial,     serialArguments,     "serial gc"))
-SHENANDOAHGC_ONLY_ARG(IncludedGC(UseShenandoahGC,    CollectedHeap::Shenandoah, shenandoahArguments, "shenandoah gc"))
+SHENANDOAHGC_ONLY_ARG(IncludedGC(UseXenandoahGC,    CollectedHeap::Xenandoah, shenandoahArguments, "shenandoah gc"))
          ZGC_ONLY_ARG(IncludedGC(UseZGC,             CollectedHeap::Z,          zArguments,          "z gc"))
 };
 
@@ -91,7 +91,7 @@ void GCConfig::fail_if_non_included_gc_is_selected() {
   NOT_G1GC(        FAIL_IF_SELECTED(UseG1GC));
   NOT_PARALLELGC(  FAIL_IF_SELECTED(UseParallelGC));
   NOT_SERIALGC(    FAIL_IF_SELECTED(UseSerialGC));
-  NOT_SHENANDOAHGC(FAIL_IF_SELECTED(UseShenandoahGC));
+  NOT_SHENANDOAHGC(FAIL_IF_SELECTED(UseXenandoahGC));
   NOT_ZGC(         FAIL_IF_SELECTED(UseZGC));
 }
 

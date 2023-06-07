@@ -86,8 +86,8 @@ public class HeapSummary extends Tool {
       printValMB("MetaspaceSize            = ", getFlagValue("MetaspaceSize", flagMap));
       printValMB("CompressedClassSpaceSize = ", getFlagValue("CompressedClassSpaceSize", flagMap));
       printValMB("MaxMetaspaceSize         = ", getFlagValue("MaxMetaspaceSize", flagMap));
-      if (heap instanceof ShenandoahHeap) {
-         printValMB("ShenandoahRegionSize     = ", ShenandoahHeapRegion.regionSizeBytes());
+      if (heap instanceof XenandoahHeap) {
+         printValMB("XenandoahRegionSize     = ", XenandoahHeapRegion.regionSizeBytes());
       } else {
          printValMB("G1HeapRegionSize         = ", HeapRegion.grainBytes());
       }
@@ -133,12 +133,12 @@ public class HeapSummary extends Tool {
          printValMB("used     = ", oldGen.used());
          printValMB("free     = ", oldFree);
          System.out.println(alignment + (double)oldGen.used() * 100.0 / oldGen.capacity() + "% used");
-      } else if (heap instanceof ShenandoahHeap) {
-         ShenandoahHeap sh = (ShenandoahHeap) heap;
+      } else if (heap instanceof XenandoahHeap) {
+         XenandoahHeap sh = (XenandoahHeap) heap;
          long num_regions = sh.numOfRegions();
-         System.out.println("Shenandoah Heap:");
+         System.out.println("Xenandoah Heap:");
          System.out.println("   regions   = " + num_regions);
-         printValMB("capacity  = ", num_regions * ShenandoahHeapRegion.regionSizeBytes());
+         printValMB("capacity  = ", num_regions * XenandoahHeapRegion.regionSizeBytes());
          printValMB("used      = ", sh.used());
          printValMB("committed = ", sh.committed());
       } else if (heap instanceof EpsilonHeap) {
@@ -195,9 +195,9 @@ public class HeapSummary extends Tool {
            return;
        }
 
-       l = getFlagValue("UseShenandoahGC", flagMap);
+       l = getFlagValue("UseXenandoahGC", flagMap);
        if (l == 1L) {
-           System.out.print("Shenandoah GC ");
+           System.out.print("Xenandoah GC ");
            l = getFlagValue("ParallelGCThreads", flagMap);
            System.out.println("with " + l + " thread(s)");
            return;

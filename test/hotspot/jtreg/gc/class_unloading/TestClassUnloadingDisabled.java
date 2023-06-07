@@ -75,9 +75,9 @@ package gc.class_unloading;
  */
 
 /*
- * @test TestClassUnloadingDisabledShenandoah
+ * @test TestClassUnloadingDisabledXenandoah
  * @bug 8114823
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  * @requires vm.opt.ExplicitGCInvokesConcurrent != true
  * @requires vm.opt.ClassUnloading != true
  * @library /test/lib
@@ -86,7 +86,7 @@ package gc.class_unloading;
  * @build jdk.test.whitebox.WhiteBox
  * @run driver jdk.test.lib.helpers.ClassFileInstaller jdk.test.whitebox.WhiteBox
  * @run main/othervm -Xbootclasspath/a:. -XX:+UnlockDiagnosticVMOptions -XX:+WhiteBoxAPI
- *                   -XX:-ClassUnloading -XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC gc.class_unloading.TestClassUnloadingDisabled
+ *                   -XX:-ClassUnloading -XX:+UnlockExperimentalVMOptions -XX:+UseXenandoahGC gc.class_unloading.TestClassUnloadingDisabled
  */
 
 import java.io.File;

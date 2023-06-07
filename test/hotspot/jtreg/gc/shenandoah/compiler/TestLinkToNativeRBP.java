@@ -29,10 +29,10 @@
  *
  * @requires vm.flavor == "server"
  * @requires ((os.arch == "amd64" | os.arch == "x86_64") & sun.arch.data.model == "64") | os.arch == "aarch64" | os.arch == "ppc64le"
- * @requires vm.gc.Shenandoah
+ * @requires vm.gc.Xenandoah
  *
  * @run main/othervm --enable-native-access=ALL-UNNAMED -XX:+UnlockDiagnosticVMOptions
- *                   -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=aggressive TestLinkToNativeRBP
+ *                   -XX:+UseXenandoahGC -XX:XenandoahGCHeuristics=aggressive TestLinkToNativeRBP
  *
  */
 
