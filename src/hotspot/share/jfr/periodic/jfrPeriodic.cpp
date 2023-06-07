@@ -73,7 +73,7 @@
 #include "gc/g1/g1HeapRegionEventSender.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/xenandoah/shenandoahJfrSupport.hpp"
+#include "gc/xenandoah/xenandoahJfrSupport.hpp"
 #endif
 
 /**

@@ -50,7 +50,7 @@
 #include "opto/vectornode.hpp"
 #include "utilities/macros.hpp"
 #if INCLUDE_SHENANDOAHGC
-#include "gc/xenandoah/c2/shenandoahBarrierSetC2.hpp"
+#include "gc/xenandoah/c2/xenandoahBarrierSetC2.hpp"
 #endif
 
 // ----------------------------------------------------------------------------

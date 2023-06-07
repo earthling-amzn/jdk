@@ -37,7 +37,7 @@
 #include "gc/g1/g1BarrierSet.inline.hpp"
 #endif
 #if INCLUDE_SHENANDOAHGC
-#include "gc/xenandoah/shenandoahBarrierSet.inline.hpp"
+#include "gc/xenandoah/xenandoahBarrierSet.inline.hpp"
 #endif
 #if INCLUDE_ZGC
 #include "gc/x/xBarrierSet.inline.hpp"
