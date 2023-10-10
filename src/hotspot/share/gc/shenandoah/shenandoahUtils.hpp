@@ -42,13 +42,31 @@
 
 class GCTimer;
 
+class ShenandoahCycleMemoryStats : public StackObj {
+private:
+  GCMemoryManager* _gc_memory_manager;
+  GCCause::Cause   _cause;
+  const char*      _end_message;
+public:
+  ShenandoahCycleMemoryStats() {}
+  ShenandoahCycleMemoryStats(GCMemoryManager* gc_memory_manager,
+                             GCCause::Cause cause,
+                             const char* end_message);
+
+  void initialize(GCMemoryManager* gc_memory_manager,
+                  GCCause::Cause cause,
+                  const char* end_message);
+
+  ~ShenandoahCycleMemoryStats();
+};
+
 class ShenandoahGCSession : public StackObj {
 private:
   ShenandoahHeap* const _heap;
   GCTimer*  const _timer;
   GCTracer* const _tracer;
 
-  TraceMemoryManagerStats _trace_cycle;
+  ShenandoahCycleMemoryStats _trace_cycle;
 public:
   ShenandoahGCSession(GCCause::Cause cause);
   ~ShenandoahGCSession();

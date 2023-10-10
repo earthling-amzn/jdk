@@ -24,10 +24,8 @@
 
 #include "precompiled.hpp"
 
-#include "jfr/jfrEvents.hpp"
 #include "gc/shared/gcCause.hpp"
 #include "gc/shared/gcTrace.hpp"
-#include "gc/shared/gcWhen.hpp"
 #include "gc/shared/referenceProcessorStats.hpp"
 #include "gc/shenandoah/heuristics/shenandoahHeuristics.hpp"
 #include "gc/shenandoah/shenandoahCollectorPolicy.hpp"
@@ -37,6 +35,39 @@
 #include "utilities/debug.hpp"
 
 ShenandoahPhaseTimings::Phase ShenandoahTimingsTracker::_current_phase = ShenandoahPhaseTimings::_invalid_phase;
+
+ShenandoahCycleMemoryStats::ShenandoahCycleMemoryStats(GCMemoryManager* gc_memory_manager,
+                                                       GCCause::Cause cause,
+                                                       const char* end_message) {
+  initialize(gc_memory_manager, cause, end_message);
+}
+
+// for a subclass to create then initialize an instance before invoking
+// the MemoryService
+void ShenandoahCycleMemoryStats::initialize(GCMemoryManager* gc_memory_manager,
+                                            GCCause::Cause cause,
+                                            const char* end_message) {
+  _gc_memory_manager = gc_memory_manager;
+  _cause = cause;
+  _end_message = end_message;
+
+  MemoryService::gc_begin(_gc_memory_manager,
+                          /* recordGCBeginTime= */       true,
+                          /* recordAccumulatedGCTime= */ true,
+                          /* recordPreGCUsage= */        true,
+                          /* recordPeakUsage= */         true
+                          );
+}
+
+ShenandoahCycleMemoryStats::~ShenandoahCycleMemoryStats() {
+  MemoryService::gc_end(_gc_memory_manager,
+                        /* recordPostGCUsage= */ !ShenandoahHeap::heap()->cancelled_gc(),
+                        /* recordAccumulatedGCTime= */ true,
+                        /* recordGCEndTime= */ true,
+                        /* countCollection= */ true, _cause,
+                        /* allMemoryPoolsAffected= */ true,
+                        _end_message);
+}
 
 ShenandoahGCSession::ShenandoahGCSession(GCCause::Cause cause) :
   _heap(ShenandoahHeap::heap()),
@@ -51,17 +82,7 @@ ShenandoahGCSession::ShenandoahGCSession(GCCause::Cause cause) :
 
   _heap->shenandoah_policy()->record_cycle_start();
   _heap->heuristics()->record_cycle_start();
-  _trace_cycle.initialize(_heap->cycle_memory_manager(), cause,
-          "end of GC cycle",
-          /* allMemoryPoolsAffected */    true,
-          /* recordGCBeginTime = */       true,
-          /* recordPreGCUsage = */        true,
-          /* recordPeakUsage = */         true,
-          /* recordPostGCUsage = */       true,
-          /* recordAccumulatedGCTime = */ true,
-          /* recordGCEndTime = */         true,
-          /* countCollection = */         true
-  );
+  _trace_cycle.initialize(_heap->cycle_memory_manager(), cause, "end of GC cycle");
 }
 
 ShenandoahGCSession::~ShenandoahGCSession() {
