@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1999, 2023, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -21,37 +21,25 @@
  * questions.
  */
 
-#include <errno.h>
+/*
+ * @test
+ * @bug 4239714
+ * @summary Tests that BasicMenuItemUI.installComponent() is protected
+ */
 
-#ifdef _WIN64
-#define EXPORT __declspec(dllexport)
-#else
-#define EXPORT
-#endif
+import javax.swing.JMenuItem;
+import javax.swing.plaf.basic.BasicMenuItemUI;
 
-EXPORT void empty() {}
+public class bug4239714 {
+    public static void main(String[] argv) throws Exception {
+        Tester tester = new Tester();
+        tester.test();
+    }
 
-EXPORT int identity(int value) {
-    return value;
-}
-
-// 128 bit struct returned in buffer on SysV
-struct Big {
-    long long x;
-    long long y;
-};
-
-EXPORT struct Big with_return_buffer() {
-    struct Big b;
-    b.x = 10;
-    b.y = 11;
-    return b;
-}
-
-EXPORT void capture_errno(int value) {
-    errno = value;
-}
-
-EXPORT void do_upcall(void(*f)(void)) {
-    f();
+    static class Tester extends BasicMenuItemUI {
+        public void test() {
+            JMenuItem mi = new JMenuItem("bug4239714");
+            installComponents(mi);
+        }
+    }
 }
