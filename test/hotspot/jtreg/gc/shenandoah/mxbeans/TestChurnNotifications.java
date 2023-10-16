@@ -145,10 +145,12 @@ public class TestChurnNotifications {
                     MemoryUsage after = mapAfter.get("Shenandoah");
 
                     if ((before != null) && (after != null)) {
-                        long diff = before.getUsed() - after.getUsed();
-                        if (diff > 0) {
-                            churnBytes.addAndGet(diff);
-                        }
+                        if (after.getUsed() > 0) {
+                          long diff = before.getUsed() - after.getUsed();
+                          if (diff > 0) {
+                              churnBytes.addAndGet(diff);
+                          }
+                       }
                     }
                 }
             }
