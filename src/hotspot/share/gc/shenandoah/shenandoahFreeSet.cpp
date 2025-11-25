@@ -175,7 +175,6 @@ ShenandoahRegionPartitions::ShenandoahRegionPartitions(size_t max_regions, Shena
 void ShenandoahFreeSet::account_for_pip_regions(size_t mutator_regions, size_t mutator_bytes,
                                                 size_t collector_regions, size_t collector_bytes) {
   shenandoah_assert_heaplocked();
-  size_t region_size_bytes = ShenandoahHeapRegion::region_size_bytes();
 
   // We have removed all of these regions from their respective partition. Each pip region is "in" the NotFree partition.
   // We want to account for all pip pad memory as if it had been consumed from within the Mutator partition.

@@ -29,6 +29,8 @@
 #include "gc/shenandoah/shenandoahCollectorPolicy.hpp"
 #include "gc/shenandoah/shenandoahFreeSet.hpp"
 #include "gc/shenandoah/shenandoahGeneration.hpp"
+
+#include "shenandoahInPlacePromoter.hpp"
 #include "gc/shenandoah/shenandoahGenerationalHeap.inline.hpp"
 #include "gc/shenandoah/shenandoahHeapRegionClosures.hpp"
 #include "gc/shenandoah/shenandoahOldGeneration.hpp"
@@ -490,19 +492,10 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
   assert_no_in_place_promotions();
 
   auto const heap = ShenandoahGenerationalHeap::heap();
-  ShenandoahFreeSet* free_set = heap->free_set();
   bool* const candidate_regions_for_promotion_by_copy = heap->collection_set()->preselected_regions();
-  ShenandoahMarkingContext* const ctx = heap->marking_context();
+  ShenandoahInPlacePromoter promoter(heap);
 
-  const size_t old_garbage_threshold = (ShenandoahHeapRegion::region_size_bytes() * ShenandoahOldGarbageThreshold) / 100;
-
-  const size_t pip_used_threshold = (ShenandoahHeapRegion::region_size_bytes() * ShenandoahGenerationalMinPIPUsage) / 100;
-
-  size_t promo_potential = 0;
   size_t candidates = 0;
-
-  // Tracks the padding of space above top in regions eligible for promotion in place
-  size_t promote_in_place_pad = 0;
 
   // Sort the promotion-eligible regions in order of increasing live-data-bytes so that we can first reclaim regions that require
   // less evacuation effort.  This prioritizes garbage first, expanding the allocation pool early before we reclaim regions that
@@ -511,140 +504,33 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
 
   ResourceMark rm;
   AgedRegionData* sorted_regions = NEW_RESOURCE_ARRAY(AgedRegionData, num_regions);
-
-  // Any region that is to be promoted in place needs to be retired from its Collector or Mutator partition.
-  idx_t pip_low_collector_idx = free_set->max_regions();
-  idx_t pip_high_collector_idx = -1;
-  idx_t pip_low_mutator_idx = free_set->max_regions();
-  idx_t pip_high_mutator_idx = -1;
-  size_t collector_regions_to_pip = 0;
-  size_t mutator_regions_to_pip = 0;
-
-  size_t pip_mutator_regions = 0;
-  size_t pip_collector_regions = 0;
-  size_t pip_mutator_bytes = 0;
-  size_t pip_collector_bytes = 0;
-
   for (idx_t i = 0; i < num_regions; i++) {
     ShenandoahHeapRegion* const r = heap->get_region(i);
     if (r->is_empty() || !r->has_live() || !r->is_young() || !r->is_regular()) {
       // skip over regions that aren't regular young with some live data
       continue;
     }
+
     if (heap->is_tenurable(r)) {
-      if ((r->garbage() < old_garbage_threshold) && (r->used() > pip_used_threshold)) {
+      // All the objects in this region are tenurable. Will we promote the entire region in-place or will
+      // we promote individual objects during evacuation?
+      if (promoter.is_eligible(r)) {
         // We prefer to promote this region in place because it has a small amount of garbage and a large usage.
-        HeapWord* tams = ctx->top_at_mark_start(r);
-        HeapWord* original_top = r->top();
-        if (!heap->is_concurrent_old_mark_in_progress() && tams == original_top) {
-          // No allocations from this region have been made during concurrent mark. It meets all the criteria
-          // for in-place-promotion. Though we only need the value of top when we fill the end of the region,
-          // we use this field to indicate that this region should be promoted in place during the evacuation
-          // phase.
-          r->save_top_before_promote();
-          size_t remnant_bytes = r->free();
-          size_t remnant_words = remnant_bytes / HeapWordSize;
-          assert(ShenandoahHeap::min_fill_size() <= PLAB::min_size(), "Implementation makes invalid assumptions");
-          if (remnant_words >= ShenandoahHeap::min_fill_size()) {
-            ShenandoahHeap::fill_with_object(original_top, remnant_words);
-            // Fill the remnant memory within this region to assure no allocations prior to promote in place.  Otherwise,
-            // newly allocated objects will not be parsable when promote in place tries to register them.  Furthermore, any
-            // new allocations would not necessarily be eligible for promotion.  This addresses both issues.
-            r->set_top(r->end());
-            // The region r is either in the Mutator or Collector partition if remnant_words > heap()->plab_min_size.
-            // Otherwise, the region is in the NotFree partition.
-            ShenandoahFreeSetPartitionId p = free_set->membership(i);
-            if (p == ShenandoahFreeSetPartitionId::Mutator) {
-              mutator_regions_to_pip++;
-              if (i < pip_low_mutator_idx) {
-                pip_low_mutator_idx = i;
-              }
-              if (i > pip_high_mutator_idx) {
-                pip_high_mutator_idx = i;
-              }
-              pip_mutator_regions++;
-              pip_mutator_bytes += remnant_bytes;
-            } else if (p == ShenandoahFreeSetPartitionId::Collector) {
-              collector_regions_to_pip++;
-              if (i < pip_low_collector_idx) {
-                pip_low_collector_idx = i;
-              }
-              if (i > pip_high_collector_idx) {
-                pip_high_collector_idx = i;
-              }
-              pip_collector_regions++;
-              pip_collector_bytes += remnant_bytes;
-            } else {
-              assert((p == ShenandoahFreeSetPartitionId::NotFree) && (remnant_words < heap->plab_min_size()),
-                     "Should be NotFree if not in Collector or Mutator partitions");
-              // In this case, the memory is already counted as used and the region has already been retired.  There is
-              // no need for further adjustments to used.  Further, the remnant memory for this region will not be
-              // unallocated or made available to OldCollector after pip.
-              remnant_bytes = 0;
-            }
-            promote_in_place_pad += remnant_bytes;
-            free_set->prepare_to_promote_in_place(i, remnant_bytes);
-          } else {
-            // Since the remnant is so small that this region has already been retired, we don't have to worry about any
-            // accidental allocations occurring within this region before the region is promoted in place.
-
-            // This region was already not in the Collector or Mutator set, so no need to remove it.
-            assert(free_set->membership(i) == ShenandoahFreeSetPartitionId::NotFree, "sanity");
-          }
-        }
-        // Else, we do not promote this region (either in place or by copy) because it has received new allocations.
-
-        // During evacuation, we exclude from promotion regions for which age > tenure threshold, garbage < garbage-threshold,
-        //  used > pip_used_threshold, and get_top_before_promote() != tams
+        // Note that if this region has been used recently for allocation, it will not be promoted and it will
+        // not be selected for promotion by evacuation.
+        promoter.prepare(r);
       } else {
         // Record this promotion-eligible candidate region. After sorting and selecting the best candidates below,
-        // we may still decide to exclude this promotion-eligible region from the current collection set.  If this
-        // happens, we will consider this region as part of the anticipated promotion potential for the next GC
-        // pass; see further below.
+        // we may still decide to exclude this promotion-eligible region from the current collection set.
         sorted_regions[candidates]._region = r;
-        sorted_regions[candidates++]._live_data = r->get_live_data_bytes();
-      }
-    } else {
-      // We only evacuate & promote objects from regular regions whose garbage() is above old-garbage-threshold.
-      // Objects in tenure-worthy regions with less garbage are promoted in place. These take a different path to
-      // old-gen.  Regions excluded from promotion because their garbage content is too low (causing us to anticipate that
-      // the region would be promoted in place) may be eligible for evacuation promotion by the time promotion takes
-      // place during a subsequent GC pass because more garbage is found within the region between now and then.  This
-      // should not happen if we are properly adapting the tenure age.  The theory behind adaptive tenuring threshold
-      // is to choose the youngest age that demonstrates no "significant" further loss of population since the previous
-      // age.  If not this, we expect the tenure age to demonstrate linear population decay for at least two population
-      // samples, whereas we expect to observe exponential population decay for ages younger than the tenure age.
-      //
-      // In the case that certain regions which were anticipated to be promoted in place need to be promoted by
-      // evacuation, it may be the case that there is not sufficient reserve within old-gen to hold evacuation of
-      // these regions.  The likely outcome is that these regions will not be selected for evacuation or promotion
-      // in the current cycle and we will anticipate that they will be promoted in the next cycle.  This will cause
-      // us to reserve more old-gen memory so that these objects can be promoted in the subsequent cycle.
-      if (heap->is_aging_cycle() && heap->age_census()->is_tenurable(r->age() + 1)) {
-        if (r->garbage() >= old_garbage_threshold) {
-          promo_potential += r->get_live_data_bytes();
-        }
+        sorted_regions[candidates]._live_data = r->get_live_data_bytes();
+        ++candidates;
       }
     }
-    // Note that we keep going even if one region is excluded from selection.
-    // Subsequent regions may be selected if they have smaller live data.
   }
 
-  if (pip_mutator_regions + pip_collector_regions > 0) {
-    free_set->account_for_pip_regions(pip_mutator_regions, pip_mutator_bytes, pip_collector_regions, pip_collector_bytes);
-  }
-
-  // Retire any regions that have been selected for promote in place
-  if (collector_regions_to_pip > 0) {
-    free_set->shrink_interval_if_range_modifies_either_boundary(ShenandoahFreeSetPartitionId::Collector,
-                                                               pip_low_collector_idx, pip_high_collector_idx,
-                                                               collector_regions_to_pip);
-  }
-  if (mutator_regions_to_pip > 0) {
-    free_set->shrink_interval_if_range_modifies_either_boundary(ShenandoahFreeSetPartitionId::Mutator,
-                                                               pip_low_mutator_idx, pip_high_mutator_idx,
-                                                               mutator_regions_to_pip);
-  }
+  // Adjust the free set to accommodate regions that will be promoted in place
+  promoter.update_free_set();
 
   // Sort in increasing order according to live data bytes.  Note that candidates represents the number of regions
   // that qualify to be promoted by evacuation.
@@ -663,13 +549,8 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
         selected_regions++;
         selected_live += region_live_data;
       } else {
-        // We rejected this promotable region from the collection set because we had no room to hold its copy.
-        // Add this region to promo potential for next GC.
-        promo_potential += region_live_data;
-        assert(!candidate_regions_for_promotion_by_copy[region->index()], "Shouldn't be selected");
+        break;
       }
-      // We keep going even if one region is excluded from selection because we need to accumulate all eligible
-      // regions that are not preselected into promo_potential
     }
     log_debug(gc, ergo)("Preselected %zu regions containing " PROPERFMT " live data,"
                         " consuming: " PROPERFMT " of budgeted: " PROPERFMT,
@@ -680,10 +561,9 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
   const size_t tenurable_next_cycle = heap->age_census()->get_tenurable_bytes(tenuring_threshold - 1);
   const size_t tenurable_this_cycle = heap->age_census()->get_tenurable_bytes(tenuring_threshold);
 
-  log_info(gc, ergo)("Promotion potential: " PROPERFMT ", tenurable next cycle: " PROPERFMT ", tenurable this cycle: " PROPERFMT ", selected for promotion: " PROPERFMT ,
-                     PROPERFMTARGS(promo_potential), PROPERFMTARGS(tenurable_next_cycle), PROPERFMTARGS(tenurable_this_cycle), PROPERFMTARGS(old_consumed));
+  log_info(gc, ergo)("Tenurable next cycle: " PROPERFMT ", tenurable this cycle: " PROPERFMT ", selected for promotion: " PROPERFMT ,
+                     PROPERFMTARGS(tenurable_next_cycle), PROPERFMTARGS(tenurable_this_cycle), PROPERFMTARGS(old_consumed));
 
-  heap->old_generation()->set_pad_for_promote_in_place(promote_in_place_pad);
   heap->old_generation()->set_promotion_potential(tenurable_next_cycle);
 
   assert(old_consumed <= old_promotion_reserve, "Consumed more (%zu) than we reserved (%zu)", old_consumed, old_promotion_reserve);
