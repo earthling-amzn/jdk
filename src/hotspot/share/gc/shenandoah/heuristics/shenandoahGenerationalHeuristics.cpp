@@ -92,14 +92,11 @@ void ShenandoahGenerationalHeuristics::choose_collection_set(ShenandoahCollectio
         immediate_garbage += garbage;
         region->make_trash_immediate();
       } else {
-        bool is_candidate;
         // This is our candidate for later consideration.
-        if (collection_set->is_preselected(i)) {
+        if (collection_set->is_in(i)) {
+          // We have "preselected" this region for evacuation when we were computing promotion reserves
           assert(heap->is_tenurable(region), "Preselection filter");
-          is_candidate = true;
           preselected_candidates++;
-          // Set garbage value to maximum value to force this into the sorted collection set.
-          garbage = region_size_bytes;
         } else if (region->is_young() && heap->is_tenurable(region)) {
           // Note that for GLOBAL GC, region may be OLD, and OLD regions do not qualify for pre-selection
 
@@ -114,11 +111,7 @@ void ShenandoahGenerationalHeuristics::choose_collection_set(ShenandoahCollectio
             regular_regions_promoted_free += region->free();
             regular_regions_promoted_garbage += region->garbage();
           }
-          is_candidate = false;
         } else {
-          is_candidate = true;
-        }
-        if (is_candidate) {
           candidates[cand_idx].set_region_and_garbage(region, garbage);
           cand_idx++;
         }
@@ -196,32 +189,3 @@ void ShenandoahGenerationalHeuristics::choose_collection_set(ShenandoahCollectio
                                            immediate_regions,
                                            immediate_garbage);
 }
-
-
-size_t ShenandoahGenerationalHeuristics::add_preselected_regions_to_collection_set(ShenandoahCollectionSet* cset,
-                                                                                   const RegionData* data,
-                                                                                   size_t size) const {
-  // cur_young_garbage represents the amount of memory to be reclaimed from young-gen.  In the case that live objects
-  // are known to be promoted out of young-gen, we count this as cur_young_garbage because this memory is reclaimed
-  // from young-gen and becomes available to serve future young-gen allocation requests.
-  size_t cur_young_garbage = 0;
-  for (size_t idx = 0; idx < size; idx++) {
-    ShenandoahHeapRegion* r = data[idx].get_region();
-    if (cset->is_preselected(r->index())) {
-      assert(ShenandoahGenerationalHeap::heap()->is_tenurable(r), "Preselected regions must have tenure age");
-      // Entire region will be promoted, This region does not impact young-gen or old-gen evacuation reserve.
-      // This region has been pre-selected and its impact on promotion reserve is already accounted for.
-
-      // r->used() is r->garbage() + r->get_live_data_bytes()
-      // Since all live data in this region is being evacuated from young-gen, it is as if this memory
-      // is garbage insofar as young-gen is concerned.  Counting this as garbage reduces the need to
-      // reclaim highly utilized young-gen regions just for the sake of finding min_garbage to reclaim
-      // within young-gen memory.
-
-      cur_young_garbage += r->garbage();
-      cset->add_region(r);
-    }
-  }
-  return cur_young_garbage;
-}
-

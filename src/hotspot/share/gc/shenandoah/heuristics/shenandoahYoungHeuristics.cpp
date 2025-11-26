@@ -50,17 +50,14 @@ void ShenandoahYoungHeuristics::choose_collection_set_from_regiondata(Shenandoah
   // more live data than we can evacuate.
 
   // Better select garbage-first regions
-  QuickSort::sort<RegionData>(data, (int) size, compare_by_garbage);
+  QuickSort::sort<RegionData>(data,  size, compare_by_garbage);
 
-  size_t cur_young_garbage = add_preselected_regions_to_collection_set(cset, data, size);
-
-  choose_young_collection_set(cset, data, size, actual_free, cur_young_garbage);
+  choose_young_collection_set(cset, data, size, actual_free);
 }
 
 void ShenandoahYoungHeuristics::choose_young_collection_set(ShenandoahCollectionSet* cset,
                                                             const RegionData* data,
-                                                            size_t size, size_t actual_free,
-                                                            size_t cur_young_garbage) const {
+                                                            size_t size, size_t actual_free) const {
 
   const auto heap = ShenandoahGenerationalHeap::heap();
 
@@ -71,6 +68,7 @@ void ShenandoahYoungHeuristics::choose_young_collection_set(ShenandoahCollection
   // This is young-gen collection or a mixed evacuation.
   // If this is mixed evacuation, the old-gen candidate regions have already been added.
   size_t cur_cset = 0;
+  size_t cur_young_garbage = cset->get_young_garbage();
   const size_t max_cset = (size_t) (heap->young_generation()->get_evacuation_reserve() / ShenandoahEvacWaste);
   const size_t free_target = (capacity * ShenandoahMinFreeThreshold) / 100 + max_cset;
   const size_t min_garbage = (free_target > actual_free) ? (free_target - actual_free) : 0;
@@ -83,24 +81,27 @@ void ShenandoahYoungHeuristics::choose_young_collection_set(ShenandoahCollection
 
   for (size_t idx = 0; idx < size; idx++) {
     ShenandoahHeapRegion* r = data[idx].get_region();
-    if (cset->is_preselected(r->index())) {
+    if (cset->is_in(r)) {
       continue;
     }
 
     // Note that we do not add tenurable regions if they were not pre-selected.  They were not preselected
     // because there is insufficient room in old-gen to hold their to-be-promoted live objects or because
-    // they are to be promoted in place.
-    if (!heap->is_tenurable(r)) {
-      const size_t new_cset = cur_cset + r->get_live_data_bytes();
-      const size_t region_garbage = r->garbage();
-      const size_t new_garbage = cur_young_garbage + region_garbage;
-      const bool add_regardless = (region_garbage > ignore_threshold) && (new_garbage < min_garbage);
-      assert(r->is_young(), "Only young candidates expected in the data array");
-      if ((new_cset <= max_cset) && (add_regardless || (region_garbage > garbage_threshold))) {
-        cur_cset = new_cset;
-        cur_young_garbage = new_garbage;
-        cset->add_region(r);
-      }
+    // they are to be promoted in place. That is, if we wanted to promote the objects out of this region,
+    // we would have added it to the collection set in 'select_aged_regions'.
+    if (heap->is_tenurable(r)) {
+      continue;
+    }
+
+    const size_t new_cset = cur_cset + r->get_live_data_bytes();
+    const size_t region_garbage = r->garbage();
+    const size_t new_garbage = cur_young_garbage + region_garbage;
+    const bool add_regardless = (region_garbage > ignore_threshold) && (new_garbage < min_garbage);
+    assert(r->is_young(), "Only young candidates expected in the data array");
+    if ((new_cset <= max_cset) && (add_regardless || (region_garbage > garbage_threshold))) {
+      cur_cset = new_cset;
+      cur_young_garbage = new_garbage;
+      cset->add_region(r);
     }
   }
 }
