@@ -491,7 +491,7 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
   assert_no_in_place_promotions();
 
   auto const heap = ShenandoahGenerationalHeap::heap();
-  ShenandoahInPlacePromoter promoter(heap);
+  ShenandoahInPlacePromotionPlanner promoter(heap);
   const idx_t num_regions = heap->num_regions();
   size_t candidates = 0;
   ResourceMark rm;

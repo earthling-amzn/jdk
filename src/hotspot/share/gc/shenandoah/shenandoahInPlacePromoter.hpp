@@ -30,7 +30,7 @@ class ShenandoahMarkingContext;
 class ShenandoahGenerationalHeap;
 class ShenandoahHeapRegion;
 
-class ShenandoahInPlacePromoter {
+class ShenandoahInPlacePromotionPlanner {
   using idx_t = ShenandoahSimpleBitMap::idx_t;
 
   struct RegionPromotions {
@@ -59,12 +59,11 @@ class ShenandoahInPlacePromoter {
   // Tracks the padding of space above top in regions eligible for promotion in place
   size_t _pip_padding_bytes;
 public:
-  explicit ShenandoahInPlacePromoter(const ShenandoahGenerationalHeap* heap);
+  explicit ShenandoahInPlacePromotionPlanner(const ShenandoahGenerationalHeap* heap);
 
   bool is_eligible(const ShenandoahHeapRegion* region) const;
   void prepare(ShenandoahHeapRegion* region);
   void update_free_set() const;
 };
-
 
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHINPLACEPROMOTER_HPP

@@ -30,7 +30,7 @@
 #include "gc/shenandoah/shenandoahOldGeneration.hpp"
 #include "gc/shenandoah/shenandoahMarkingContext.hpp"
 
-ShenandoahInPlacePromoter::RegionPromotions::RegionPromotions(ShenandoahFreeSet* free_set)
+ShenandoahInPlacePromotionPlanner::RegionPromotions::RegionPromotions(ShenandoahFreeSet* free_set)
   : _low_idx(free_set->max_regions())
   , _high_idx(-1)
   , _regions(0)
@@ -39,7 +39,7 @@ ShenandoahInPlacePromoter::RegionPromotions::RegionPromotions(ShenandoahFreeSet*
 {
 }
 
-void ShenandoahInPlacePromoter::RegionPromotions::increment(idx_t region_index, size_t remnant_bytes) {
+void ShenandoahInPlacePromotionPlanner::RegionPromotions::increment(idx_t region_index, size_t remnant_bytes) {
   if (region_index < _low_idx) {
     _low_idx = region_index;
   }
@@ -50,13 +50,13 @@ void ShenandoahInPlacePromoter::RegionPromotions::increment(idx_t region_index, 
   _bytes += remnant_bytes;
 }
 
-void ShenandoahInPlacePromoter::RegionPromotions::update_free_set(ShenandoahFreeSetPartitionId partition_id) const {
+void ShenandoahInPlacePromotionPlanner::RegionPromotions::update_free_set(ShenandoahFreeSetPartitionId partition_id) const {
   if (_regions > 0) {
     _free_set->shrink_interval_if_range_modifies_either_boundary(partition_id, _low_idx, _high_idx, _regions);
   }
 }
 
-ShenandoahInPlacePromoter::ShenandoahInPlacePromoter(const ShenandoahGenerationalHeap* heap)
+ShenandoahInPlacePromotionPlanner::ShenandoahInPlacePromotionPlanner(const ShenandoahGenerationalHeap* heap)
   : _old_garbage_threshold(ShenandoahHeapRegion::region_size_bytes() * ShenandoahOldGarbageThreshold / 100)
   , _pip_used_threshold(ShenandoahHeapRegion::region_size_bytes() * ShenandoahGenerationalMinPIPUsage / 100)
   , _heap(heap)
@@ -68,11 +68,11 @@ ShenandoahInPlacePromoter::ShenandoahInPlacePromoter(const ShenandoahGenerationa
 {
 }
 
-bool ShenandoahInPlacePromoter::is_eligible(const ShenandoahHeapRegion* region) const {
+bool ShenandoahInPlacePromotionPlanner::is_eligible(const ShenandoahHeapRegion* region) const {
   return region->garbage() < _old_garbage_threshold && region->used() > _pip_used_threshold;
 }
 
-void ShenandoahInPlacePromoter::prepare(ShenandoahHeapRegion* r) {
+void ShenandoahInPlacePromotionPlanner::prepare(ShenandoahHeapRegion* r) {
   HeapWord* tams = _marking_context->top_at_mark_start(r);
   HeapWord* original_top = r->top();
 
@@ -126,7 +126,7 @@ void ShenandoahInPlacePromoter::prepare(ShenandoahHeapRegion* r) {
   }
 }
 
-void ShenandoahInPlacePromoter::update_free_set() const {
+void ShenandoahInPlacePromotionPlanner::update_free_set() const {
   _heap->old_generation()->set_pad_for_promote_in_place(_pip_padding_bytes);
 
   if (_mutator_regions._regions + _collector_regions._regions > 0) {
