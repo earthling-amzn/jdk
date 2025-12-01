@@ -552,10 +552,13 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
 
   const uint tenuring_threshold = heap->age_census()->tenuring_threshold();
   const size_t tenurable_this_cycle = heap->age_census()->get_tenurable_bytes(tenuring_threshold);
+  size_t tenurable_next_cycle = heap->age_census()->get_tenurable_bytes(tenuring_threshold - 1);
 
   // Don't include the bytes we expect to promote in this cycle, in the next
-  size_t tenurable_next_cycle = heap->age_census()->get_tenurable_bytes(tenuring_threshold - 1);
-  assert(tenurable_next_cycle > tenurable_this_cycle, "Tenurable next cycle should include tenurable this cycle");
+  assert(tenurable_next_cycle >= tenurable_this_cycle,
+         "Tenurable next cycle (" PROPERFMT ") should include tenurable this cycle (" PROPERFMT ")",
+         PROPERFMTARGS(tenurable_next_cycle), PROPERFMTARGS(tenurable_this_cycle));
+
   tenurable_next_cycle -= tenurable_this_cycle;
 
   log_info(gc, ergo)("Tenurable next cycle: " PROPERFMT ", tenurable this cycle: " PROPERFMT ", selected for promotion: " PROPERFMT ,
