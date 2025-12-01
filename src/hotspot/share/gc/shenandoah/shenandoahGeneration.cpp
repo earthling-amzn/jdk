@@ -267,6 +267,8 @@ size_t get_maximum_old_evacuation_reserve(size_t maximum_young_evacuation_reserv
 }
 
 void ShenandoahGeneration::compute_evacuation_budgets(ShenandoahHeap* const heap) {
+  assert(heap->collection_set()->is_empty(), "Collection set must be empty here");
+
   shenandoah_assert_generational();
 
   ShenandoahOldGeneration* const old_generation = heap->old_generation();
