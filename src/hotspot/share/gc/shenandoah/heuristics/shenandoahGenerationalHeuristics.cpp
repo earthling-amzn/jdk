@@ -139,10 +139,9 @@ void ShenandoahGenerationalHeuristics::choose_collection_set(ShenandoahCollectio
         }
       }
     } else if (region->is_trash()) {
-      // Count in just trashed collection set, during coalesced CM-with-UR
+      // Count in just trashed humongous continuations
       immediate_regions++;
       immediate_garbage += garbage;
-      fatal("This looks like a hold over from IU mode? or earlier design that piggybacked update refs on concurrent mark");
     }
   }
   heap->old_generation()->set_expected_humongous_region_promotions(humongous_regions_promoted);
