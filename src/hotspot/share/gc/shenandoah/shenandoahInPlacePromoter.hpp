@@ -66,4 +66,16 @@ public:
   void update_free_set() const;
 };
 
+class ShenandoahInPlacePromoter {
+  ShenandoahGenerationalHeap* _heap;
+public:
+  explicit ShenandoahInPlacePromoter(ShenandoahGenerationalHeap* heap) : _heap(heap) {}
+
+  void maybe_promote_region(ShenandoahHeapRegion* region) const;
+
+private:
+  void promote(ShenandoahHeapRegion* region) const;
+  void promote_humongous(ShenandoahHeapRegion* region) const;
+};
+
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHINPLACEPROMOTER_HPP
