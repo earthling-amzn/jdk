@@ -547,6 +547,7 @@ size_t ShenandoahGeneration::select_aged_regions(const size_t old_promotion_rese
       selected_regions++;
       selected_live += region_live_data;
     }
+
     log_debug(gc, ergo)("Preselected %zu regions containing " PROPERFMT " live data,"
                         " consuming: " PROPERFMT " of budgeted: " PROPERFMT,
                         selected_regions, PROPERFMTARGS(selected_live), PROPERFMTARGS(old_consumed), PROPERFMTARGS(old_promotion_reserve));
@@ -599,7 +600,7 @@ void ShenandoahGeneration::prepare_regions_and_collection_set(bool concurrent) {
   }
 
   // Tally the census counts and compute the adaptive tenuring threshold
-  if (is_generational && ShenandoahGenerationalAdaptiveTenuring) {
+  if (is_generational) {
     // Objects above TAMS weren't included in the age census. Since they were all
     // allocated in this cycle they belong in the age 0 cohort. We walk over all
     // young regions and sum the volume of objects between TAMS and top.
