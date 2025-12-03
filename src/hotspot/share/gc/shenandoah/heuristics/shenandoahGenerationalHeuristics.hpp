@@ -47,6 +47,31 @@ public:
   void choose_collection_set(ShenandoahCollectionSet* collection_set) override;
 protected:
   ShenandoahGeneration* _generation;
+private:
+  void filter_regions(ShenandoahGenerationalHeap* heap, ShenandoahCollectionSet* collection_set);
+
+  // Compute evacuation budgets prior to choosing collection set.
+  void compute_evacuation_budgets(ShenandoahGenerationalHeap* heap, ShenandoahCollectionSet* collection_set);
+
+  // Adjust evacuation budgets after choosing collection set.
+  void adjust_evacuation_budgets(ShenandoahGenerationalHeap* heap, ShenandoahCollectionSet* collection_set);
+
+  // Preselect for possible inclusion into the collection set exactly the most
+  // garbage-dense regions, including those that satisfy criteria 1 & 2 below,
+  // and whose live bytes will fit within old_available budget:
+  // Criterion 1. region age >= tenuring threshold
+  // Criterion 2. region garbage percentage > ShenandoahOldGarbageThreshold
+  //
+  // Identifies regions eligible for promotion in place,
+  // being those of at least tenuring_threshold age that have lower garbage
+  // density.
+  //
+  // Updates promotion_potential and pad_for_promote_in_place fields
+  // of the heap. Returns bytes of live object memory in the preselected
+  // regions, which are marked in the preselected_regions() indicator
+  // array of the heap's collection set, which should be initialized
+  // to false.
+  size_t select_aged_regions(size_t old_promotion_reserve, ShenandoahGenerationalHeap* heap, ShenandoahCollectionSet* collection_set);
 };
 
 
