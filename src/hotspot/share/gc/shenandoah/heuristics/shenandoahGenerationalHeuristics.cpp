@@ -369,12 +369,21 @@ void ShenandoahGenerationalHeuristics::adjust_evacuation_budgets(ShenandoahGener
     old_generation->set_evacuation_reserve(anticipated_bytes_needed_for_old);
   }
 
+  old_generation->reset_promoted_expended();
+
 #ifdef ASSERT
   const size_t region_size_bytes = ShenandoahHeapRegion::region_size_bytes();
 
-  const size_t old_available = old_generation->available();
+  size_t old_available = old_generation->available();
   const size_t promoted_reserve = old_generation->get_promoted_reserve();
   const size_t old_consumed = anticipated_bytes_needed_for_old + promoted_reserve;
+  if (_generation->is_global() && old_available < old_consumed) {
+    // The global heuristic may transfer young regions to the old generation to allow more old evacuations.
+    // It will increase the old evacuation reserve when it does this, but old available will be adjusted
+    // when the free set is rebuilt (after this method exits).
+    old_available = old_consumed;
+  }
+
   assert(old_available >= old_consumed, "Cannot consume (%zu) more than is available (%zu)", old_consumed, old_available);
 
   const size_t excess_old = old_available - old_consumed;
@@ -385,8 +394,6 @@ void ShenandoahGenerationalHeuristics::adjust_evacuation_budgets(ShenandoahGener
          unaffiliated_old, unaffiliated_old_regions, region_size_bytes, old_available);
   log_debug(gc, cset)("excess_old is: %zu, unaffiliated_old_regions is: %zu", excess_old, unaffiliated_old_regions);
 #endif
-
-  old_generation->reset_promoted_expended();
 
 
   log_info(gc, ergo)("Adjusted evacuation reserves: young: " PROPERFMT ", promotion: " PROPERFMT ", old: " PROPERFMT,
