@@ -321,10 +321,10 @@ oop ShenandoahGenerationalHeap::try_evacuate_object(oop p, Thread* thread, uint 
         }
       }
       // else, we leave copy equal to nullptr, signaling a promotion failure below if appropriate.
-      // We choose not to promote objects smaller than PLAB::max_size() by way of shared allocations, as this is too
+      // We choose not to promote objects smaller than PLAB::min_size() by way of shared allocations, as this is too
       // costly (such objects should use the PLAB). Instead, we'll simply "evacuate" to young-gen memory (using a GCLAB)
       // and will promote in a future evacuation pass.  This condition is denoted by: is_promotion && has_plab && (size
-      // <= PLAB::max_size())
+      // <= PLAB::min_size())
     }
 #ifdef ASSERT
   }
@@ -715,19 +715,6 @@ void ShenandoahGenerationalHeap::reset_generation_reserves() {
   young_generation()->set_evacuation_reserve(0);
   old_generation()->set_evacuation_reserve(0);
   old_generation()->set_promoted_reserve(0);
-}
-
-void ShenandoahGenerationalHeap::TransferResult::print_on(const char* when, outputStream* ss) const {
-  auto heap = ShenandoahGenerationalHeap::heap();
-  ShenandoahYoungGeneration* const young_gen = heap->young_generation();
-  ShenandoahOldGeneration* const old_gen = heap->old_generation();
-  const size_t young_available = young_gen->available();
-  const size_t old_available = old_gen->available();
-  ss->print_cr("After %s, %s %zu regions to %s to prepare for next gc, old available: "
-                     PROPERFMT ", young_available: " PROPERFMT,
-                     when,
-                     success? "successfully transferred": "failed to transfer", region_count, region_destination,
-                     PROPERFMTARGS(old_available), PROPERFMTARGS(young_available));
 }
 
 void ShenandoahGenerationalHeap::coalesce_and_fill_old_regions(bool concurrent) {
