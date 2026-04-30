@@ -92,10 +92,11 @@ inline void ShenandoahAllocationRateThread::stop_service() {
 }
 
 inline void ShenandoahAllocationRateThread::run_service() {
+  MonitorLocker locker(&_sleep_lock, Mutex::_no_safepoint_check_flag);
   while (!should_terminate()) {
     _rate->record_sample();
     const jlong before_sleep_time = os::elapsed_counter();
-    os::naked_short_sleep(ShenandoahAllocRateSamplePeriodMs);
+    _sleep_lock.wait(ShenandoahAllocRateSamplePeriodMs);
     const jlong sleep_duration_ticks = os::elapsed_counter() - before_sleep_time;
     const double sleep_duration_ms = static_cast<double>(sleep_duration_ticks) * 1000 / os::elapsed_frequency();
     const double drift_ms = abs(sleep_duration_ms - ShenandoahAllocRateSamplePeriodMs);

@@ -88,8 +88,11 @@ typedef ShenandoahAllocRate<> ShenandoahAllocationRate;
 
 class ShenandoahAllocationRateThread : public ConcurrentGCThread {
   ShenandoahAllocationRate* _rate;
+  Monitor _sleep_lock;
 public:
-  explicit ShenandoahAllocationRateThread(ShenandoahAllocationRate* rate) : _rate(rate) {
+  explicit ShenandoahAllocationRateThread(ShenandoahAllocationRate* rate)
+    : _rate(rate)
+    , _sleep_lock(Mutex::nosafepoint - 2, "ShenandoahAllocSleep_lock", true) {
     set_name("ShenAllocRate");
     create_and_start();
   }
