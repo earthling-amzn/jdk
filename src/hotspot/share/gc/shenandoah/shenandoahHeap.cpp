@@ -504,8 +504,6 @@ jint ShenandoahHeap::initialize() {
   print_init_logger();
   FullGCForwarding::initialize(_heap_region);
 
-  _alloc_rate_thread = new ShenandoahAllocationRateThread(&_alloc_rate);
-
   return JNI_OK;
 }
 
@@ -2249,9 +2247,6 @@ void ShenandoahHeap::stop() {
   if (_uncommit_thread != nullptr) {
     _uncommit_thread->stop();
   }
-
-  // Step 5: Shutdown allocation rate sampling thread.
-  _alloc_rate_thread->stop();
 }
 
 void ShenandoahHeap::stw_unload_classes(bool full_gc) {

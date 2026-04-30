@@ -25,10 +25,10 @@
 #ifndef SHARE_GC_SHENANDOAH_SHENANDOAHALLOCRATE_HPP
 #define SHARE_GC_SHENANDOAH_SHENANDOAHALLOCRATE_HPP
 
-#include "gc/shared/concurrentGCThread.hpp"
 #include "runtime/mutex.hpp"
 #include "runtime/mutexLocker.hpp"
 #include "runtime/os.hpp"
+#include "utilities/globalDefinitions.hpp"
 #include "utilities/numberSeq.hpp"
 
 class ShenandoahAllocationClock {
@@ -68,7 +68,7 @@ public:
   }
 
   void allocated(size_t allocated_bytes);
-  void record_sample();
+  void maybe_record_sample();
   size_t accelerated_consumption(double& acceleration, double& current_rate, double time_delta);
 
   double average() {
@@ -85,21 +85,5 @@ private:
 };
 
 typedef ShenandoahAllocRate<> ShenandoahAllocationRate;
-
-class ShenandoahAllocationRateThread : public ConcurrentGCThread {
-  ShenandoahAllocationRate* _rate;
-  Monitor _sleep_lock;
-public:
-  explicit ShenandoahAllocationRateThread(ShenandoahAllocationRate* rate)
-    : _rate(rate)
-    , _sleep_lock(Mutex::nosafepoint - 2, "ShenandoahAllocSleep_lock", true) {
-    set_name("ShenAllocRate");
-    create_and_start();
-  }
-
-protected:
-  void stop_service() override;
-  void run_service() override;
-};
 
 #endif //SHARE_GC_SHENANDOAH_SHENANDOAHALLOCRATE_HPP
