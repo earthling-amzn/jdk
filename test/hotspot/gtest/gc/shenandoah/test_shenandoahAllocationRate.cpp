@@ -52,7 +52,6 @@ protected:
   template<typename Clock>
   static void allocate(ShenandoahAllocRate<Clock>& rate, size_t quantity) {
     rate.allocated(quantity);
-    rate.maybe_record_sample();
   }
 };
 

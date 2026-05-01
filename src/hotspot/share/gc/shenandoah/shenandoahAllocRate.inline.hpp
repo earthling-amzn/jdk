@@ -31,6 +31,7 @@
 template<typename Clock>
 void ShenandoahAllocRate<Clock>::allocated(const size_t allocated_bytes) {
   _allocated_bytes_since_last_sample.add_then_fetch(allocated_bytes);
+  maybe_record_sample();
 }
 
 template<typename Clock>
