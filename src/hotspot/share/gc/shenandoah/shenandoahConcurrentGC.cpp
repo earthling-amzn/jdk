@@ -172,15 +172,17 @@ bool ShenandoahConcurrentGC::collect(GCCause::Cause cause) {
   // Complete marking under STW, and start evacuation
   vmop_entry_final_mark();
 
-  // If the GC was cancelled before final mark, nothing happens on the safepoint. We are still
-  // in the marking phase and must resume the degenerated cycle from there. If the GC was cancelled
-  // after final mark, then we've entered the evacuation phase and must resume the degenerated cycle
-  // from that phase.
+  // If the GC was cancelled before final mark, nothing happens on the safepoint.
   if (_generation->is_concurrent_mark_in_progress()) {
     bool cancelled = check_cancellation_and_abort();
     assert(cancelled, "GC must have been cancelled between concurrent and final mark");
     return false;
   }
+
+  // Final mark may have reclaimed immediate garbage, notify gc waiters. Alloc waiters
+  // will retry their allocations. Threads waiting for a complete cycle will just go
+  // back to sleep.
+  _controller->notify_gc_waiters();
 
   assert(heap->is_concurrent_weak_root_in_progress(), "Must be doing weak roots now");
 
