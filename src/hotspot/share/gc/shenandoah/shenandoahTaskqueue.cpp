@@ -25,13 +25,9 @@
 
 #include "gc/shenandoah/shenandoahHeap.inline.hpp"
 #include "gc/shenandoah/shenandoahTaskqueue.inline.hpp"
-#include "logging/log.hpp"
-#include "logging/logStream.hpp"
-#include "memory/resourceArea.hpp"
 
 void ShenandoahObjToScanQueueSet::clear() {
-  uint size = GenericTaskQueueSet<ShenandoahObjToScanQueue, mtGC>::size();
-  for (uint index = 0; index < size; index ++) {
+  for (uint index = 0, num_queues = size(); index < num_queues; ++index) {
     ShenandoahObjToScanQueue* q = queue(index);
     assert(q != nullptr, "Sanity");
     q->clear();
@@ -39,8 +35,7 @@ void ShenandoahObjToScanQueueSet::clear() {
 }
 
 bool ShenandoahObjToScanQueueSet::is_empty() {
-  uint size = GenericTaskQueueSet<ShenandoahObjToScanQueue, mtGC>::size();
-  for (uint index = 0; index < size; index ++) {
+  for (uint index = 0, num_queues = size(); index < num_queues; ++index) {
     ShenandoahObjToScanQueue* q = queue(index);
     assert(q != nullptr, "Sanity");
     if (!q->is_empty()) {
@@ -59,5 +54,5 @@ bool ShenandoahTerminatorTerminator::should_exit_termination(size_t tasks) {
 
   // Else, true if there are tasks _and_ this worker is allowed to work. In this way we can keep
   // reserved workers idle.
-  return tasks > 0 && WorkerThread::worker_id() < _heap->control_thread()->concurrent_worker_count();
+  return tasks > 0 && (!_cancellable || WorkerThread::worker_id() < _heap->control_thread()->concurrent_worker_count());
 }
