@@ -103,7 +103,10 @@ void TaskTerminator::reset_for_reuse(uint n_threads) {
 }
 
 bool TaskTerminator::exit_termination(size_t tasks, TerminatorTerminator* terminator) {
-  return tasks > 0 || (terminator != nullptr && terminator->should_exit_termination());
+  if (terminator != nullptr) {
+    return terminator->should_exit_termination(tasks);
+  }
+  return tasks > 0;
 }
 
 size_t TaskTerminator::tasks_in_queue_set() const {

@@ -2274,7 +2274,7 @@ void G1CMTask::unregister_partial_array_splitter() {
   _partial_array_splitter.~PartialArraySplitter();
 }
 
-bool G1CMTask::should_exit_termination() {
+bool G1CMTask::should_exit_termination(size_t tasks) {
   if (!regular_clock_call()) {
     return true;
   }

@@ -490,8 +490,10 @@ void ShenandoahConcurrentGC::entry_mark() {
   ShenandoahConcurrentPhase gc_phase(msg, ShenandoahPhaseTimings::conc_mark);
   EventMark em("%s", msg);
 
+  // Start max workers. Only calc_workers_for_conc_marking will begin doing work. The remainder
+  // will be held in reserve and enlisted only when there are allocation stalls.
   ShenandoahWorkerScope scope(heap->workers(),
-                              ShenandoahWorkerPolicy::calc_workers_for_conc_marking(),
+                              heap->max_workers(),
                               "concurrent marking");
 
   _controller->set_phase(ShenandoahController::MARK);

@@ -187,13 +187,16 @@ void ShenandoahMark::mark_loop_work(T* cl, ShenandoahLiveData* live_data, uint w
     }
 
     uint work = 0;
-    for (uint i = 0; i < stride; i++) {
-      if (q->pop(t) ||
-          queues->steal(worker_id, t)) {
-        do_task<T, OT, GENERATION, STRING_DEDUP>(q, cl, live_data, req, &t, worker_id);
-        work++;
-      } else {
-        break;
+    if (worker_id < heap->control_thread()->concurrent_worker_count()) {
+      // This worker is allowed to perform work. Otherwise, this worker will be held in 'reserve' by
+      // letting it fall through and offering termination.
+      for (uint i = 0; i < stride; i++) {
+        if (q->pop(t) || queues->steal(worker_id, t)) {
+          do_task<T, OT, GENERATION, STRING_DEDUP>(q, cl, live_data, req, &t, worker_id);
+          work++;
+        } else {
+          break;
+        }
       }
     }
 

@@ -365,7 +365,7 @@ private:
   ShenandoahHeap* _heap;
 public:
   ShenandoahTerminatorTerminator(ShenandoahHeap* const heap) : _heap(heap) { }
-  virtual bool should_exit_termination();
+  virtual bool should_exit_termination(size_t tasks);
 };
 
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHTASKQUEUE_HPP

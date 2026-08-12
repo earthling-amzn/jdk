@@ -50,6 +50,14 @@ bool ShenandoahObjToScanQueueSet::is_empty() {
   return true;
 }
 
-bool ShenandoahTerminatorTerminator::should_exit_termination() {
-  return _heap->cancelled_gc();
+// Return true means: withdraw offer to terminate, go back and look for work.
+bool ShenandoahTerminatorTerminator::should_exit_termination(size_t tasks) {
+  if (_heap->cancelled_gc()) {
+    // If GC is cancelled, every worker will see the cancellation in the work loop and exit the work loop.
+    return true;
+  }
+
+  // Else, true if there are tasks _and_ this worker is allowed to work. In this way we can keep
+  // reserved workers idle.
+  return tasks > 0 && WorkerThread::worker_id() < _heap->control_thread()->concurrent_worker_count();
 }
