@@ -153,6 +153,7 @@ void ShenandoahMark::mark_loop_work(T* cl, ShenandoahLiveData* live_data, uint w
     if (!CANCELLABLE || worker_id < heap->control_thread()->concurrent_worker_count()) {
       // This worker is allowed to perform work. Otherwise, this worker will be held in 'reserve' by
       // letting it fall through and offering termination.
+      ShenandoahWorkerTimingsTracker timer(ShenandoahPhaseTimings::conc_mark, ShenandoahPhaseTimings::Work, worker_id, true);
 
       while (satb_mq_set.completed_buffers_num() > 0) {
         satb_mq_set.apply_closure_to_completed_buffer(&drain_satb);

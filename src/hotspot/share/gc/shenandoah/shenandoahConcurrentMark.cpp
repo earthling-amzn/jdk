@@ -56,7 +56,6 @@ public:
 
   void work(uint worker_id) {
     ShenandoahConcurrentWorkerSession worker_session(worker_id);
-    ShenandoahWorkerTimingsTracker timer(ShenandoahPhaseTimings::conc_mark, ShenandoahPhaseTimings::Work, worker_id, true);
     SuspendibleThreadSetJoiner stsj;
     _cm->mark_loop(worker_id, _terminator, GENERATION, true /*cancellable*/);
     // Concurrent marking loop flushes Java thread buffers, coordinating with a handshake.
