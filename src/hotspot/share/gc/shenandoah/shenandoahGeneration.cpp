@@ -1,6 +1,6 @@
 /*
  * Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
- * Copyright (c) 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2025, 2026, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -347,7 +347,7 @@ ShenandoahMarkingContext* ShenandoahGeneration::complete_marking_context() {
 }
 
 void ShenandoahGeneration::cancel_marking() {
-  log_info(gc)("Cancel marking: %s", name());
+  log_info(gc, phases)("Cancel marking: %s", name());
   if (is_concurrent_mark_in_progress()) {
     set_mark_incomplete();
   }

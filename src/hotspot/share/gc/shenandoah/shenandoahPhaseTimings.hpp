@@ -51,6 +51,7 @@ class outputStream;
   SHENANDOAH_WORKER_PHASE_DO(NAME_PREFIX, DESC_PREFIX, f)
 
 #define SHENANDOAH_PHASE_DO(f)                                                                                       \
+  SHENANDOAH_SIMPLE_PHASE_DEF(f, conc_gc,                                         "Concurrent GC")                   \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, conc_reset,                                      "Concurrent Reset")                \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, init_mark_gross,                                 "Pause Init Mark (G)")             \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, init_mark,                                       "Pause Init Mark (N)")             \
@@ -135,7 +136,6 @@ class outputStream;
                                                                                                                      \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, full_gc_gross,                                   "Pause Full GC (G)")               \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, full_gc,                                         "Pause Full GC (N)")               \
-  SHENANDOAH_SIMPLE_PHASE_DEF(f, full_gc_un_self_forward,                         "  Un-Self-Forward")               \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, full_gc_heapdump_pre,                            "  Pre Heap Dump")                 \
   SHENANDOAH_SIMPLE_PHASE_DEF(f, full_gc_prepare,                                 "  Prepare")                       \
   SHENANDOAH_WORKER_PHASE_DEF(f, full_gc_update_roots,                            "    Update Roots",                \

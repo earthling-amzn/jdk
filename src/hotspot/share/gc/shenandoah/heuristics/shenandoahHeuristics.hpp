@@ -84,13 +84,11 @@ class ShenandoahHeuristics : public CHeapObj<mtGC> {
   double _most_recent_trigger_evaluation_time;
   double _most_recent_planned_sleep_interval;
 
-  // When we decide to do an abbreviated cycle, withdraw reserves so memory can be made available to mutators.
-  void adjust_reserves_for_abbreviated(ShenandoahHeap* heap);
-
 protected:
   static constexpr uint Moving_Average_Samples = 10; // Number of samples to store in moving averages
 
   // True denotes that GC has been triggered, so no need to trigger again.
+  shenandoah_padding(0);
   Atomic<bool> _start_gc_is_pending;
 
   // This counts how many times since previous GC finished that this heuristic has answered false to should_start_gc().
@@ -99,8 +97,17 @@ protected:
   // note that once the trigger has been accepted, _start_gc_is_pending will be set and subsequent attempts to evaluate
   // the trigger conditions will return early and will not increase _declined_trigger_count. This is written to
   // by both the regulator and control thread, read by control thread.
+  shenandoah_padding(1);
   Atomic<size_t> _declined_trigger_count;
+  shenandoah_padding(2);
   Atomic<bool> _allocation_stalls;
+  shenandoah_padding(3);
+
+  // Snapshot declined trigger count and alloc stalls to compute appropriate penalties (if warranted)
+  struct PenaltyData {
+    size_t declined_triggers;
+    bool stalls;
+  };
 
   class RegionData {
     private:
@@ -197,6 +204,9 @@ protected:
                                                      RegionData* data, size_t data_size,
                                                      size_t free) = 0;
 
+  // Called when immediate garbage threshold is reached.
+  virtual void prepare_for_abbreviated_cycle() {}
+
   virtual void adjust_penalty(intx step);
 
   void decline_trigger() {
@@ -279,7 +289,9 @@ public:
   // Format prefix and emit log message indicating a GC cycle hs been triggered
   void log_trigger(const char* fmt, ...) const ATTRIBUTE_PRINTF(2, 3);
 
-  DEBUG_ONLY(static void assert_humongous_mark_consistency(ShenandoahHeapRegion* region));
+  PenaltyData consume_penalty_data();
+
+  DEBUG_ONLY( static void assert_humongous_mark_consistency(ShenandoahHeapRegion* region));
 };
 
 #endif // SHARE_GC_SHENANDOAH_HEURISTICS_SHENANDOAHHEURISTICS_HPP
