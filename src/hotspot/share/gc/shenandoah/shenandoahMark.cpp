@@ -143,14 +143,14 @@ void ShenandoahMark::mark_loop_work(T* cl, ShenandoahLiveData* live_data, uint w
 
   ShenandoahSATBBufferClosure<GENERATION> drain_satb(q, old_q);
   SATBMarkQueueSet& satb_mq_set = ShenandoahBarrierSet::satb_mark_queue_set();
-
+  ShenandoahTerminatorTerminator tt(heap, CANCELLABLE);
   while (true) {
     if (CANCELLABLE && heap->check_cancelled_gc_and_yield()) {
       return;
     }
 
     uint work = 0;
-    if (!CANCELLABLE || worker_id < heap->control_thread()->concurrent_worker_count()) {
+    if (tt.can_work()) {
       // This worker is allowed to perform work. Otherwise, this worker will be held in 'reserve' by
       // letting it fall through and offering termination.
       ShenandoahWorkerTimingsTracker timer(ShenandoahPhaseTimings::conc_mark, ShenandoahPhaseTimings::Work, worker_id, true);
@@ -173,7 +173,6 @@ void ShenandoahMark::mark_loop_work(T* cl, ShenandoahLiveData* live_data, uint w
       // No work encountered in current stride, try to terminate.
       // Need to leave the STS here otherwise it might block safepoints.
       SuspendibleThreadSetLeaver stsl(CANCELLABLE);
-      ShenandoahTerminatorTerminator tt(heap, CANCELLABLE);
       if (terminator->offer_termination(&tt)) return;
     }
   }

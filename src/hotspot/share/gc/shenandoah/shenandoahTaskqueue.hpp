@@ -363,10 +363,13 @@ public:
 class ShenandoahTerminatorTerminator : public TerminatorTerminator {
   ShenandoahHeap* _heap;
   bool _cancellable;
+  bool _retired;
 public:
   ShenandoahTerminatorTerminator(ShenandoahHeap* const heap, bool cancellable)
-    : _heap(heap), _cancellable(cancellable) { }
+    : _heap(heap), _cancellable(cancellable), _retired(false) { }
 
+  void retire();
+  bool can_work() const;
   bool should_exit_termination(size_t tasks) override;
 };
 

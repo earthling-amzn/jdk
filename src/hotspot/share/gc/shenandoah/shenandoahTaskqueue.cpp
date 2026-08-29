@@ -45,6 +45,16 @@ bool ShenandoahObjToScanQueueSet::is_empty() {
   return true;
 }
 
+void ShenandoahTerminatorTerminator::retire() {
+  _retired = true;
+}
+
+bool ShenandoahTerminatorTerminator::can_work() const {
+  // Can work if the thread cannot be cancelled (i.e., STW worker) or the thread has not been retired,
+  // and it is not being held in reserve.
+  return !_cancellable || (!_retired && WorkerThread::worker_id() < _heap->control_thread()->concurrent_worker_count());
+}
+
 // Return true means: withdraw offer to terminate, go back and look for work.
 bool ShenandoahTerminatorTerminator::should_exit_termination(size_t tasks) {
   if (_heap->cancelled_gc()) {
@@ -53,6 +63,6 @@ bool ShenandoahTerminatorTerminator::should_exit_termination(size_t tasks) {
   }
 
   // Else, true if there are tasks _and_ this worker is allowed to work. In this way we can keep
-  // reserved workers idle.
-  return tasks > 0 && (!_cancellable || WorkerThread::worker_id() < _heap->control_thread()->concurrent_worker_count());
+  // reserved or retired workers idle.
+  return tasks > 0 && can_work();
 }

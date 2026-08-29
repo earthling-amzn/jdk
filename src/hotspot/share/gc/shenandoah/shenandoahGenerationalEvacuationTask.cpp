@@ -47,6 +47,16 @@ public:
   }
 };
 
+#ifdef ASSERT
+void ShenandoahCsetTaskAdapter::assert_empty() const {
+  // Okay for some regions to not be evacuated when there are evacuation failures
+}
+#endif
+
+uint ShenandoahCsetTaskAdapter::tasks() const {
+  return checked_cast<uint>(_collection_set->remaining());
+}
+
 ShenandoahGenerationalEvacuationTask::ShenandoahGenerationalEvacuationTask(ShenandoahGenerationalHeap* heap,
                                                                            ShenandoahGeneration* generation,
                                                                            ShenandoahRegionIterator* iterator,
@@ -56,6 +66,8 @@ ShenandoahGenerationalEvacuationTask::ShenandoahGenerationalEvacuationTask(Shena
   _generation(generation),
   _regions(iterator),
   _collection_set(_heap->collection_set()),
+  _collection_set_tasks(_collection_set),
+  _terminator(_heap->max_workers(), &_collection_set_tasks),
   _only_promote_regions(only_promote_regions)
 {
   shenandoah_assert_generational();
@@ -106,27 +118,37 @@ void ShenandoahGenerationalEvacuationTask::promote_regions() {
 
 void ShenandoahGenerationalEvacuationTask::evacuate_and_promote_regions() {
   ShenandoahConcurrentEvacuator cl(_heap);
-  ShenandoahHeapRegion* r;
-
-  while ((r = _collection_set->claim_next()) != nullptr) {
-    if (LogTarget(Debug, gc) lt; lt.is_enabled()) {
-      LogStream ls(lt);
-      log_region(r, &ls);
-    }
-
-    assert(r->has_live(), "Region %zu should have been reclaimed early", r->index());
-    _heap->marked_object_iterate(r, &cl);
-
-    if (ShenandoahCollectorPolicy::should_abandon_evacuations(r)) {
-      // No more evacuations for this thread, but it may yet complete in-place promotions
-      break;
-    }
-
+  ShenandoahTerminatorTerminator tt(_heap, true);
+  while (true) {
     if (_heap->check_cancelled_gc_and_yield()) {
       // GC is cancelled (vm is stopping), no further work
       assert(_heap->cancelled_cause() == GCCause::_shenandoah_stop_vm,
         "Evacuation should not be cancelled for: %s", GCCause::to_string(_heap->cancelled_cause()));
       return;
+    }
+
+    ShenandoahHeapRegion* r = nullptr;
+    if (tt.can_work()) {
+      r = _collection_set->claim_next();
+    }
+
+    if (r == nullptr) {
+      if (_terminator.offer_termination(&tt)) {
+        break;
+      }
+    } else {
+      if (LogTarget(Debug, gc) lt; lt.is_enabled()) {
+        LogStream ls(lt);
+        log_region(r, &ls);
+      }
+
+      assert(r->has_live(), "Region %zu should have been reclaimed early", r->index());
+      _heap->marked_object_iterate(r, &cl);
+
+      if (ShenandoahCollectorPolicy::should_abandon_evacuations(r)) {
+        // No more evacuations for this thread, but it may yet complete in-place promotions
+        tt.retire();
+      }
     }
   }
 

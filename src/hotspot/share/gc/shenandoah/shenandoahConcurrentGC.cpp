@@ -621,9 +621,7 @@ void ShenandoahConcurrentGC::entry_evacuate() {
   ShenandoahConcurrentSubphase gc_phase(msg, ShenandoahPhaseTimings::conc_evac);
   EventMark em("%s", msg);
 
-  ShenandoahWorkerScope scope(heap->workers(),
-                              ShenandoahWorkerPolicy::calc_workers_for_conc_evac(),
-                              "concurrent evacuation");
+  ShenandoahWorkerScope scope(heap->workers(), heap->max_workers(), "concurrent evacuation");
 
   update_phase(ShenandoahController::EVAC);
   heap->try_inject_alloc_failure();
