@@ -181,6 +181,26 @@ public:
   void confirm_heuristics_mode();
 
   virtual void record_success_concurrent(bool abbreviated);
+  virtual void record_collection_start(size_t gc_id) {
+    _started_gc_id.store_relaxed(gc_id);
+  }
+
+private:
+  // Read by mutators, written by control thread
+  Atomic<size_t> _started_gc_id;
+  Atomic<size_t> _completed_gc_id;
+
+protected:
+  void update_completed_gc_id();
+
+public:
+  size_t started_gc_id() const {
+    return _started_gc_id.load_relaxed();
+  }
+
+  size_t completed_gc_id() const {
+    return _completed_gc_id.load_relaxed();
+  }
 };
 
 #endif // SHARE_VM_GC_SHENANDOAH_SHENANDOAHGENERATION_HPP

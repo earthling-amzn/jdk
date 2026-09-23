@@ -165,3 +165,12 @@ void ShenandoahYoungGeneration::prepare_gc() {
   // new marking cycle
   ShenandoahGenerationalHeap::heap()->age_census()->reset_local();
 }
+
+void ShenandoahYoungGeneration::record_collection_start(size_t gc_id) {
+  ShenandoahGeneration::record_collection_start(gc_id);
+  if (is_old_marking_active()) {
+    // This is the beginning of a bootstrap cycle and is, therefore, also the
+    // beginning of an old collection.
+    ShenandoahGenerationalHeap::heap()->old_generation()->record_collection_start(gc_id);
+  }
+}

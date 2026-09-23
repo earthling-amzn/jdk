@@ -535,6 +535,7 @@ void ShenandoahGenerationalControlThread::service_concurrent_cycle(ShenandoahGen
   _do_old_gc_bootstrap = do_old_gc_bootstrap;
   ShenandoahConcurrentGC gc(generation, do_old_gc_bootstrap);
   _heap->increment_total_collections(false);
+  generation->record_collection_start(get_gc_id());
   if (gc.collect(cause)) {
     // Cycle is complete
     _heap->notify_gc_progress();
@@ -740,13 +741,13 @@ void ShenandoahGenerationalControlThread::wait_for_gc_cycle(GCCause::Cause cause
   // requested the GC.
 
   MonitorLocker ml(&_gc_waiters_lock);
-  size_t current_gc_id = get_gc_id();
+  size_t current_gc_id = generation->started_gc_id();
   const size_t required_gc_id = current_gc_id + 1;
   while (current_gc_id < required_gc_id && !should_terminate()) {
     // Make requests to run cycles until at least one is completed
     notify_control_thread(cause, generation);
     ml.wait();
-    current_gc_id = get_gc_id();
+    current_gc_id = generation->completed_gc_id();
   }
 }
 

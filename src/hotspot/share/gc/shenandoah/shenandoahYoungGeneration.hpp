@@ -92,6 +92,8 @@ public:
   size_t soft_mutator_available() const override;
 
   void prepare_gc() override;
+
+  void record_collection_start(size_t gc_id) override;
 };
 
 #endif // SHARE_VM_GC_SHENANDOAH_SHENANDOAHYOUNGGENERATION_HPP

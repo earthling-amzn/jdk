@@ -428,7 +428,12 @@ size_t ShenandoahGeneration::available(size_t capacity) const {
   return result;
 }
 
+void ShenandoahGeneration::update_completed_gc_id() {
+  _completed_gc_id.store_relaxed(_started_gc_id.load_relaxed());
+}
+
 void ShenandoahGeneration::record_success_concurrent(bool abbreviated) {
+  update_completed_gc_id();
   heuristics()->record_success_concurrent();
   ShenandoahHeap::heap()->shenandoah_policy()->record_success_concurrent(is_young(), abbreviated);
 }
