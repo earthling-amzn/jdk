@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2025, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2026, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2020, 2021, Red Hat, Inc. and/or its affiliates.
  * Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,6 +26,7 @@
 
 #include "classfile/javaClasses.hpp"
 #include "gc/shared/workerThread.hpp"
+#include "gc/shenandoah/shenandoahBarrierSet.inline.hpp"
 #include "gc/shenandoah/shenandoahClosures.inline.hpp"
 #include "gc/shenandoah/shenandoahGeneration.hpp"
 #include "gc/shenandoah/shenandoahReferenceProcessor.inline.hpp"
@@ -64,7 +65,7 @@ static void card_mark_barrier(T* field, oop value) {
   assert(ShenandoahCardBarrier, "Card-mark barrier should be on");
   ShenandoahGenerationalHeap* heap = ShenandoahGenerationalHeap::heap();
   assert(heap->is_in_or_null(value), "Should be in heap");
-  if (heap->is_in_old(field) && heap->is_in_young(value)) {
+  if (heap->is_old_to_young(field, value)) {
     // For Shenandoah, each generation collects all the _referents_ that belong to the
     // collected generation. We can end up with discovered lists that contain a mixture
     // of old and young _references_. These references are linked together through the
@@ -236,7 +237,7 @@ void ShenandoahRefProcThreadLocal::heal_discovered_list() {
 
   // The `lrb` static method only operates on marked objects, these references have been discovered
   // so may not be marked. Here, we need the barrier to handle these possibly unmarked references too.
-  oop healed_reference = barriers->load_reference_barrier(raw_reference);
+  oop healed_reference = barriers->load_reference_barrier(ON_STRONG_OOP_REF, raw_reference, (oop*)nullptr);
   if (raw_reference != healed_reference) {
     set_oop_field(list, healed_reference);
   }
@@ -249,7 +250,7 @@ void ShenandoahRefProcThreadLocal::heal_discovered_list() {
       break;
     }
 
-    const oop healed_discovered = barriers->load_reference_barrier(raw_discovered);
+    const oop healed_discovered = barriers->load_reference_barrier(ON_STRONG_OOP_REF, raw_discovered, (oop*)nullptr);
     if (raw_discovered != healed_discovered) {
       // Update our list with the forwarded object
       set_oop_field(next_addr, healed_discovered);
