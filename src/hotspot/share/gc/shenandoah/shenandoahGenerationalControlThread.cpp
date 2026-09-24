@@ -416,6 +416,11 @@ void ShenandoahGenerationalControlThread::service_concurrent_old_cycle(const She
       old_generation->transition_to(ShenandoahOldGeneration::MARKING);
       set_gc_mode(bootstrapping_old);
 
+      // This is the logical gc id for the old collection. The old cycle itself might be
+      // interrupted many times and each iteration will generate a new gc id, but the one
+      // we record at the start will span all the interruptions.
+      old_generation->record_collection_start(get_gc_id());
+
       // Configure the young generation's concurrent mark to put objects in
       // old regions into the concurrent mark queues associated with the old
       // generation. The young cycle will run as normal except that rather than
@@ -535,7 +540,6 @@ void ShenandoahGenerationalControlThread::service_concurrent_cycle(ShenandoahGen
   _do_old_gc_bootstrap = do_old_gc_bootstrap;
   ShenandoahConcurrentGC gc(generation, do_old_gc_bootstrap);
   _heap->increment_total_collections(false);
-  generation->record_collection_start(get_gc_id());
   if (gc.collect(cause)) {
     // Cycle is complete
     _heap->notify_gc_progress();
@@ -731,6 +735,12 @@ bool ShenandoahGenerationalControlThread::preempt_old_marking(ShenandoahGenerati
 }
 
 void ShenandoahGenerationalControlThread::wait_for_gc_cycle(GCCause::Cause cause, ShenandoahGeneration* generation) {
+
+  if (generation->is_old()) {
+    wait_for_old_gc_cycle(cause, static_cast<ShenandoahOldGeneration*>(generation));
+    return;
+  }
+
   // Make sure we have at least one complete GC cycle before unblocking
   // from the explicit GC request.
   //
@@ -740,6 +750,19 @@ void ShenandoahGenerationalControlThread::wait_for_gc_cycle(GCCause::Cause cause
   // opportunities for cleanup that were made available before the caller
   // requested the GC.
 
+  MonitorLocker ml(&_gc_waiters_lock);
+  size_t current_gc_id = get_gc_id();
+  const size_t required_gc_id = current_gc_id + 1;
+  while (current_gc_id < required_gc_id && !should_terminate()) {
+    // Make requests to run cycles until at least one is completed
+    notify_control_thread(cause, generation);
+    ml.wait();
+    current_gc_id = get_gc_id();
+  }
+}
+
+
+void ShenandoahGenerationalControlThread::wait_for_old_gc_cycle(GCCause::Cause cause, ShenandoahOldGeneration* generation) {
   MonitorLocker ml(&_gc_waiters_lock);
   size_t current_gc_id = generation->started_gc_id();
   const size_t required_gc_id = current_gc_id + 1;

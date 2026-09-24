@@ -836,3 +836,7 @@ size_t ShenandoahOldGeneration::max_capacity() const {
 size_t ShenandoahOldGeneration::free_unaffiliated_regions() const {
   return _free_set->old_unaffiliated_regions();
 }
+
+void ShenandoahOldGeneration::update_completed_gc_id() {
+  _completed_gc_id.store_relaxed(_started_gc_id.load_relaxed());
+}
