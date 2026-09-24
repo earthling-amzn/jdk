@@ -42,7 +42,7 @@ bool ShenandoahElasticTaskCoordinator::is_done() const {
 }
 
 void ShenandoahElasticTaskCoordinator::increase_workers(size_t max_concurrent_workers) {
-  MonitorLocker locker(&_gate, Mutex::_no_safepoint_check_flag);
+  MonitorLocker locker(&_gate);
   if (is_done()) {
     // This phase is already complete, we cannot admit more
     // workers or allow another thread to begin work.

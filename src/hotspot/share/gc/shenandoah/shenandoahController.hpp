@@ -69,7 +69,7 @@ protected:
   // Threads waiting for a complete gc cycle (full gc or concurrent global) will wait here.
   Monitor _gc_waiters_lock;
 
-  // Threads waiting for the gc to free memory will wait here. Note that immediate garabge may be reclaimed
+  // Threads waiting for the gc to free memory will wait here. Note that immediate garbage may be reclaimed
   // midcycle during final mark, so we want to notify alloc waiters independently of cycle waiters. Similarly,
   // no threads should be notified when a concurrent old mark increment is interrupted.
   Monitor _alloc_waiters_lock;
