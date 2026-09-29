@@ -43,6 +43,7 @@ void shenandoah_elastic_loop(ShenandoahHeap* heap, TaskTerminator* terminator, W
     if (Cancellable && heap->check_cancelled_gc_and_yield()) {
       // The termination offer is withdrawn when a cycle cancellation is
       // observed. The thread returns to the top of the loop here and exits.
+      terminator->notify_all();
       return;
     }
 

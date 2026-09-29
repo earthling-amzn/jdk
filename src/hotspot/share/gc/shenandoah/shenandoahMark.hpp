@@ -45,6 +45,7 @@ protected:
   ShenandoahObjToScanQueueSet* const _task_queues;
   ShenandoahObjToScanQueueSet* const _old_gen_task_queues;
   bool const _string_dedup;
+  Atomic<size_t> _workers_watermark;
 
   explicit ShenandoahMark(ShenandoahGeneration* generation);
 
@@ -67,6 +68,10 @@ public:
   inline ShenandoahObjToScanQueue* get_old_queue(uint index) const;
 
   ShenandoahGeneration* generation() const { return _generation; };
+
+  void set_eligible_workers(uint workers) {
+    _workers_watermark.store_relaxed(workers);
+  }
 
 private:
 // ---------- Marking loop and tasks

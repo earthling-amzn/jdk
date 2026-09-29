@@ -50,8 +50,9 @@ private:
   TaskTerminator* const           _terminator;
 
 public:
-  ShenandoahConcurrentMarkingTask(ShenandoahConcurrentMark* cm, TaskTerminator* terminator) :
+  ShenandoahConcurrentMarkingTask(ShenandoahConcurrentMark* cm, TaskTerminator* terminator, uint eligible_workers) :
     WorkerTask("Shenandoah Concurrent Mark"), _cm(cm), _terminator(terminator) {
+    _cm->set_eligible_workers(eligible_workers);
   }
 
   void work(uint worker_id) {
@@ -184,25 +185,25 @@ void ShenandoahConcurrentMark::concurrent_mark() {
     switch (gen_type) {
       case YOUNG: {
         TaskTerminator terminator(nworkers, task_queues());
-        ShenandoahConcurrentMarkingTask<YOUNG> task(this, &terminator);
+        ShenandoahConcurrentMarkingTask<YOUNG> task(this, &terminator, heap->eligible_workers());
         workers->run_task(&task);
         break;
       }
       case OLD: {
         TaskTerminator terminator(nworkers, task_queues());
-        ShenandoahConcurrentMarkingTask<OLD> task(this, &terminator);
+        ShenandoahConcurrentMarkingTask<OLD> task(this, &terminator, heap->eligible_workers());
         workers->run_task(&task);
         break;
       }
       case GLOBAL: {
         TaskTerminator terminator(nworkers, task_queues());
-        ShenandoahConcurrentMarkingTask<GLOBAL> task(this, &terminator);
+        ShenandoahConcurrentMarkingTask<GLOBAL> task(this, &terminator, heap->eligible_workers());
         workers->run_task(&task);
         break;
       }
       case NON_GEN: {
         TaskTerminator terminator(nworkers, task_queues());
-        ShenandoahConcurrentMarkingTask<NON_GEN> task(this, &terminator);
+        ShenandoahConcurrentMarkingTask<NON_GEN> task(this, &terminator, heap->eligible_workers());
         workers->run_task(&task);
         break;
       }

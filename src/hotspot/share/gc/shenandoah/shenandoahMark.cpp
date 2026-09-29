@@ -52,7 +52,8 @@ ShenandoahMark::ShenandoahMark(ShenandoahGeneration* generation) :
   _generation(generation),
   _task_queues(generation->task_queues()),
   _old_gen_task_queues(generation->old_gen_task_queues()),
-  _string_dedup(StringDedup::is_enabled()) {
+  _string_dedup(StringDedup::is_enabled()),
+  _workers_watermark(0) {
 }
 
 template <ShenandoahGenerationType GENERATION, bool CANCELLABLE, bool STRING_DEDUP>
@@ -144,6 +145,19 @@ void ShenandoahMark::mark_loop_work(T* cl, ShenandoahLiveData* live_data, uint w
         work++;
       } else {
         break;
+      }
+    }
+
+    if (CANCELLABLE) {
+      size_t actual = _workers_watermark.load_relaxed();
+      size_t desired = heap->control_thread()->concurrent_worker_count();
+      while (actual < desired) {
+        if (_workers_watermark.compare_set(actual, desired)) {
+          terminator->notify_all();
+          break;
+        }
+        actual = _workers_watermark.load_relaxed();
+        desired = heap->control_thread()->concurrent_worker_count();
       }
     }
 
