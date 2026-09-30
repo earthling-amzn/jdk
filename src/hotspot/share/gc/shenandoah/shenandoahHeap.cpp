@@ -1247,7 +1247,8 @@ ShenandoahSelfForwardTask::ShenandoahSelfForwardTask(ShenandoahHeap* heap, Shena
   WorkerTask("Shenandoah Self-Forward"),
   _heap(heap),
   _cs(cs) {
-  _cs->clear_current_index();
+  // Do not reset claim index, these workers pick up from where the evacuation workers left off
+  assert(!_cs->all_regions_claimed(), "Only here to self forward objects in unclaimed regions");
 }
 
 void ShenandoahSelfForwardTask::work(uint worker_id) {
@@ -1272,21 +1273,21 @@ void ShenandoahHeap::evacuate_collection_set(ShenandoahGeneration* generation) {
   ShenandoahElasticTaskCoordinator* coordinator = control_thread()->reset_task_coordinator();
   ShenandoahEvacuationTask task(this, coordinator, _collection_set);
   workers()->run_task(&task);
+}
 
-  if (has_self_forwarded_objects()) {
-    // When a thread cannot evacuate, it will self forward objects _and_ then it
-    // will _stop_ further evacuation attempts to avoid 'poisoning' more regions
-    // with self forwarded objects. Of course, we should change this behavior if
-    // we gain the ability to reclaim evacuated regions during evacuation. The scenario
-    // we are worried about here is that the workers failed to attempt evacuations
-    // in some subset of the collection set regions. In this case, we must prevent
-    // mutators from attempting to evacuate the object during update refs. We could,
-    // alternatively, have the LRB distinguish between the evacuation phase and the
-    // self-update phase, but this would increase barrier complexity.
-    log_debug(gc)("Cleaning up failed evacuations");
-    ShenandoahSelfForwardTask self_forward_task(this, _collection_set);
-    workers()->run_task(&self_forward_task);
-  }
+void ShenandoahHeap::self_forward_stranded_objects() {
+  // When an object cannot be evacuated, it will be self-forwarded. Regions with self-forwarded objects
+  // can only be "partially" recycled. We have made a policy/design decision to stop trying to evacuate
+  // such regions. Instead, the workers will focus on evacuating regions that still have a chance of being
+  // completely evacuated. However, once a worker itself cannot refill its LABs, it will do nothing more
+  // beside create more partially evacuated regions. For this reason, such a worker exits the evacuation
+  // task. This leaves the remaining regions to the remaining workers who, we hope, may yet complete more
+  // successful evacuations. For the case that all workers exit before all the collection set regions are
+  // evacuated, we have this step below which simply self forwards all the objects in all the regions that
+  // were not evacuated out of the collection set.
+  log_debug(gc)("Cleaning up failed evacuations");
+  ShenandoahSelfForwardTask self_forward_task(this, collection_set());
+  workers()->run_task(&self_forward_task);
 }
 
 class ShenandoahCompleteStackWatermarkHandshakeClosure : public HandshakeClosure {
