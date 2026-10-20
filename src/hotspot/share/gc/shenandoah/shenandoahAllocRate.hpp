@@ -129,7 +129,7 @@ class ShenandoahAllocRate {
     return static_cast<uint32_t>(params >> 32);
   }
 
-  void maybe_take_sample(size_t minimum_sample_size, size_t striped_unsampled);
+  bool maybe_take_sample(size_t minimum_sample_size, size_t striped_unsampled);
 
   ShenandoahWeightedSeq _baseline;
   ShenandoahWeightedSeq _recent;
@@ -156,7 +156,7 @@ public:
   void set_minimum_sample_size(size_t minimum_sample_size);
 
   // Indicate that this many bytes have been allocated (by the mutator).
-  void allocated(size_t allocated_bytes);
+  bool allocated(size_t allocated_bytes);
 
   // Shenandoah currently evaluates triggers on a dedicated thread to lighten the workload
   // for allocators. However, this means that when there isn't enough allocations to update

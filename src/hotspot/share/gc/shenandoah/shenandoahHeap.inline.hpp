@@ -55,6 +55,7 @@
 #include "runtime/javaThread.hpp"
 #include "runtime/objectMonitor.inline.hpp"
 #include "runtime/prefetch.inline.hpp"
+#include "shenandoahYoungGeneration.hpp"
 #include "utilities/copy.hpp"
 #include "utilities/globalDefinitions.hpp"
 
@@ -247,6 +248,19 @@ inline HeapWord* ShenandoahHeap::allocate_from_gclab(Thread* thread, size_t size
     return obj;
   }
   return allocate_from_gclab_slow(thread, size);
+}
+
+inline void ShenandoahHeap::maybe_request_gc_cycle() {
+  if (mode()->is_generational()) {
+    if (young_generation()->heuristics()->should_start_gc()) {
+      control_thread()->request_gc(GCCause::_shenandoah_concurrent_gc);
+    }
+  } else {
+    if (global_generation()->heuristics()->should_start_gc()) {
+      // TODO: Update single-gen controller to handle a non-blocking gc request
+      // control_thread()->request_gc(GCCause::_shenandoah_concurrent_gc);
+    }
+  }
 }
 
 inline bool ShenandoahHeap::is_in_active_generation(oop obj) const {

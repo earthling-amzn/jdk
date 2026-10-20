@@ -1045,7 +1045,10 @@ HeapWord* ShenandoahHeap::allocate_memory_work(ShenandoahAllocRequest& req, bool
 
   if (result != nullptr) {
     if (req.is_mutator_alloc()) {
-      _alloc_rate.allocated((req.actual_size() + req.waste()) * HeapWordSize);
+      const bool took_sample = _alloc_rate.allocated((req.actual_size() + req.waste()) * HeapWordSize);
+      if (took_sample) {
+        maybe_request_gc_cycle();
+      }
     }
 
     if (req.is_old()) {

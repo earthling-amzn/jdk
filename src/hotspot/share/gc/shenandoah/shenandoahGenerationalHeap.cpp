@@ -145,19 +145,19 @@ GrowableArray<MemoryPool*> ShenandoahGenerationalHeap::memory_pools() {
 void ShenandoahGenerationalHeap::initialize_controller() {
   auto control_thread = new ShenandoahGenerationalControlThread();
   _control_thread = control_thread;
-  _regulator_thread = new ShenandoahRegulatorThread(control_thread);
+  // _regulator_thread = new ShenandoahRegulatorThread(control_thread);
 }
 
 void ShenandoahGenerationalHeap::gc_threads_do(ThreadClosure* tcl) const {
   if (!shenandoah_policy()->is_at_shutdown()) {
     ShenandoahHeap::gc_threads_do(tcl);
-    tcl->do_thread(regulator_thread());
+    // tcl->do_thread(regulator_thread());
   }
 }
 
 void ShenandoahGenerationalHeap::stop() {
   ShenandoahHeap::stop();
-  regulator_thread()->stop();
+  // regulator_thread()->stop();
 }
 
 void ShenandoahGenerationalHeap::start_idle_span() {

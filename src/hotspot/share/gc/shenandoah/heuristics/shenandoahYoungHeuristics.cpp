@@ -165,6 +165,7 @@ bool ShenandoahYoungHeuristics::should_start_gc() {
   ShenandoahOldHeuristics* old_heuristics = old_generation->heuristics();
 
   // Checks that an old cycle has run for at least ShenandoahMinimumOldTimeMs before allowing a young cycle.
+  // TODO: need to rethink this if 'should_start_gc' is not called frequently.
   if (old_collection_needs_more_time(old_generation, old_heuristics)) {
     log_debug(gc)("Young heuristics declines to trigger because old_time_elapsed < ShenandoahMinimumOldTimeMs");
     return false;

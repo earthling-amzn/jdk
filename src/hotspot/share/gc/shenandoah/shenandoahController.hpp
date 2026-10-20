@@ -112,7 +112,7 @@ public:
 
   // Request a collection cycle. This handles "explicit" gc requests
   // like System.gc and "implicit" gc requests, like metaspace oom.
-  virtual void request_gc(GCCause::Cause cause);
+  void request_gc(GCCause::Cause cause);
 
   // Notify threads that the gc has completed a cycle, or it's exiting.
   void notify_gc_waiters();

@@ -185,6 +185,13 @@ ShenandoahGenerationalControlThread::GCMode ShenandoahGenerationalControlThread:
     _heap->set_unload_classes(false);
   }
 
+  if (request.generation->is_young()) {
+    if (_heap->old_generation()->heuristics()->should_start_gc()) {
+      // Co-opt this young request into bootstrapping old.
+      request.generation = _heap->old_generation();
+    }
+  }
+
   if (request.generation->is_old()) {
     switch (_heap->old_generation()->state()) {
       case ShenandoahOldGeneration::FILLING:
@@ -221,12 +228,19 @@ void ShenandoahGenerationalControlThread::maybe_print_young_region_ages() const 
   }
 }
 
-void ShenandoahGenerationalControlThread::clear_allocation_failure_and_notify_waiters() {
-  ShenandoahController::clear_allocation_failure_and_notify_waiters();
+void ShenandoahGenerationalControlThread::maybe_request_full_or_old_cycle() {
   if (_heap->old_generation()->clear_failed_evacuation()) {
     // Immediately run a full GC.
     log_info(gc, ergo)("Requesting a full gc because of evacuation failures in old");
     notify_control_thread(GCCause::_shenandoah_upgrade_to_full_gc, _heap->global_generation());
+    return;
+  }
+
+  auto const old_heuristics = _heap->old_generation()->heuristics();
+  if (old_heuristics->should_start_gc() || old_heuristics->should_resume_old_cycle()) {
+    // We just finished a cycle, but the old generation wants to be collected
+    notify_control_thread(GCCause::_shenandoah_concurrent_gc, _heap->old_generation());
+    return;
   }
 }
 
@@ -476,6 +490,9 @@ void ShenandoahGenerationalControlThread::service_concurrent_cycle(ShenandoahGen
     // Notify threads waiting for GC and/or memory when a young or global cycle completes
     notify_gc_waiters();
     clear_allocation_failure_and_notify_waiters();
+
+    // Check if we should start a full gc or an old gc now.
+    maybe_request_full_or_old_cycle();
   } else {
     assert(_heap->cancelled_gc(), "Must have been cancelled");
   }
@@ -688,12 +705,20 @@ bool ShenandoahGenerationalControlThread::wait_for_old_gc_cycle(GCCause::Cause c
 }
 
 void ShenandoahGenerationalControlThread::handle_requested_gc(GCCause::Cause cause) {
-  // For normal requested GCs (System.gc) we want to block the caller. However,
-  // for whitebox requested GC, we want to initiate the GC and return immediately.
-  // The whitebox caller thread will arrange for itself to wait until the GC notifies
-  // it that has reached the requested breakpoint (phase in the GC).
   if (cause == GCCause::_wb_breakpoint) {
+    // For normal requested GCs (System.gc) we want to block the caller. However,
+    // for whitebox requested GC, we want to initiate the GC and return immediately.
+    // The whitebox caller thread will arrange for itself to wait until the GC notifies
+    // it that has reached the requested breakpoint (phase in the GC).
     notify_control_thread(cause, ShenandoahHeap::heap()->global_generation());
+    return;
+  }
+
+  if (cause == GCCause::_shenandoah_concurrent_gc) {
+    // This request is for a concurrent GC. In the generational mode, when this cause
+    // comes in through this API, we should request a concurrent young cycle and should
+    // not block the caller. This will asynchronously interrupt any old marking effort.
+    notify_control_thread(cause, ShenandoahHeap::heap()->young_generation());
     return;
   }
 

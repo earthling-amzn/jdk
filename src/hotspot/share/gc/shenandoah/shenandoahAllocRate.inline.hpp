@@ -71,31 +71,33 @@ void ShenandoahAllocRate<Clock>::set_minimum_sample_size(const size_t minimum_sa
 }
 
 template<typename Clock>
-void ShenandoahAllocRate<Clock>::maybe_take_sample(const size_t minimum_sample_size, const size_t striped_unsampled) {
+bool ShenandoahAllocRate<Clock>::maybe_take_sample(const size_t minimum_sample_size, const size_t striped_unsampled) {
   if (!_sample_lock.try_lock()) {
     // Another thread has the lock and will take the sample.
-    return;
+    return false;
   }
 
   if (unsampled_below_floor(minimum_sample_size, striped_unsampled)) {
     // Either another thread already sampled and drained, or this thread's stripe crossed its share
     // while the aggregate is still short (skewed distribution). Wait for more.
     _sample_lock.unlock();
-    return;
+    return false;
   }
   const jlong now = Clock::elapsed_counter();
   const jlong elapsed = now - _last_sample_time;
   if (elapsed <= 0) {
     // Avoid sampling nonsense allocation rates.
     _sample_lock.unlock();
-    return;
+    return false;
   }
+
   take_sample(now, elapsed, _unsampled.drain());
   _sample_lock.unlock();
+  return true;
 }
 
 template<typename Clock>
-void ShenandoahAllocRate<Clock>::allocated(const size_t allocated_bytes) {
+bool ShenandoahAllocRate<Clock>::allocated(const size_t allocated_bytes) {
   const size_t striped_unsampled = _unsampled.add(allocated_bytes);
   const size_t previous_striped_unsampled = striped_unsampled - allocated_bytes;
 
@@ -104,8 +106,9 @@ void ShenandoahAllocRate<Clock>::allocated(const size_t allocated_bytes) {
 
   // Re-arm the trigger at every per-stripe threshold crossing.
   if (striped_threshold_exceeded(striped_unsampled, previous_striped_unsampled, log_per_stripe_threshold)) {
-    maybe_take_sample(decode_min_sample_size(params), striped_unsampled);
+    return maybe_take_sample(decode_min_sample_size(params), striped_unsampled);
   }
+  return false;
 }
 
 template<typename Clock>
