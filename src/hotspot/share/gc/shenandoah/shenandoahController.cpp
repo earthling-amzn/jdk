@@ -94,11 +94,16 @@ void ShenandoahController::handle_requested_gc(GCCause::Cause cause) {
   const ShenandoahCollectorPolicy* policy = heap->shenandoah_policy();
   ShenandoahGeneration* global = heap->global_generation();
 
-  // For normal requested GCs (System.gc) we want to block the caller. However,
-  // for whitebox requested GC, we want to initiate the GC and return immediately.
-  // The whitebox caller thread will arrange for itself to wait until the GC notifies
-  // it that has reached the requested breakpoint (phase in the GC).
   if (cause == GCCause::_wb_breakpoint) {
+    // For normal requested GCs (System.gc) we want to block the caller. However,
+    // for whitebox requested GC, we want to initiate the GC and return immediately.
+    // The whitebox caller thread will arrange for itself to wait until the GC notifies
+    // it that has reached the requested breakpoint (phase in the GC).
+    notify_control_thread(cause, global);
+    return;
+  }
+
+  if (cause == GCCause::_shenandoah_concurrent_gc) {
     notify_control_thread(cause, global);
     return;
   }

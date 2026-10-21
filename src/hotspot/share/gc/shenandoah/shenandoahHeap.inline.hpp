@@ -257,8 +257,7 @@ inline void ShenandoahHeap::maybe_request_gc_cycle() {
     }
   } else {
     if (global_generation()->heuristics()->should_start_gc()) {
-      // TODO: Update single-gen controller to handle a non-blocking gc request
-      // control_thread()->request_gc(GCCause::_shenandoah_concurrent_gc);
+      control_thread()->request_gc(GCCause::_shenandoah_concurrent_gc);
     }
   }
 }
