@@ -98,6 +98,9 @@ const char* GCCause::to_string(GCCause::Cause cause) {
     case _shenandoah_humongous_allocation_failure:
       return "Humongous Allocation Failure";
 
+    case _shenandoah_periodic_gc:
+      return "Periodic GC";
+
     case _shenandoah_concurrent_gc:
       return "Concurrent GC";
 

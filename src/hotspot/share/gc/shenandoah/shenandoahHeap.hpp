@@ -242,7 +242,6 @@ private:
   shenandoah_padding(1);
 
   ShenandoahAllocationRate _alloc_rate;
-  ShenandoahDecayAllocRate _alloc_rate_decay;
 
 public:
   void increase_committed(size_t bytes);
@@ -732,9 +731,9 @@ public:
 protected:
   inline HeapWord* allocate_from_gclab(Thread* thread, size_t size);
 
-private:
-  void maybe_request_gc_cycle();
+  virtual void maybe_request_gc_cycle();
 
+private:
   HeapWord* allocate_memory_work(ShenandoahAllocRequest& request, bool& in_new_region);
   HeapWord* allocate_from_gclab_slow(Thread* thread, size_t size);
   HeapWord* allocate_new_gclab(size_t min_size, size_t word_size, size_t* actual_size);

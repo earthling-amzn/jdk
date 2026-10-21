@@ -112,7 +112,7 @@ public:
 
   // Request a collection cycle. This handles "explicit" gc requests
   // like System.gc and "implicit" gc requests, like metaspace oom.
-  void request_gc(GCCause::Cause cause);
+  void request_gc(GCCause::Cause cause, ShenandoahGeneration* generation);
 
   // Notify threads that the gc has completed a cycle, or it's exiting.
   void notify_gc_waiters();
@@ -148,7 +148,7 @@ public:
   static const char* collector_phase_to_string(ShenandoahCollectorPhase phase);
 
 protected:
-  virtual void handle_requested_gc(GCCause::Cause cause);
+  virtual void handle_requested_gc(GCCause::Cause cause, ShenandoahGeneration* generation);
 
   // Used at the end of a cycle to clear allocation failure and notify alloc waiters
   virtual void clear_allocation_failure_and_notify_waiters();

@@ -86,6 +86,8 @@ public:
   size_t soft_mutator_available() const override;
 
   void prepare_gc() override;
+
+  void maybe_request_gc_cycle(GCCause::Cause) override;
 };
 
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHYOUNGGENERATION_HPP

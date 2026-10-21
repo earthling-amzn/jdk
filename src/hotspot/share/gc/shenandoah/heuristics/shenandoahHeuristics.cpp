@@ -58,8 +58,8 @@ ShenandoahHeuristics::ShenandoahHeuristics(ShenandoahSpaceInfo* space_info) :
   _space_info(space_info),
   _region_data(nullptr),
   _guaranteed_gc_interval(0),
-  _cycle_start(os::elapsedTime()),
-  _last_cycle_end(0),
+  _cycle_start(0),
+  _last_cycle_end(os::elapsedTime()),
   _gc_times_learned(0),
   _gc_time_penalties(0),
   _metaspace_oom()
@@ -163,19 +163,39 @@ void ShenandoahHeuristics::start_idle_span() {
 }
 
 void ShenandoahHeuristics::record_cycle_start() {
-  _cycle_start = os::elapsedTime();
+  _cycle_start.store_relaxed(os::elapsedTime());
   cancel_trigger_request();
   log_debug(gc, ergo)("Declined trigger count at start: %zu", _declined_trigger_count.load_relaxed());
 }
 
 void ShenandoahHeuristics::record_cycle_end() {
-  _last_cycle_end = os::elapsedTime();
+  _last_cycle_end.store_relaxed(os::elapsedTime());
 
   ShenandoahHeap* heap = ShenandoahHeap::heap();
   if (!heap->mode()->is_generational()) {
     const size_t available = _space_info->soft_mutator_available();
     heap->alloc_rate().update_minimum_sample_size(available);
   }
+}
+
+bool ShenandoahHeuristics::trigger_periodic_gc() {
+  if (_guaranteed_gc_interval > 0 && !_start_gc_is_pending.load_relaxed()) {
+    const double cycle_start = _cycle_start.load_relaxed();
+    const double last_cycle_end = _last_cycle_end.load_relaxed();
+    if (cycle_start > last_cycle_end) {
+      // The cycle has started, but hasn't completed. Do not trigger
+      return false;
+    }
+
+    const double last_time_ms = (os::elapsedTime() - last_cycle_end) * 1000;
+    if (last_time_ms > _guaranteed_gc_interval) {
+      log_trigger("Guaranteed Interval. %.0f ms since last GC, above %zu ms guaranteed interval",
+                  last_time_ms, _guaranteed_gc_interval);
+      accept_trigger();
+      return true;
+    }
+  }
+  return false;
 }
 
 bool ShenandoahHeuristics::should_start_gc() {
@@ -191,15 +211,6 @@ bool ShenandoahHeuristics::should_start_gc() {
     return true;
   }
 
-  if (_guaranteed_gc_interval > 0) {
-    double last_time_ms = (os::elapsedTime() - _last_cycle_end) * 1000;
-    if (last_time_ms > _guaranteed_gc_interval) {
-      log_trigger("Guaranteed Interval. %.0f ms since last GC, above %zu ms guaranteed interval",
-                  last_time_ms, _guaranteed_gc_interval);
-      accept_trigger();
-      return true;
-    }
-  }
   decline_trigger();
   return false;
 }
@@ -285,7 +296,7 @@ void ShenandoahHeuristics::post_initialize() {
 }
 
 double ShenandoahHeuristics::elapsed_cycle_time() const {
-  return os::elapsedTime() - _cycle_start;
+  return os::elapsedTime() - _cycle_start.load_relaxed();
 }
 
 #ifdef ASSERT

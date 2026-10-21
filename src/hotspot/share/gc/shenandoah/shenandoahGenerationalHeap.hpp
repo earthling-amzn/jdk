@@ -35,7 +35,9 @@ class ShenandoahGenerationalControlThread;
 class ShenandoahAgeCensus;
 
 class ShenandoahGenerationalHeap : public ShenandoahHeap {
+protected:
   void stop() override;
+  void maybe_request_gc_cycle() override;
 
 public:
   ShenandoahGenerationalHeap();
@@ -43,6 +45,8 @@ public:
   void initialize_generations() override;
   void initialize_heuristics() override;
   void post_initialize_heuristics() override;
+
+  void collect(GCCause::Cause cause) override;
 
   bool wait_for_old_collection(uint timeout_seconds);
 

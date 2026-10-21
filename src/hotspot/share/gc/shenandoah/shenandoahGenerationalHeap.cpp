@@ -104,6 +104,16 @@ void ShenandoahGenerationalHeap::post_initialize_heuristics() {
   _old_generation->post_initialize_heuristics();
 }
 
+void ShenandoahGenerationalHeap::collect(GCCause::Cause cause) {
+  // We can only run concurrent young GCs. If the request is to run a young gc, but
+  // explicit invokes concurrent is disabled, you get a global/full GC.
+  ShenandoahGeneration* generation = cause == GCCause::_wb_young_gc && ExplicitGCInvokesConcurrent
+                                   ? young_generation()
+                                   : global_generation();
+
+  control_thread()->request_gc(cause, generation);
+}
+
 void ShenandoahGenerationalHeap::print_init_logger() const {
   ShenandoahGenerationalInitLogger logger;
   logger.print_all();
@@ -158,6 +168,10 @@ void ShenandoahGenerationalHeap::gc_threads_do(ThreadClosure* tcl) const {
 void ShenandoahGenerationalHeap::stop() {
   ShenandoahHeap::stop();
   // regulator_thread()->stop();
+}
+
+void ShenandoahGenerationalHeap::maybe_request_gc_cycle() {
+  young_generation()->maybe_request_gc_cycle(GCCause::_shenandoah_concurrent_gc);
 }
 
 void ShenandoahGenerationalHeap::start_idle_span() {

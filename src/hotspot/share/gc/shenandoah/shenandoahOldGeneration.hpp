@@ -345,6 +345,8 @@ public:
   size_t started_gc_id() const {
     return _started_gc_id.load_relaxed();
   }
+
+  void maybe_request_gc_cycle(GCCause::Cause) override;
 };
 
 

@@ -57,6 +57,7 @@ public enum GCCause {
   _shenandoah_allocation_failure_evac ("Allocation Failure During Evacuation"),
   _shenandoah_humongous_allocation_failure("Humongous Allocation Failure"),
   _shenandoah_concurrent_gc ("Concurrent GC"),
+  _shenandoah_periodic_gc("Periodic GC"),
   _shenandoah_upgrade_to_full_gc ("Upgrade To Full GC"),
 
   _z_timer ("Timer"),

@@ -82,29 +82,31 @@ void ShenandoahController::handle_alloc_failure_full() {
   }
 }
 
-void ShenandoahController::request_gc(GCCause::Cause cause) {
+void ShenandoahController::request_gc(GCCause::Cause cause, ShenandoahGeneration* generation) {
   if (ShenandoahCollectorPolicy::should_handle_requested_gc(cause)) {
-    handle_requested_gc(cause);
+    handle_requested_gc(cause, generation);
   }
 }
 
-void ShenandoahController::handle_requested_gc(GCCause::Cause cause) {
-  // Requested gc's always operate on the entire heap
+void ShenandoahController::handle_requested_gc(GCCause::Cause cause, ShenandoahGeneration* generation) {
   const ShenandoahHeap* heap = ShenandoahHeap::heap();
   const ShenandoahCollectorPolicy* policy = heap->shenandoah_policy();
-  ShenandoahGeneration* global = heap->global_generation();
+
+  // Requested gc's always operate on the entire heap
+  assert(!heap->mode()->is_generational(), "Should only be here for non-generational mode");
+  assert(generation->is_global(), "There are only global cycles here");
 
   if (cause == GCCause::_wb_breakpoint) {
     // For normal requested GCs (System.gc) we want to block the caller. However,
     // for whitebox requested GC, we want to initiate the GC and return immediately.
     // The whitebox caller thread will arrange for itself to wait until the GC notifies
     // it that has reached the requested breakpoint (phase in the GC).
-    notify_control_thread(cause, global);
+    notify_control_thread(cause, generation);
     return;
   }
 
-  if (cause == GCCause::_shenandoah_concurrent_gc) {
-    notify_control_thread(cause, global);
+  if (cause == GCCause::_shenandoah_concurrent_gc || cause == GCCause::_shenandoah_periodic_gc) {
+    notify_control_thread(cause, generation);
     return;
   }
 
@@ -119,7 +121,7 @@ void ShenandoahController::handle_requested_gc(GCCause::Cause cause) {
   MonitorLocker ml(&_gc_waiters_lock);
   const size_t current_gc_id = get_gc_id();
   while (policy->last_whole_heap_gc_id() <= current_gc_id && !should_terminate()) {
-    notify_control_thread(cause, global);
+    notify_control_thread(cause, generation);
     ml.wait();
   }
 }

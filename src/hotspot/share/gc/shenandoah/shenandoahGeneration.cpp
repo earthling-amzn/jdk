@@ -129,6 +129,13 @@ void ShenandoahGeneration::confirm_heuristics_mode() {
   }
 }
 
+void ShenandoahPeriodicCollectionTask::task() {
+  if (_generation->heuristics()->trigger_periodic_gc()) {
+    const ShenandoahHeap* heap = ShenandoahHeap::heap();
+    heap->control_thread()->request_gc(GCCause::_shenandoah_periodic_gc, _generation);
+  }
+}
+
 ShenandoahHeuristics* ShenandoahGeneration::initialize_heuristics(ShenandoahMode* gc_mode) {
   _heuristics = gc_mode->initialize_heuristics(this);
   _heuristics->set_guaranteed_gc_interval(ShenandoahGuaranteedGCInterval);
@@ -326,13 +333,25 @@ void ShenandoahGeneration::cancel_marking() {
   set_concurrent_mark_in_progress(false);
 }
 
+static uintx get_periodic_gc_interval(ShenandoahGenerationType type) {
+  switch (type) {
+    case GLOBAL:  return 0; // no periodic global gc in generational mode
+    case NON_GEN: return ShenandoahGuaranteedGCInterval;
+    case YOUNG:   return ShenandoahGuaranteedYoungGCInterval;
+    case OLD:     return ShenandoahGuaranteedOldGCInterval;
+    default:
+      ShouldNotReachHere();
+  }
+}
+
 ShenandoahGeneration::ShenandoahGeneration(ShenandoahGenerationType type, uint max_workers) :
   _type(type),
   _task_queues(new ShenandoahObjToScanQueueSet(max_workers)),
   _ref_processor(new ShenandoahReferenceProcessor(this, MAX2(max_workers, 1U))),
   _evacuation_reserve(0),
   _free_set(nullptr),
-  _heuristics(nullptr)
+  _heuristics(nullptr),
+  _periodic_gc(nullptr)
 {
   _is_marking_complete.set();
   assert(max_workers > 0, "At least one queue");
@@ -348,11 +367,22 @@ ShenandoahGeneration::~ShenandoahGeneration() {
     delete q;
   }
   delete _task_queues;
+
+  if (_periodic_gc != nullptr) {
+    delete _periodic_gc;
+  }
 }
 
 void ShenandoahGeneration::post_initialize(ShenandoahHeap* heap) {
   _free_set = heap->free_set();
   assert(_free_set != nullptr, "bad initialization order");
+
+  if (heap->mode()->is_concurrent()) {
+    const uintx periodic_gc_interval = get_periodic_gc_interval(type());
+    if (periodic_gc_interval > 0) {
+      _periodic_gc = new ShenandoahPeriodicCollectionTask(this);
+    }
+  }
 }
 
 ShenandoahObjToScanQueueSet* ShenandoahGeneration::old_gen_task_queues() const {

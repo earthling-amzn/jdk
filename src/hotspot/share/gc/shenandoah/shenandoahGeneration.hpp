@@ -41,6 +41,7 @@ class ShenandoahHeapRegionClosure;
 class ShenandoahHeuristics;
 class ShenandoahMode;
 class ShenandoahReferenceProcessor;
+class ShenandoahPeriodicCollectionTask;
 
 class ShenandoahGeneration : public CHeapObj<mtGC>, public ShenandoahSpaceInfo {
   friend class VMStructs;
@@ -65,6 +66,8 @@ protected:
   ShenandoahHeuristics* _heuristics;
 
 private:
+  ShenandoahPeriodicCollectionTask* _periodic_gc;
+
   // Return available assuming that we can allocate no more than capacity bytes within this generation.
   size_t available(size_t capacity) const;
 
@@ -189,6 +192,24 @@ public:
 
   virtual bool is_concurrent_mark_in_progress() = 0;
   void confirm_heuristics_mode();
+
+  virtual void maybe_request_gc_cycle(GCCause::Cause) = 0;
 };
 
+class ShenandoahPeriodicCollectionTask : public PeriodicTask {
+public:
+  ShenandoahPeriodicCollectionTask(ShenandoahGeneration* generation)
+    : PeriodicTask(100), _generation(generation) {
+    enroll();
+  }
+
+  ~ShenandoahPeriodicCollectionTask() override {
+    disenroll();
+  }
+
+  void task() override;
+
+private:
+  ShenandoahGeneration* _generation;
+};
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHGENERATION_HPP

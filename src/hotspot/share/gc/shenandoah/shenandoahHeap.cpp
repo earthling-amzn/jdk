@@ -564,7 +564,6 @@ ShenandoahHeap::ShenandoahHeap() :
   _active_generation(nullptr),
   _initial_size(0),
   _committed(0),
-  _alloc_rate_decay(&_alloc_rate),
   _max_workers(MAX3(ConcGCThreads, ParallelGCThreads, 1U)),
   _workers(nullptr),
   _safepoint_workers(nullptr),
@@ -709,11 +708,6 @@ void ShenandoahHeap::post_initialize() {
 
   // Schedule periodic task to report on gc thread CPU utilization
   _mmu_tracker.initialize();
-
-  // Periodically decay allocation rate to compensate for not being updated when allocation rate
-  // is low. Heuristics are evaluated unconditionally from a dedicated thread so it will continue
-  // to see the last (possibly stale) allocation rate if the allocation rate is low.
-  _alloc_rate_decay.enroll();
 
   MutexLocker ml(Threads_lock);
 
@@ -1063,6 +1057,10 @@ HeapWord* ShenandoahHeap::allocate_memory_work(ShenandoahAllocRequest& req, bool
     old_generation()->unexpend_promoted(req.size() << LogHeapWordSize);
   }
   return result;
+}
+
+void ShenandoahHeap::maybe_request_gc_cycle() {
+  global_generation()->maybe_request_gc_cycle(GCCause::_shenandoah_concurrent_gc);
 }
 
 HeapWord* ShenandoahHeap::mem_allocate(size_t size) {
@@ -1671,7 +1669,7 @@ void ShenandoahHeap::collect_as_vm_thread(GCCause::Cause cause) {
 }
 
 void ShenandoahHeap::collect(GCCause::Cause cause) {
-  control_thread()->request_gc(cause);
+  control_thread()->request_gc(cause, global_generation());
 }
 
 void ShenandoahHeap::do_full_collection(bool clear_all_soft_refs) {
@@ -2320,13 +2318,10 @@ void ShenandoahHeap::stop() {
   // Step 1. Stop reporting on gc thread cpu utilization
   mmu_tracker()->stop();
 
-  // Step 2. Stop decaying allocation rate.
-  _alloc_rate_decay.disenroll();
-
-  // Step 3. Wait until GC worker exits normally (this will cancel any ongoing GC).
+  // Step 2. Wait until GC worker exits normally (this will cancel any ongoing GC).
   control_thread()->stop();
 
-  // Step 4. Shutdown uncommit thread.
+  // Step 3. Shutdown uncommit thread.
   if (_uncommit_thread != nullptr) {
     _uncommit_thread->stop();
   }

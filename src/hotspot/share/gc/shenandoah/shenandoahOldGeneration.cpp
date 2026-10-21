@@ -799,6 +799,12 @@ size_t ShenandoahOldGeneration::max_capacity() const {
   return total_regions * ShenandoahHeapRegion::region_size_bytes();
 }
 
+void ShenandoahOldGeneration::maybe_request_gc_cycle(GCCause::Cause cause) {
+  if (heuristics()->should_start_gc()) {
+    ShenandoahGenerationalHeap::heap()->control_thread()->request_gc(cause, this);
+  }
+}
+
 size_t ShenandoahOldGeneration::free_unaffiliated_regions() const {
   return _free_set->old_unaffiliated_regions();
 }

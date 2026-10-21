@@ -148,3 +148,9 @@ void ShenandoahYoungGeneration::prepare_gc() {
   // new marking cycle
   ShenandoahGenerationalHeap::heap()->age_census()->reset_local();
 }
+
+void ShenandoahYoungGeneration::maybe_request_gc_cycle(GCCause::Cause cause) {
+  if (heuristics()->should_start_gc()) {
+    ShenandoahGenerationalHeap::heap()->control_thread()->request_gc(cause, this);
+  }
+}

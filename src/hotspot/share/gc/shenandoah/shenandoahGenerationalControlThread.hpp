@@ -92,7 +92,7 @@ protected:
   bool notify_control_thread(GCCause::Cause cause, ShenandoahGeneration* generation) override;
 
   // Handle whitebox requests to run old or young cycles
-  void handle_requested_gc(GCCause::Cause cause) override;
+  void handle_requested_gc(GCCause::Cause cause, ShenandoahGeneration* generation) override;
 
 private:
 

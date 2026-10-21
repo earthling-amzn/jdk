@@ -40,6 +40,7 @@ public:
                                              size_t free) override;
 
   bool should_start_gc() override;
+  bool trigger_periodic_gc() override { return false; }
 
   bool should_unload_classes() override;
 

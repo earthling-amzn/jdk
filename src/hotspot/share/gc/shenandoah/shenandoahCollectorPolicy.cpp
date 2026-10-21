@@ -145,9 +145,9 @@ bool ShenandoahCollectorPolicy::is_shenandoah_gc(GCCause::Cause cause) {
       || cause == GCCause::_shenandoah_allocation_failure_evac
       || cause == GCCause::_shenandoah_humongous_allocation_failure
       || cause == GCCause::_shenandoah_concurrent_gc
+      || cause == GCCause::_shenandoah_periodic_gc
       || cause == GCCause::_shenandoah_upgrade_to_full_gc;
 }
-
 
 bool ShenandoahCollectorPolicy::is_allocation_failure(GCCause::Cause cause) {
   return cause == GCCause::_allocation_failure
@@ -206,28 +206,30 @@ bool ShenandoahCollectorPolicy::should_abandon_evacuations(ShenandoahHeapRegion*
 // regulator requests and allocation failures do not preempt a shutdown request.
 int ShenandoahCollectorPolicy::cause_priority(GCCause::Cause cause) {
   if (is_explicit_gc(cause)) {
-    return 5;
+    return 6;
   }
 
   switch (cause) {
     case GCCause::_shenandoah_stop_vm:
-      return 7;
+      return 8;
     case GCCause::_shenandoah_upgrade_to_full_gc:
-      return 6;
+      return 7;
     case GCCause::_shenandoah_humongous_allocation_failure:
-      return 4;
+      return 5;
     case GCCause::_shenandoah_allocation_failure_evac:
-      return 3;
+      return 4;
     case GCCause::_allocation_failure:
-      return 2;
+      return 3;
     case GCCause::_shenandoah_concurrent_gc:
+      return 2;
+    case GCCause::_shenandoah_periodic_gc:
       return 1;
     case GCCause::_no_gc:
       return 0;
     default:
       // Unanticipated gc causes are treated as an allocation failure and cannot be
       // preempted by regulator requests
-      return 2;
+      return 3;
   }
 }
 

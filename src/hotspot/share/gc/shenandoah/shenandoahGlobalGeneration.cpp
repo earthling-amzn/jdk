@@ -150,3 +150,9 @@ void ShenandoahGlobalGeneration::prepare_gc() {
     assert(type() == NON_GEN, "Unexpected generation type");
   }
 }
+
+void ShenandoahGlobalGeneration::maybe_request_gc_cycle(GCCause::Cause cause) {
+  if (heuristics()->should_start_gc()) {
+    ShenandoahHeap::heap()->control_thread()->request_gc(cause, this);
+  }
+}

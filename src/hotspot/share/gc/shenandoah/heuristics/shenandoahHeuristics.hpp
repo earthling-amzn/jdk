@@ -188,8 +188,9 @@ protected:
 
   size_t _guaranteed_gc_interval;
 
-  double _cycle_start;
-  double _last_cycle_end;
+  // Read by periodic task thread, written by control thread
+  Atomic<double> _cycle_start;
+  Atomic<double> _last_cycle_end;
 
   size_t _gc_times_learned;
   intx _gc_time_penalties;
@@ -239,11 +240,13 @@ public:
   }
 
   double cycle_start_time_seconds() const {
-    return _cycle_start;
+    return _cycle_start.load_relaxed();
   }
 
   virtual void record_cycle_start();
   virtual void record_cycle_end();
+
+  virtual bool trigger_periodic_gc();
 
   void update_should_start_query_times(double now, double planned_sleep_interval) {
     _most_recent_trigger_evaluation_time = now;

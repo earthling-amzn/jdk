@@ -75,7 +75,9 @@ public:
 
   ShenandoahHeuristics* initialize_heuristics(ShenandoahMode* gc_mode) override;
 
-  virtual void prepare_gc() override;
+  void prepare_gc() override;
+
+  void maybe_request_gc_cycle(GCCause::Cause) override;
 };
 
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHGLOBALGENERATION_HPP
