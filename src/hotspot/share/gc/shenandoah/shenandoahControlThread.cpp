@@ -45,6 +45,12 @@ ShenandoahControlThread::ShenandoahControlThread() {
   create_and_start();
 }
 
+void ShenandoahControlThread::prepare_for_explicit_gc(ShenandoahHeap* const heap, ShenandoahHeuristics* const heuristics, GCCause::Cause cause) {
+  heuristics->log_trigger("GC Request (%s)", GCCause::to_string(cause));
+  heuristics->record_requested_gc();
+  heap->global_generation()->ref_processor()->set_soft_reference_policy(true);
+}
+
 void ShenandoahControlThread::run_service() {
   ShenandoahHeap* const heap = ShenandoahHeap::heap();
   ShenandoahHeuristics* const heuristics = heap->heuristics();
@@ -65,26 +71,21 @@ void ShenandoahControlThread::run_service() {
 
     // Choose which GC mode to run in. The block below should select a single mode.
     GCMode mode = concurrent_normal;
-    bool clear_soft_references = ShenandoahAlwaysClearSoftRefs;
-    if (ShenandoahCollectorPolicy::is_explicit_gc(cause)) {
-      // A cycle was requested, clear soft references
-      heuristics->log_trigger("GC Request (%s)", GCCause::to_string(cause));
-      heuristics->record_requested_gc();
-      clear_soft_references = true;
-      if (ShenandoahCollectorPolicy::should_run_full_gc(cause)) {
-        mode = stw_full;
-      } else {
-        // Unload and clean up everything
-        heap->set_unload_classes(heuristics->can_unload_classes());
+    if (ShenandoahCollectorPolicy::should_run_full_gc(cause)) {
+      mode = stw_full;
+      if (ShenandoahCollectorPolicy::is_explicit_gc(cause)) {
+        prepare_for_explicit_gc(heap, heuristics, cause);
       }
+    } else if (ShenandoahCollectorPolicy::is_explicit_gc(cause)) {
+      // A cycle was requested, clear soft references
+      prepare_for_explicit_gc(heap, heuristics, cause);
+      heap->set_unload_classes(heuristics->can_unload_classes());
     } else {
       // Ask policy if this cycle wants to process references or unload classes
       heap->set_unload_classes(heuristics->should_unload_classes());
     }
 
     if (cause != GCCause::_no_gc) {
-      heap->global_generation()->ref_processor()->set_soft_reference_policy(clear_soft_references);
-
       // Cannot uncommit bitmap slices during concurrent reset
       ShenandoahNoUncommitMark forbid_region_uncommit(heap);
 

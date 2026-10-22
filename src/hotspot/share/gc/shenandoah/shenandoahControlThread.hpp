@@ -52,6 +52,7 @@ protected:
 private:
   void service_concurrent_normal_cycle(GCCause::Cause cause);
   void service_stw_full_cycle(GCCause::Cause cause);
+  void prepare_for_explicit_gc(ShenandoahHeap* heap, ShenandoahHeuristics* heuristics, GCCause::Cause cause);
 };
 
 #endif // SHARE_GC_SHENANDOAH_SHENANDOAHCONTROLTHREAD_HPP
