@@ -66,15 +66,8 @@ private:
   // A reference to the heap
   ShenandoahGenerationalHeap* _heap;
 
-  // This is true when the old generation cycle is in an interruptible phase (i.e., marking or
-  // preparing for mark).
-  ShenandoahSharedFlag _allow_old_preemption;
-
 public:
   ShenandoahGenerationalControlThread();
-
-  // Return true if the request to start a concurrent GC for the given generation succeeded.
-  bool request_concurrent_gc(ShenandoahGeneration* generation);
 
   // Visible for white box API to start an old cycle
   bool wait_for_gc_cycle(GCCause::Cause cause, ShenandoahGeneration* generation, uint timeout_seconds = 10);
@@ -107,9 +100,6 @@ private:
   void service_stw_full_cycle(GCCause::Cause cause);
   void service_concurrent_normal_cycle(const ShenandoahGCRequest& request);
   void service_concurrent_old_cycle(const ShenandoahGCRequest& request);
-
-  // Returns true if the old generation marking was interrupted to allow a young cycle.
-  bool preempt_old_marking(ShenandoahGeneration* generation);
 
   // Set the gc mode and post a notification if it has changed. The overloaded variant should be used
   // when the _control_lock is already held.

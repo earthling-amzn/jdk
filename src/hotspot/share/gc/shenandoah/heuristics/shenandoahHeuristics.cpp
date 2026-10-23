@@ -27,11 +27,9 @@
 #include "gc/shared/gcCause.hpp"
 #include "gc/shenandoah/heuristics/shenandoahHeuristics.hpp"
 #include "gc/shenandoah/shenandoahAllocRate.inline.hpp"
-#include "gc/shenandoah/shenandoahCollectorPolicy.hpp"
 #include "gc/shenandoah/shenandoahHeap.inline.hpp"
 #include "gc/shenandoah/shenandoahHeapRegion.inline.hpp"
 #include "gc/shenandoah/shenandoahMarkingContext.inline.hpp"
-#include "gc/shenandoah/shenandoahOldGeneration.hpp"
 #include "gc/shenandoah/shenandoahTrace.hpp"
 #include "gc/shenandoah/shenandoahYoungGeneration.hpp"
 #include "logging/log.hpp"
@@ -51,8 +49,6 @@ int ShenandoahHeuristics::compare_by_garbage(RegionData a, RegionData b) {
 }
 
 ShenandoahHeuristics::ShenandoahHeuristics(ShenandoahSpaceInfo* space_info) :
-  _most_recent_trigger_evaluation_time(os::elapsedTime()),
-  _most_recent_planned_sleep_interval(0.0),
   _start_gc_is_pending(false),
   _declined_trigger_count(0),
   _space_info(space_info),
@@ -61,8 +57,7 @@ ShenandoahHeuristics::ShenandoahHeuristics(ShenandoahSpaceInfo* space_info) :
   _cycle_start(0),
   _last_cycle_end(os::elapsedTime()),
   _gc_times_learned(0),
-  _gc_time_penalties(0),
-  _metaspace_oom()
+  _gc_time_penalties(0)
 {
   size_t num_regions = ShenandoahHeap::heap()->num_regions();
   assert(num_regions > 0, "Sanity");

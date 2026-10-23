@@ -30,7 +30,6 @@
 #include "utilities/checkedCast.hpp"
 
 class PLAB;
-class ShenandoahRegulatorThread;
 class ShenandoahGenerationalControlThread;
 class ShenandoahAgeCensus;
 
@@ -117,8 +116,6 @@ public:
   void initialize_serviceability() override;
   GrowableArray<MemoryPool*> memory_pools() override;
 
-  ShenandoahRegulatorThread* regulator_thread() const { return _regulator_thread;  }
-
   void gc_threads_do(ThreadClosure* tcl) const override;
 
   bool requires_barriers(stackChunkOop obj) const override;
@@ -137,8 +134,6 @@ private:
 
   // Makes old regions parsable. This will also rebuild card offsets, which is necessary if classes were unloaded
   void coalesce_and_fill_old_regions(bool concurrent);
-
-  ShenandoahRegulatorThread* _regulator_thread;
 
   MemoryPool* _young_gen_memory_pool;
   MemoryPool* _old_gen_memory_pool;

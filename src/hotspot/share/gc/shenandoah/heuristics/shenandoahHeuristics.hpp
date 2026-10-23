@@ -81,9 +81,6 @@ class ShenandoahHeuristics : public CHeapObj<mtGC> {
   };
 #endif
 
-  double _most_recent_trigger_evaluation_time;
-  double _most_recent_planned_sleep_interval;
-
 protected:
   static constexpr uint Moving_Average_Samples = 10; // Number of samples to store in moving averages
 
@@ -96,7 +93,7 @@ protected:
   // the heuristics will be 'penalized' in a way that will make them start the next concurrent cycle sooner. Also
   // note that once the trigger has been accepted, _start_gc_is_pending will be set and subsequent attempts to evaluate
   // the trigger conditions will return early and will not increase _declined_trigger_count. This is written to
-  // by both the regulator and control thread, read by control thread.
+  // by both mutators and the control thread, read by control thread.
   shenandoah_padding(1);
   Atomic<size_t> _declined_trigger_count;
   shenandoah_padding(2);
@@ -195,9 +192,6 @@ protected:
   size_t _gc_times_learned;
   intx _gc_time_penalties;
 
-  // There may be many threads that contend to set this flag
-  ShenandoahSharedFlag _metaspace_oom;
-
   static int compare_by_garbage(RegionData a, RegionData b);
 
   // This is a helper function to choose_collection_set()
@@ -214,21 +208,9 @@ protected:
     _declined_trigger_count.add_then_fetch(1UL, memory_order_relaxed);
   }
 
-  double get_most_recent_wake_time() const {
-    return _most_recent_trigger_evaluation_time;
-  }
-
-  double get_planned_sleep_interval() const {
-    return _most_recent_planned_sleep_interval;
-  }
-
 public:
   ShenandoahHeuristics(ShenandoahSpaceInfo* space_info);
   virtual ~ShenandoahHeuristics();
-
-  void record_metaspace_oom()     { _metaspace_oom.set(); }
-  void clear_metaspace_oom()      { _metaspace_oom.unset(); }
-  bool has_metaspace_oom() const  { return _metaspace_oom.is_set(); }
 
   void set_guaranteed_gc_interval(size_t guaranteed_gc_interval) {
     _guaranteed_gc_interval = guaranteed_gc_interval;
@@ -247,11 +229,6 @@ public:
   virtual void record_cycle_end();
 
   virtual bool trigger_periodic_gc();
-
-  void update_should_start_query_times(double now, double planned_sleep_interval) {
-    _most_recent_trigger_evaluation_time = now;
-    _most_recent_planned_sleep_interval = planned_sleep_interval;
-  }
 
   void accept_trigger() {
     _start_gc_is_pending.store_relaxed(true);

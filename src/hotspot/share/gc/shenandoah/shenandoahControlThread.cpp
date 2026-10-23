@@ -148,11 +148,6 @@ void ShenandoahControlThread::run_service() {
       // Retract forceful part of soft refs policy
       heap->global_generation()->ref_processor()->set_soft_reference_policy(false);
 
-      // Clear metaspace oom flag, if current cycle unloaded classes
-      if (heap->unload_classes()) {
-        heuristics->clear_metaspace_oom();
-      }
-
       // Manage and print gc stats
       heap->process_gc_stats();
 

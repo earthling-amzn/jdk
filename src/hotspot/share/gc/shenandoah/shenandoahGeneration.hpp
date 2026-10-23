@@ -199,7 +199,7 @@ public:
 class ShenandoahPeriodicCollectionTask : public PeriodicTask {
 public:
   ShenandoahPeriodicCollectionTask(ShenandoahGeneration* generation)
-    : PeriodicTask(100), _generation(generation) {
+    : PeriodicTask(ShenandoahGuaranteedGCResolution), _generation(generation) {
     enroll();
   }
 

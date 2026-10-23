@@ -41,8 +41,8 @@ class ShenandoahMmuTask;
  * all major platforms.
  *
  * The time spent by GC threads is attributed to the young or old generation.
- * The time given to the controller and regulator threads is attributed to the
- * global generation. At the end of every collection, the average MMU is inspected.
+ * The time given to the control thread is attributed to the global generation.
+ * At the end of every collection, the average MMU is inspected.
  * If it is below `GCTimeRatio`, this class will attempt to increase the capacity
  * of the generation that is consuming the most CPU time. The assumption being
  * that increasing memory will reduce the collection frequency and raise the

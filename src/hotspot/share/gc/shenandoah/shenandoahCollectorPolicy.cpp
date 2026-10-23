@@ -208,7 +208,7 @@ bool ShenandoahCollectorPolicy::should_abandon_evacuations(ShenandoahHeapRegion*
 }
 
 // Some causes should not be allowed to preempt others. We must make sure that
-// regulator requests and allocation failures do not preempt a shutdown request.
+// heuristic requests and allocation failures do not preempt a shutdown request.
 int ShenandoahCollectorPolicy::cause_priority(GCCause::Cause cause) {
   if (is_explicit_gc(cause)) {
     return 6;

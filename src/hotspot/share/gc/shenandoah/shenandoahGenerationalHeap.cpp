@@ -40,7 +40,6 @@
 #include "gc/shenandoah/shenandoahMonitoringSupport.hpp"
 #include "gc/shenandoah/shenandoahOldGeneration.hpp"
 #include "gc/shenandoah/shenandoahPhaseTimings.hpp"
-#include "gc/shenandoah/shenandoahRegulatorThread.hpp"
 #include "gc/shenandoah/shenandoahScanRemembered.inline.hpp"
 #include "gc/shenandoah/shenandoahUtils.hpp"
 #include "gc/shenandoah/shenandoahWorkerPolicy.hpp"
@@ -82,7 +81,6 @@ ShenandoahGenerationalHeap::ShenandoahGenerationalHeap() :
   _age_census(nullptr),
   _min_plab_size(calculate_min_plab()),
   _max_plab_size(calculate_max_plab()),
-  _regulator_thread(nullptr),
   _young_gen_memory_pool(nullptr),
   _old_gen_memory_pool(nullptr) {
 }
@@ -153,21 +151,17 @@ GrowableArray<MemoryPool*> ShenandoahGenerationalHeap::memory_pools() {
 }
 
 void ShenandoahGenerationalHeap::initialize_controller() {
-  auto control_thread = new ShenandoahGenerationalControlThread();
-  _control_thread = control_thread;
-  // _regulator_thread = new ShenandoahRegulatorThread(control_thread);
+  _control_thread = new ShenandoahGenerationalControlThread();
 }
 
 void ShenandoahGenerationalHeap::gc_threads_do(ThreadClosure* tcl) const {
   if (!shenandoah_policy()->is_at_shutdown()) {
     ShenandoahHeap::gc_threads_do(tcl);
-    // tcl->do_thread(regulator_thread());
   }
 }
 
 void ShenandoahGenerationalHeap::stop() {
   ShenandoahHeap::stop();
-  // regulator_thread()->stop();
 }
 
 void ShenandoahGenerationalHeap::maybe_request_gc_cycle() {

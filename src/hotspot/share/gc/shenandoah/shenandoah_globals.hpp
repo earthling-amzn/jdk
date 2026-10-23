@@ -277,6 +277,11 @@
           "heuristic to initiate more concurrent cycles." )                 \
           range(0.319,3.291)                                                \
                                                                             \
+  product(uintx, ShenandoahGuaranteedGCResolution, 100, EXPERIMENTAL,       \
+          "The interval (in milliseconds) to check if the guaranteed time " \
+          "between gc cycles has elapsed")                                  \
+          range(10, 999)                                                    \
+                                                                            \
   product(uintx, ShenandoahGuaranteedGCInterval, 5*60*1000, EXPERIMENTAL,   \
           "Many heuristics would guarantee a concurrent GC cycle at "       \
           "least with this interval. This is useful when large idle "       \
@@ -321,24 +326,6 @@
           "the samples. Higher values provide more fidelity, at expense "   \
           "of more sampling overhead.")                                     \
                                                                             \
-  product(uintx, ShenandoahControlIntervalMin, 1, EXPERIMENTAL,             \
-          "The minimum sleep interval for the control loop that drives "    \
-          "the cycles. Lower values would increase GC responsiveness "      \
-          "to changing heap conditions, at the expense of higher perf "     \
-          "overhead. Time is in milliseconds.")                             \
-          range(1, 999)                                                     \
-                                                                            \
-  product(uintx, ShenandoahControlIntervalMax, 10, EXPERIMENTAL,            \
-          "The maximum sleep interval for control loop that drives "        \
-          "the cycles. Lower values would increase GC responsiveness "      \
-          "to changing heap conditions, at the expense of higher perf "     \
-          "overhead. Time is in milliseconds.")                             \
-          range(1, 999)                                                     \
-                                                                            \
-  product(uintx, ShenandoahControlIntervalAdjustPeriod, 1000, EXPERIMENTAL, \
-          "The time period for one step in control loop interval "          \
-          "adjustment. Lower values make adjustments faster, at the "       \
-          "expense of higher perf overhead. Time is in milliseconds.")      \
                                                                             \
   product(bool, ShenandoahVerify, false, DIAGNOSTIC,                        \
           "Enable internal verification. This would catch many GC bugs, "   \
@@ -513,10 +500,6 @@
           "for the purpose of supporting compaction of old-gen "            \
           "memory.  Otherwise, old-gen memory cannot be compacted.")        \
           range(0, 128)                                                     \
-                                                                            \
-  product(bool, ShenandoahAllowOldMarkingPreemption, true, DIAGNOSTIC,      \
-          "Allow young generation collections to suspend concurrent"        \
-          " marking in the old generation.")                                \
                                                                             \
   develop(bool, ShenandoahEnableCardStats, false,                           \
           "Enable statistics collection related to clean & dirty cards")    \

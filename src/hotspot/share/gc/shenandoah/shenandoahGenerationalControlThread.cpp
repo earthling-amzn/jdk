@@ -328,11 +328,6 @@ void ShenandoahGenerationalControlThread::run_gc_cycle(const ShenandoahGCRequest
   // Retract forceful part of soft refs policy
   request.generation->ref_processor()->set_soft_reference_policy(false);
 
-  // Clear metaspace oom flag, if current cycle unloaded classes
-  if (_heap->unload_classes()) {
-    _heap->global_generation()->heuristics()->clear_metaspace_oom();
-  }
-
   // Manage and print gc stats
   _heap->process_gc_stats();
 
@@ -361,7 +356,7 @@ void ShenandoahGenerationalControlThread::run_gc_cycle(const ShenandoahGCRequest
   }
 }
 
-// Young and old concurrent cycles are initiated by the regulator. GC requests are
+// Young and old concurrent cycles are initiated by heuristic evaluators. GC requests are
 // handled by the controller thread and always run a global cycle (which is concurrent
 // by default, but may be overridden by command line options to run on a safepoint).
 // If there is an allocation failure during old marking, it will be cancelled. The
@@ -422,9 +417,7 @@ void ShenandoahGenerationalControlThread::service_concurrent_old_cycle(const She
     }
     case ShenandoahOldGeneration::FILLING: {
       ShenandoahGCSession session(request.cause, old_generation);
-      _allow_old_preemption.set();
       const bool filling_complete = old_generation->entry_coalesce_and_fill();
-      _allow_old_preemption.unset();
 
       if (!filling_complete) {
         assert(old_generation->state() == ShenandoahOldGeneration::FILLING, "Should still be filling");
@@ -449,7 +442,7 @@ void ShenandoahGenerationalControlThread::resume_concurrent_old_cycle(Shenandoah
   // We can only tolerate being cancelled during concurrent marking or during preparation for mixed
   // evacuation. This flag here (passed by reference) is used to control precisely where the regulator
   // is allowed to cancel a GC.
-  ShenandoahOldGC gc(generation, _allow_old_preemption);
+  ShenandoahOldGC gc(generation);
   if (gc.collect(cause)) {
     if (alloc_stall_count() == 0) {
       _heap->notify_gc_progress();
@@ -550,53 +543,6 @@ void ShenandoahGenerationalControlThread::service_stw_full_cycle(GCCause::Cause 
   clear_allocation_failure_and_notify_waiters();
 }
 
-bool ShenandoahGenerationalControlThread::request_concurrent_gc(ShenandoahGeneration* generation) {
-  if (_heap->cancelled_gc()) {
-    // Ignore subsequent requests from the heuristics
-    log_debug(gc, thread)("Reject request for concurrent gc: gc_requested: %s, gc_cancelled: %s",
-                          GCCause::to_string(_requested_gc_cause),
-                          BOOL_TO_STR(_heap->cancelled_gc()));
-    return false;
-  }
-
-  MonitorLocker ml(&_control_lock, Mutex::_no_safepoint_check_flag);
-  if (gc_mode() == servicing_old) {
-    if (!preempt_old_marking(generation)) {
-      // Global should be able to cause old collection to be abandoned
-      log_debug(gc, thread)("Cannot start %s, old collection is not preemptible", generation->name());
-      return false;
-    }
-
-    // Cancel the old GC and wait for the control thread to start servicing the new request.
-    log_info(gc, phases)("Preempting old generation mark to allow %s GC", generation->name());
-    while (gc_mode() == servicing_old) {
-      notify_control_thread(ml, GCCause::_shenandoah_concurrent_gc, generation);
-      ml.wait();
-    }
-    return true;
-  }
-
-  if (gc_mode() == none) {
-    const size_t current_gc_id = get_gc_id();
-    while (gc_mode() == none && current_gc_id == get_gc_id()) {
-      if (_requested_gc_cause != GCCause::_no_gc) {
-        log_debug(gc, thread)("Reject request for concurrent gc because another gc is pending: %s", GCCause::to_string(_requested_gc_cause));
-        return false;
-      }
-
-      notify_control_thread(ml, GCCause::_shenandoah_concurrent_gc, generation);
-      ml.wait();
-    }
-    return true;
-  }
-
-
-  log_debug(gc, thread)("Reject request for concurrent gc: mode: %s, allow_old_preemption: %s",
-                        gc_mode_name(gc_mode()),
-                        BOOL_TO_STR(_allow_old_preemption.is_set()));
-  return false;
-}
-
 bool ShenandoahGenerationalControlThread::notify_control_thread(GCCause::Cause cause, ShenandoahGeneration* generation) {
   MonitorLocker ml(&_control_lock, Mutex::_no_safepoint_check_flag);
   return notify_control_thread(ml, cause, generation);
@@ -635,10 +581,6 @@ void ShenandoahGenerationalControlThread::notify_control_thread(MonitorLocker& m
     _requested_gc_cause = cause;
     ml.notify_all();
   }
-}
-
-bool ShenandoahGenerationalControlThread::preempt_old_marking(ShenandoahGeneration* generation) {
-  return generation->is_young() && _allow_old_preemption.try_unset();
 }
 
 bool ShenandoahGenerationalControlThread::wait_for_gc_cycle(GCCause::Cause cause, ShenandoahGeneration* generation, uint timeout_seconds) {

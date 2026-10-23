@@ -37,10 +37,9 @@
 #include "utilities/events.hpp"
 
 
-ShenandoahOldGC::ShenandoahOldGC(ShenandoahOldGeneration* generation, ShenandoahSharedFlag& allow_preemption)
+ShenandoahOldGC::ShenandoahOldGC(ShenandoahOldGeneration* generation)
   : ShenandoahConcurrentGC(nullptr, generation, false)
-  , _old_generation(generation)
-  , _allow_preemption(allow_preemption) {
+  , _old_generation(generation) {
 }
 
 // Final mark for old-gen is different for young than old, so we
@@ -96,21 +95,8 @@ bool ShenandoahOldGC::collect(GCCause::Cause cause) {
   SHENANDOAH_EVENT_MESSAGE(msg, _generation->type(), "Concurrent GC", "");
   ShenandoahConcurrentPhase gc_phase(msg, ShenandoahPhaseTimings::conc_gc, /* log_heap_usage = */ true);
 
-  // Enable preemption of old generation mark.
-  _allow_preemption.set();
-
   // Continue concurrent mark, do not reset regions, do not mark roots, do not collect $200.
   entry_mark();
-
-  // If we failed to unset the preemption flag, it means another thread has already unset it.
-  if (!_allow_preemption.try_unset()) {
-    // The regulator thread has unset the preemption guard. That thread will shortly cancel
-    // the gc, but the control thread is now racing it. Wait until this thread sees the
-    // cancellation.
-    while (!heap->cancelled_gc()) {
-      SpinPause();
-    }
-  }
 
   if (heap->cancelled_gc()) {
     return false;

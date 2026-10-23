@@ -34,7 +34,7 @@ class ShenandoahCycleDuration {
   // allows us to predict increasing GC times rather than always assuming average recent GC time is the best predictor.
   static constexpr uint GC_TIME_SAMPLE_SIZE = 15;
 
-  // Written by control thread, read by regulator thread
+  // Written by control thread, read by heuristic evaluator threads
   Monitor _gc_times_lock;
   ShenandoahWeightedSeq _gc_times;
 
