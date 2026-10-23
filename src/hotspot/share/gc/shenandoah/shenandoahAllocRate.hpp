@@ -31,7 +31,6 @@
 #include "runtime/mutex.hpp"
 #include "runtime/mutexLocker.hpp"
 #include "runtime/os.hpp"
-#include "runtime/task.hpp"
 #include "utilities/globalDefinitions.hpp"
 
 class ShenandoahAllocationClock {

@@ -439,9 +439,6 @@ void ShenandoahGenerationalControlThread::resume_concurrent_old_cycle(Shenandoah
   assert(_heap->is_concurrent_old_mark_in_progress(), "Old mark should be in progress");
   log_debug(gc)("Resuming old generation with " UINT32_FORMAT " marking tasks queued", generation->task_queues()->tasks());
 
-  // We can only tolerate being cancelled during concurrent marking or during preparation for mixed
-  // evacuation. This flag here (passed by reference) is used to control precisely where the regulator
-  // is allowed to cancel a GC.
   ShenandoahOldGC gc(generation);
   if (gc.collect(cause)) {
     if (alloc_stall_count() == 0) {
