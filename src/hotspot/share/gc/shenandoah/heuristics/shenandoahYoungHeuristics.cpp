@@ -171,6 +171,10 @@ bool ShenandoahYoungHeuristics::should_start_gc() {
     return false;
   }
 
+  if (is_gc_pending()) {
+    return false;
+  }
+
   if (ShenandoahAdaptiveHeuristics::should_start_gc()) {
     // Inherited triggers have already decided to start a cycle, so no further evaluation is required
     // ShenandoahAdaptiveHeuristics::should_start_gc() has already accepted trigger, or declined it.

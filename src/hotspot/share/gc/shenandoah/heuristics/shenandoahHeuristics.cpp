@@ -163,13 +163,14 @@ void ShenandoahHeuristics::start_idle_span() {
 }
 
 void ShenandoahHeuristics::record_cycle_start() {
+  _start_gc_is_pending.store_relaxed(true);
   _cycle_start.store_relaxed(os::elapsedTime());
-  cancel_trigger_request();
   log_debug(gc, ergo)("Declined trigger count at start: %zu", _declined_trigger_count.load_relaxed());
 }
 
 void ShenandoahHeuristics::record_cycle_end() {
   _last_cycle_end.store_relaxed(os::elapsedTime());
+  cancel_trigger_request();
 
   ShenandoahHeap* heap = ShenandoahHeap::heap();
   if (!heap->mode()->is_generational()) {
@@ -199,9 +200,9 @@ bool ShenandoahHeuristics::trigger_periodic_gc() {
 }
 
 bool ShenandoahHeuristics::should_start_gc() {
-  if (_start_gc_is_pending.load_relaxed()) {
-    log_info(gc, ergo)("GC start is already pending");
-    return true;
+  if (is_gc_pending()) {
+    log_debug(gc, ergo)("GC start is already pending");
+    return false;
   }
 
   decline_trigger();

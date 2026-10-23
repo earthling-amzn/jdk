@@ -261,6 +261,10 @@ public:
     _start_gc_is_pending.store_relaxed(false);
   }
 
+  bool is_gc_pending() const {
+    return _start_gc_is_pending.load_relaxed();
+  }
+
   virtual bool should_start_gc();
 
   virtual void record_concurrent_completion();

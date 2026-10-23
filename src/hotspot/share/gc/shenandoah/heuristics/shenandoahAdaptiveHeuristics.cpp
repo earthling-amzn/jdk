@@ -213,9 +213,8 @@ bool ShenandoahAdaptiveHeuristics::should_start_gc() {
   log_debug(gc, ergo)("should_start_gc calculation: available: " PROPERFMT ", soft_max_capacity: "  PROPERFMT,
                       PROPERFMTARGS(available), PROPERFMTARGS(capacity));
 
-  if (_start_gc_is_pending.load_relaxed()) {
-    log_info(gc, ergo)("GC start is already pending");
-    return true;
+  if (is_gc_pending()) {
+    return false;
   }
 
   _last_trigger = OTHER;
@@ -228,7 +227,7 @@ bool ShenandoahAdaptiveHeuristics::should_start_gc() {
     return true;
   }
 
-  const double anticipated_gc_start_time = get_most_recent_wake_time() + get_planned_sleep_interval();
+  const double anticipated_gc_start_time = os::elapsedTime();
   const double anticipated_gc_duration = _cycles.predict_duration(anticipated_gc_start_time, _margin_of_error_sd);
   ShenandoahAllocationRate& alloc_rate = ShenandoahHeap::heap()->alloc_rate();
   const ShenandoahAnticipatedConsumption consumption = alloc_rate.snapshot(anticipated_gc_duration, _margin_of_error_sd);
