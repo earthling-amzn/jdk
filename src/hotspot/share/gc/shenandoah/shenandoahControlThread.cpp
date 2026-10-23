@@ -94,8 +94,6 @@ void ShenandoahControlThread::run_service() {
 
       GCIdMark gc_id_mark;
 
-      heuristics->cancel_trigger_request();
-
       MetaspaceCombinedStats meta_sizes = MetaspaceUtils::get_combined_statistics();
 
       // If GC was requested, we are sampling the counters even without actual triggers

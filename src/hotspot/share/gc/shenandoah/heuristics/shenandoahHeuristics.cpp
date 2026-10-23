@@ -196,7 +196,7 @@ bool ShenandoahHeuristics::trigger_periodic_gc() {
 }
 
 void ShenandoahHeuristics::accept_trigger() {
-  if (_start_gc_is_pending.compare_set(false, true)) {
+  if (_start_gc_is_pending.compare_set(false, true, memory_order_relaxed)) {
     _trigger_accepted_time.store_relaxed(os::elapsedTime());
   }
 }
