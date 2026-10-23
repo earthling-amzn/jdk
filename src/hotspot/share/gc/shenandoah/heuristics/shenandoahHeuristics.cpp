@@ -296,7 +296,7 @@ double ShenandoahHeuristics::elapsed_cycle_time() const {
 double ShenandoahHeuristics::trigger_to_completion_time() const {
   const double trigger_accepted = _trigger_accepted_time.load_relaxed();
   assert(trigger_accepted <= _cycle_start.load_relaxed(), "Trigger after start");
-  assert(_cycle_start.load_relaxed() <= _last_cycle_end.load_relaxed(), "Start after end");
+  assert(_last_cycle_end.load_relaxed() <= _cycle_start.load_relaxed(), "Last cycle must end before this one");
   return os::elapsedTime() - trigger_accepted;
 }
 
