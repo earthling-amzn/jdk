@@ -160,7 +160,7 @@ void ShenandoahAdaptiveHeuristics::record_concurrent_completion() {
   // from shortened cycles. Suppose we did excluded shortened times, the risk would then
   // be running the collector more often than necessary because it continues to believe
   // the average cycle time is much higher than it otherwise would be.
-  _cycles.record_duration(_cycle_start.load_relaxed(), elapsed_cycle_time());
+  _cycles.record_duration(_trigger_accepted_time.load_relaxed(), trigger_to_completion_time());
 
   double z_score = 0.0;
   const double available = static_cast<double>(_space_info->available());

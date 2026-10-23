@@ -185,9 +185,12 @@ protected:
 
   size_t _guaranteed_gc_interval;
 
-  // Read by periodic task thread, written by control thread
+  // Read by periodic task thread, written and read by control thread
   Atomic<double> _cycle_start;
   Atomic<double> _last_cycle_end;
+
+  // Written by heuristic evaluator, written and read by control thread
+  Atomic<double> _trigger_accepted_time;
 
   size_t _gc_times_learned;
   intx _gc_time_penalties;
@@ -230,9 +233,7 @@ public:
 
   virtual bool trigger_periodic_gc();
 
-  void accept_trigger() {
-    _start_gc_is_pending.store_relaxed(true);
-  }
+  void accept_trigger();
 
   void cancel_trigger_request() {
     _start_gc_is_pending.store_relaxed(false);
@@ -273,6 +274,7 @@ public:
   virtual void post_initialize();
 
   double elapsed_cycle_time() const;
+  double trigger_to_completion_time() const;
 
   // Format prefix and emit log message indicating a GC cycle hs been triggered
   void log_trigger(const char* fmt, ...) const ATTRIBUTE_PRINTF(2, 3);

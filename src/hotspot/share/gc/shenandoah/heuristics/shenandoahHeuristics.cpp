@@ -158,7 +158,7 @@ void ShenandoahHeuristics::start_idle_span() {
 }
 
 void ShenandoahHeuristics::record_cycle_start() {
-  _start_gc_is_pending.store_relaxed(true);
+  accept_trigger();
   _cycle_start.store_relaxed(os::elapsedTime());
   log_debug(gc, ergo)("Declined trigger count at start: %zu", _declined_trigger_count.load_relaxed());
 }
@@ -175,23 +175,30 @@ void ShenandoahHeuristics::record_cycle_end() {
 }
 
 bool ShenandoahHeuristics::trigger_periodic_gc() {
-  if (_guaranteed_gc_interval > 0 && !_start_gc_is_pending.load_relaxed()) {
-    const double cycle_start = _cycle_start.load_relaxed();
-    const double last_cycle_end = _last_cycle_end.load_relaxed();
-    if (cycle_start > last_cycle_end) {
-      // The cycle has started, but hasn't completed. Do not trigger
-      return false;
-    }
-
-    const double last_time_ms = (os::elapsedTime() - last_cycle_end) * 1000;
-    if (last_time_ms > _guaranteed_gc_interval) {
-      log_trigger("Guaranteed Interval. %.0f ms since last GC, above %zu ms guaranteed interval",
-                  last_time_ms, _guaranteed_gc_interval);
-      accept_trigger();
-      return true;
-    }
+  if (is_gc_pending()) {
+    return false;
   }
+
+  if (_guaranteed_gc_interval == 0) {
+    return false;
+  }
+
+  const double last_cycle_end = _last_cycle_end.load_relaxed();
+  const double last_time_ms = (os::elapsedTime() - last_cycle_end) * 1000;
+  if (last_time_ms > _guaranteed_gc_interval) {
+    log_trigger("Guaranteed Interval. %.0f ms since last GC, above %zu ms guaranteed interval",
+                last_time_ms, _guaranteed_gc_interval);
+    accept_trigger();
+    return true;
+  }
+
   return false;
+}
+
+void ShenandoahHeuristics::accept_trigger() {
+  if (_start_gc_is_pending.compare_set(false, true)) {
+    _trigger_accepted_time.store_relaxed(os::elapsedTime());
+  }
 }
 
 bool ShenandoahHeuristics::should_start_gc() {
@@ -284,6 +291,13 @@ void ShenandoahHeuristics::post_initialize() {
 
 double ShenandoahHeuristics::elapsed_cycle_time() const {
   return os::elapsedTime() - _cycle_start.load_relaxed();
+}
+
+double ShenandoahHeuristics::trigger_to_completion_time() const {
+  const double trigger_accepted = _trigger_accepted_time.load_relaxed();
+  assert(trigger_accepted <= _cycle_start.load_relaxed(), "Trigger after start");
+  assert(_cycle_start.load_relaxed() <= _last_cycle_end.load_relaxed(), "Start after end");
+  return os::elapsedTime() - trigger_accepted;
 }
 
 #ifdef ASSERT
