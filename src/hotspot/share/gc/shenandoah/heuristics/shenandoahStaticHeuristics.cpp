@@ -37,6 +37,10 @@ ShenandoahStaticHeuristics::ShenandoahStaticHeuristics(ShenandoahSpaceInfo* spac
 }
 
 bool ShenandoahStaticHeuristics::should_start_gc() {
+  if (is_gc_pending()) {
+    return false;
+  }
+
   size_t capacity = ShenandoahHeap::heap()->soft_max_capacity();
   size_t available = _space_info->soft_mutator_available();
 
