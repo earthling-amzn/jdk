@@ -169,7 +169,7 @@ void ShenandoahGenerationalControlThread::prepare_for_explicit_gc(ShenandoahGCRe
   ShenandoahHeuristics* heuristics = request.generation->heuristics();
   heuristics->record_requested_gc();
   heuristics->log_trigger("GC Request (%s)", GCCause::to_string(request.cause));
-  _heap->set_unload_classes(heuristics->can_unload_classes());
+  _heap->set_unload_classes(heuristics->can_unload_classes_concurrently());
 }
 
 ShenandoahGenerationalControlThread::GCMode ShenandoahGenerationalControlThread::prepare_for_concurrent_gc(ShenandoahGCRequest &request) const {
@@ -185,7 +185,7 @@ ShenandoahGenerationalControlThread::GCMode ShenandoahGenerationalControlThread:
     _heap->set_unload_classes(false);
   }
 
-  if (request.generation->is_young()) {
+  if (request.generation->is_young() && request.cause != GCCause::_wb_young_gc) {
     if (_heap->old_generation()->heuristics()->should_start_gc()) {
       // Co-opt this young request into bootstrapping old.
       request.generation = _heap->old_generation();
@@ -233,19 +233,21 @@ void ShenandoahGenerationalControlThread::maybe_print_young_region_ages() const 
   }
 }
 
-void ShenandoahGenerationalControlThread::maybe_request_full_or_old_cycle() {
-  if (_heap->old_generation()->clear_failed_evacuation()) {
+void ShenandoahGenerationalControlThread::maybe_request_another_cycle() {
+  auto const old_generation = _heap->old_generation();
+  auto const global_generation = _heap->global_generation();
+
+  if (old_generation->clear_failed_evacuation()) {
     // Immediately run a full GC.
     log_info(gc, ergo)("Requesting a full gc because of evacuation failures in old");
-    notify_control_thread(GCCause::_shenandoah_upgrade_to_full_gc, _heap->global_generation());
+    notify_control_thread(GCCause::_shenandoah_upgrade_to_full_gc, global_generation);
     return;
   }
 
-  auto const old_heuristics = _heap->old_generation()->heuristics();
+  auto const old_heuristics = old_generation->heuristics();
   if (old_heuristics->should_start_gc() || old_heuristics->should_resume_old_cycle()) {
     // We just finished a cycle, but the old generation wants to be collected
-    notify_control_thread(GCCause::_shenandoah_concurrent_gc, _heap->old_generation());
-    return;
+    notify_control_thread(GCCause::_shenandoah_concurrent_gc, old_generation);
   }
 }
 
@@ -352,6 +354,11 @@ void ShenandoahGenerationalControlThread::run_gc_cycle(const ShenandoahGCRequest
 
   log_debug(gc, thread)("Completed GC (%s): %s, %s, cancelled: %s",
     gc_mode_name(gc_mode()), GCCause::to_string(request.cause), request.generation->name(), BOOL_TO_STR(_heap->cancelled_gc()));
+
+  if (gc_mode() == concurrent_normal || gc_mode() == bootstrapping_old) {
+    // Check if anything urgent has come up before the control thread waits for the next request.
+    maybe_request_another_cycle();
+  }
 }
 
 // Young and old concurrent cycles are initiated by the regulator. GC requests are
@@ -495,9 +502,6 @@ void ShenandoahGenerationalControlThread::service_concurrent_cycle(ShenandoahGen
     // Notify threads waiting for GC and/or memory when a young or global cycle completes
     notify_gc_waiters();
     clear_allocation_failure_and_notify_waiters();
-
-    // Check if we should start a full gc or an old gc now.
-    maybe_request_full_or_old_cycle();
   } else {
     assert(_heap->cancelled_gc(), "Must have been cancelled");
   }
@@ -716,6 +720,14 @@ void ShenandoahGenerationalControlThread::handle_requested_gc(GCCause::Cause cau
     // The whitebox caller thread will arrange for itself to wait until the GC notifies
     // it that has reached the requested breakpoint (phase in the GC).
     assert(generation->is_global(), "Whitebox breakpoints not support for: %s", generation->name());
+    notify_control_thread(cause, generation);
+    return;
+  }
+
+  if (cause == GCCause::_metadata_GC_threshold) {
+    // Expanding meta space was enough to satisfy the allocation, but we have
+    // been asked to run an asynchronous collection to unload classes.
+    assert(generation->is_global(), "Metadata GC must be global");
     notify_control_thread(cause, generation);
     return;
   }

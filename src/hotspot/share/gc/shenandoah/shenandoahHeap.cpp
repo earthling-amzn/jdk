@@ -1076,21 +1076,17 @@ oop ShenandoahHeap::array_allocate(Klass* klass, size_t size, int length, bool d
 MetaWord* ShenandoahHeap::satisfy_failed_metadata_allocation(ClassLoaderData* loader_data,
                                                              size_t size,
                                                              Metaspace::MetadataType mdtype) {
-  MetaWord* result;
-
-  // Inform metaspace OOM to GC heuristics if class unloading is possible.
-  ShenandoahHeuristics* h = global_generation()->heuristics();
-  if (h->can_unload_classes()) {
-    h->record_metaspace_oom();
-  }
-
-  // Expand and retry allocation
-  result = loader_data->metaspace_non_null()->expand_and_allocate(size, mdtype);
+  MetaWord* result = loader_data->metaspace_non_null()->expand_and_allocate(size, mdtype);
   if (result != nullptr) {
+    if (ClassUnloadingWithConcurrentMark) {
+      // If we can do concurrent class unloading, start an asynchronous cycle
+      collect(GCCause::_metadata_GC_threshold);
+    }
     return result;
   }
 
-  // Start full GC
+  // Wait for a cycle that may free up meta space. This will either wait for a global
+  // concurrent cycle, or a full GC, depending on ClassUnloadingWithConcurrentMark.
   collect(GCCause::_metadata_GC_clear_soft_refs);
 
   // Retry allocation

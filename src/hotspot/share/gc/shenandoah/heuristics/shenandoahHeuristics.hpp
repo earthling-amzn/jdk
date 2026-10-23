@@ -276,9 +276,13 @@ public:
   virtual void choose_collection_set(ShenandoahCollectionSet* collection_set);
 
   virtual bool can_unload_classes();
+  virtual bool can_unload_classes_concurrently() {
+    return ClassUnloadingWithConcurrentMark;
+  }
 
-  // This indicates whether or not the current cycle should unload classes.
-  // It does NOT indicate that a cycle should be started.
+  // This indicates whether the current cycle should unload classes.
+  // It does NOT indicate that a cycle should be started. This is only used
+  // in the context of concurrent cycles.
   virtual bool should_unload_classes();
 
   virtual const char* name() = 0;

@@ -43,6 +43,7 @@ public:
 
   // Young collections can never unload classes
   bool can_unload_classes() override { return false; }
+  bool can_unload_classes_concurrently() override { return false; }
 
   size_t bytes_of_allocation_runway_before_gc_trigger(size_t young_regions_to_be_reclaimed);
 

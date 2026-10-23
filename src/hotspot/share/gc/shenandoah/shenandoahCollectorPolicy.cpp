@@ -129,6 +129,7 @@ bool is_valid_request(GCCause::Cause cause) {
   return ShenandoahCollectorPolicy::is_explicit_gc(cause)
       || ShenandoahCollectorPolicy::is_shenandoah_gc(cause)
       || cause == GCCause::_metadata_GC_clear_soft_refs
+      || cause == GCCause::_metadata_GC_threshold
       || cause == GCCause::_codecache_GC_aggressive
       || cause == GCCause::_codecache_GC_threshold
       || cause == GCCause::_full_gc_alot
@@ -161,6 +162,10 @@ bool ShenandoahCollectorPolicy::should_run_full_gc(GCCause::Cause cause) {
   }
 
   if (cause == GCCause::_shenandoah_upgrade_to_full_gc) {
+    return true;
+  }
+
+  if (cause == GCCause::_metadata_GC_clear_soft_refs && !ClassUnloadingWithConcurrentMark) {
     return true;
   }
 
@@ -211,8 +216,12 @@ int ShenandoahCollectorPolicy::cause_priority(GCCause::Cause cause) {
 
   switch (cause) {
     case GCCause::_shenandoah_stop_vm:
-      return 8;
+      return 10;
     case GCCause::_shenandoah_upgrade_to_full_gc:
+      return 9;
+    case GCCause::_metadata_GC_clear_soft_refs:
+      return 8;
+    case GCCause::_metadata_GC_threshold:
       return 7;
     case GCCause::_shenandoah_humongous_allocation_failure:
       return 5;
@@ -227,8 +236,7 @@ int ShenandoahCollectorPolicy::cause_priority(GCCause::Cause cause) {
     case GCCause::_no_gc:
       return 0;
     default:
-      // Unanticipated gc causes are treated as an allocation failure and cannot be
-      // preempted by regulator requests
+      // Unanticipated gc causes are treated as an allocation failure and cannot be preempted
       return 3;
   }
 }

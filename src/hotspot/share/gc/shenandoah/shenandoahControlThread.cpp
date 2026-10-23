@@ -45,10 +45,9 @@ ShenandoahControlThread::ShenandoahControlThread() {
   create_and_start();
 }
 
-void ShenandoahControlThread::prepare_for_explicit_gc(ShenandoahHeap* const heap, ShenandoahHeuristics* const heuristics, GCCause::Cause cause) {
+void ShenandoahControlThread::record_explicit_gc(ShenandoahHeuristics* const heuristics, GCCause::Cause cause) {
   heuristics->log_trigger("GC Request (%s)", GCCause::to_string(cause));
   heuristics->record_requested_gc();
-  heap->global_generation()->ref_processor()->set_soft_reference_policy(true);
 }
 
 void ShenandoahControlThread::run_service() {
@@ -74,14 +73,15 @@ void ShenandoahControlThread::run_service() {
     if (ShenandoahCollectorPolicy::should_run_full_gc(cause)) {
       mode = stw_full;
       if (ShenandoahCollectorPolicy::is_explicit_gc(cause)) {
-        prepare_for_explicit_gc(heap, heuristics, cause);
+        record_explicit_gc(heuristics, cause);
       }
     } else if (ShenandoahCollectorPolicy::is_explicit_gc(cause)) {
-      // A cycle was requested, clear soft references
-      prepare_for_explicit_gc(heap, heuristics, cause);
-      heap->set_unload_classes(heuristics->can_unload_classes());
+      record_explicit_gc(heuristics, cause);
+      heap->set_unload_classes(heuristics->can_unload_classes_concurrently());
+      heap->global_generation()->ref_processor()->set_soft_reference_policy(true);
     } else {
       // Ask policy if this cycle wants to process references or unload classes
+      heap->global_generation()->ref_processor()->set_soft_reference_policy(cause == GCCause::_metadata_GC_clear_soft_refs);
       heap->set_unload_classes(heuristics->should_unload_classes());
     }
 

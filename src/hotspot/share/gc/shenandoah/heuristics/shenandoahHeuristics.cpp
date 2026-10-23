@@ -203,13 +203,6 @@ bool ShenandoahHeuristics::should_start_gc() {
     log_info(gc, ergo)("GC start is already pending");
     return true;
   }
-  // Perform GC to cleanup metaspace
-  if (has_metaspace_oom()) {
-    // Some of vmTestbase/metaspace tests depend on following line to count GC cycles
-    log_trigger("%s", GCCause::to_string(GCCause::_metadata_GC_threshold));
-    accept_trigger();
-    return true;
-  }
 
   decline_trigger();
   return false;
@@ -282,9 +275,7 @@ bool ShenandoahHeuristics::can_unload_classes() {
 }
 
 bool ShenandoahHeuristics::should_unload_classes() {
-  if (!can_unload_classes()) return false;
-  if (has_metaspace_oom()) return true;
-  return ClassUnloadingWithConcurrentMark;
+  return can_unload_classes() && can_unload_classes_concurrently();
 }
 
 void ShenandoahHeuristics::initialize() {

@@ -137,7 +137,7 @@ private:
   void maybe_print_young_region_ages() const;
 
   // Will schedule an immediate full gc if old evacuations failed. This will also evaluate old heuristics.
-  void maybe_request_full_or_old_cycle();
+  void maybe_request_another_cycle();
 
   // Specialized function that waits for one complete old gc cycle. Note that this may invoke
   // young cycles in order to complete mixed evacuations of an existent old gc before starting

@@ -105,6 +105,13 @@ void ShenandoahController::handle_requested_gc(GCCause::Cause cause, ShenandoahG
     return;
   }
 
+  if (cause == GCCause::_metadata_GC_threshold) {
+    // Expanding meta space was enough to satisfy the allocation, but we have
+    // been asked to run an asynchronous collection to unload classes.
+    notify_control_thread(cause, generation);
+    return;
+  }
+
   if (cause == GCCause::_shenandoah_concurrent_gc || cause == GCCause::_shenandoah_periodic_gc) {
     notify_control_thread(cause, generation);
     return;

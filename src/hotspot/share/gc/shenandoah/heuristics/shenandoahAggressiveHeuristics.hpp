@@ -42,8 +42,6 @@ public:
   bool should_start_gc() override;
   bool trigger_periodic_gc() override { return false; }
 
-  bool should_unload_classes() override;
-
   const char* name()     override { return "Aggressive"; }
   bool is_diagnostic()   override { return true; }
   bool is_experimental() override { return false; }
