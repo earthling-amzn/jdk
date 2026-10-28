@@ -81,9 +81,6 @@ class ShenandoahHeuristics : public CHeapObj<mtGC> {
   };
 #endif
 
-  double _most_recent_trigger_evaluation_time;
-  double _most_recent_planned_sleep_interval;
-
 protected:
   static constexpr uint Moving_Average_Samples = 10; // Number of samples to store in moving averages
 
@@ -213,14 +210,6 @@ protected:
     _declined_trigger_count.add_then_fetch(1UL, memory_order_relaxed);
   }
 
-  double get_most_recent_wake_time() const {
-    return _most_recent_trigger_evaluation_time;
-  }
-
-  double get_planned_sleep_interval() const {
-    return _most_recent_planned_sleep_interval;
-  }
-
 public:
   ShenandoahHeuristics(ShenandoahSpaceInfo* space_info);
   virtual ~ShenandoahHeuristics();
@@ -244,11 +233,6 @@ public:
 
   virtual void record_cycle_start();
   virtual void record_cycle_end();
-
-  void update_should_start_query_times(double now, double planned_sleep_interval) {
-    _most_recent_trigger_evaluation_time = now;
-    _most_recent_planned_sleep_interval = planned_sleep_interval;
-  }
 
   void accept_trigger() {
     _start_gc_is_pending.store_relaxed(true);

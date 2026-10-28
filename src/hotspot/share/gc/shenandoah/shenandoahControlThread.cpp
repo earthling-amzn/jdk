@@ -45,14 +45,15 @@ ShenandoahControlThread::ShenandoahControlThread() {
   create_and_start();
 }
 
+void ShenandoahControlThread::notify_heap_changed() {
+  MonitorLocker ml(&_control_lock, Mutex::_no_safepoint_check_flag);
+  ml.notify();
+}
+
 void ShenandoahControlThread::run_service() {
   ShenandoahHeap* const heap = ShenandoahHeap::heap();
   constexpr GCMode default_mode = concurrent_normal;
   constexpr GCCause::Cause default_cause = GCCause::_shenandoah_concurrent_gc;
-
-  int sleep = ShenandoahControlIntervalMin;
-  double last_sleep_adjust_time = os::elapsedTime();
-  double most_recent_wake_time = last_sleep_adjust_time;
 
   ShenandoahHeuristics* const heuristics = heap->heuristics();
   while (!should_terminate()) {
@@ -178,28 +179,9 @@ void ShenandoahControlThread::run_service() {
       }
     }
 
-    // Wait before performing the next action. If allocation happened during this wait,
-    // we exit sooner, to let heuristics re-evaluate new conditions. If we are at idle,
-    // back off exponentially.
-    if (heap->has_changed()) {
-      sleep = ShenandoahControlIntervalMin;
-    } else if ((most_recent_wake_time - last_sleep_adjust_time) * 1000 > ShenandoahControlIntervalAdjustPeriod){
-      sleep = MIN2<int>(ShenandoahControlIntervalMax, MAX2(1, sleep * 2));
-      last_sleep_adjust_time = most_recent_wake_time;
-    }
     MonitorLocker ml(&_control_lock, Mutex::_no_safepoint_check_flag);
-    const double before_sleep_time = os::elapsedTime();
-    ml.wait(sleep);
-    most_recent_wake_time = os::elapsedTime();
-    // Record a conservative estimate of the longest anticipated sleep duration until we sample again.
-    const double planned_sleep_interval = MIN2<int>(ShenandoahControlIntervalMax, MAX2(1, sleep * 2)) / 1000.0;
-    heuristics->update_should_start_query_times(most_recent_wake_time, planned_sleep_interval);
-    if (LogTarget(Debug, gc, thread)::is_enabled()) {
-      const double elapsed = most_recent_wake_time - before_sleep_time;
-      const double hiccup = elapsed - static_cast<double>(sleep) / 1000.0;
-      if (hiccup > 0.001) {
-        log_debug(gc, thread)("Control Thread hiccup time: %.3fs", hiccup);
-      }
+    if (_requested_gc_cause == GCCause::_no_gc && !should_terminate()) {
+      ml.wait(ShenandoahControlInterval);
     }
   }
 
@@ -246,7 +228,8 @@ void ShenandoahControlThread::service_concurrent_normal_cycle(GCCause::Cause cau
 }
 
 void ShenandoahControlThread::stop_service() {
-  // Nothing to do here, worker threads will also check should_terminate, by way of shHeap::is_stopping.
+  MonitorLocker ml(&_control_lock, Mutex::_no_safepoint_check_flag);
+  ml.notify();
 }
 
 void ShenandoahControlThread::service_stw_full_cycle(GCCause::Cause cause) {

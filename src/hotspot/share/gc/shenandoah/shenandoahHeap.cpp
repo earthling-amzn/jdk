@@ -830,11 +830,9 @@ bool ShenandoahHeap::check_soft_max_changed() {
   return false;
 }
 
-void ShenandoahHeap::notify_heap_changed() {
-  // Update monitoring counters when we took a new region. This amortizes the
-  // update costs on slow path.
-  monitoring_support()->notify_heap_changed();
-  _heap_changed.try_set();
+void ShenandoahHeap::notify_heap_changed() const {
+  // Update monitoring counters when we take an allocation rate sample.
+  static_cast<ShenandoahControlThread*>(control_thread())->notify_heap_changed();
 }
 
 void ShenandoahHeap::start_idle_span() {
@@ -995,7 +993,7 @@ HeapWord* ShenandoahHeap::allocate_memory(ShenandoahAllocRequest& req) {
   }
 
   if (in_new_region) {
-    notify_heap_changed();
+    monitoring_support()->notify_heap_changed();
   }
 
   if (result == nullptr) {
@@ -1026,7 +1024,10 @@ HeapWord* ShenandoahHeap::allocate_memory_work(ShenandoahAllocRequest& req, bool
 
   if (result != nullptr) {
     if (req.is_mutator_alloc()) {
-      _alloc_rate.allocated((req.actual_size() + req.waste()) * HeapWordSize);
+      bool took_sample = _alloc_rate.allocated((req.actual_size() + req.waste()) * HeapWordSize);
+      if (took_sample) {
+        notify_heap_changed();
+      }
     }
 
     if (req.is_old()) {

@@ -234,8 +234,7 @@ bool ShenandoahAdaptiveHeuristics::should_start_gc() {
   if (last_alloc_sample_time != _last_alloc_sample_time) {
     _last_alloc_sample_time = last_alloc_sample_time;
 
-    const double anticipated_gc_start_time = get_most_recent_wake_time() + get_planned_sleep_interval();
-    const double anticipated_gc_duration = _cycles.predict_duration(anticipated_gc_start_time, _margin_of_error_sd);
+    const double anticipated_gc_duration = _cycles.predict_duration(os::elapsedTime(), _margin_of_error_sd);
     const ShenandoahAnticipatedConsumption consumption = alloc_rate.snapshot(anticipated_gc_duration, _margin_of_error_sd);
     const size_t allocatable_bytes = allocatable(available);
     maybe_log_rate_trigger_parameters(consumption, allocatable_bytes);

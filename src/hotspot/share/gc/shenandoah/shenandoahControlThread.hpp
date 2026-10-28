@@ -41,6 +41,7 @@ class ShenandoahControlThread: public ShenandoahController {
 public:
   ShenandoahControlThread();
 
+  void notify_heap_changed();
 protected:
   void run_service() override;
   void stop_service() override;

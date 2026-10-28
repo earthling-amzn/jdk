@@ -39,6 +39,9 @@ class ShenandoahGenerationalHeap : public ShenandoahHeap {
 
 public:
   ShenandoahGenerationalHeap();
+
+  void notify_heap_changed() const override;
+
   void post_initialize() override;
   void initialize_generations() override;
   void initialize_heuristics() override;

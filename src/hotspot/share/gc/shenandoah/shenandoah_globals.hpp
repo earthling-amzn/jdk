@@ -321,24 +321,12 @@
           "the samples. Higher values provide more fidelity, at expense "   \
           "of more sampling overhead.")                                     \
                                                                             \
-  product(uintx, ShenandoahControlIntervalMin, 1, EXPERIMENTAL,             \
-          "The minimum sleep interval for the control loop that drives "    \
+  product(uintx, ShenandoahControlInterval, 10, EXPERIMENTAL,               \
+          "The sleep interval for the control loop that drives "            \
           "the cycles. Lower values would increase GC responsiveness "      \
           "to changing heap conditions, at the expense of higher perf "     \
           "overhead. Time is in milliseconds.")                             \
           range(1, 999)                                                     \
-                                                                            \
-  product(uintx, ShenandoahControlIntervalMax, 10, EXPERIMENTAL,            \
-          "The maximum sleep interval for control loop that drives "        \
-          "the cycles. Lower values would increase GC responsiveness "      \
-          "to changing heap conditions, at the expense of higher perf "     \
-          "overhead. Time is in milliseconds.")                             \
-          range(1, 999)                                                     \
-                                                                            \
-  product(uintx, ShenandoahControlIntervalAdjustPeriod, 1000, EXPERIMENTAL, \
-          "The time period for one step in control loop interval "          \
-          "adjustment. Lower values make adjustments faster, at the "       \
-          "expense of higher perf overhead. Time is in milliseconds.")      \
                                                                             \
   product(bool, ShenandoahVerify, false, DIAGNOSTIC,                        \
           "Enable internal verification. This would catch many GC bugs, "   \

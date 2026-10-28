@@ -48,6 +48,8 @@ class ShenandoahRegulatorThread: public ConcurrentGCThread {
  public:
   explicit ShenandoahRegulatorThread(ShenandoahGenerationalControlThread* control_thread);
 
+  void notify_heap_changed();
+
  protected:
   void run_service() override;
   void stop_service() override;
@@ -78,10 +80,7 @@ class ShenandoahRegulatorThread: public ConcurrentGCThread {
   ShenandoahOldHeuristics* _old_heuristics;
   ShenandoahHeuristics* _global_heuristics;
 
-  // duration of planned regulator sleep period, in ms
-  uint _sleep;
-  double _most_recent_wake_time;
-  double _last_sleep_adjust_time;
+  Monitor _regulator_lock;
 };
 
 

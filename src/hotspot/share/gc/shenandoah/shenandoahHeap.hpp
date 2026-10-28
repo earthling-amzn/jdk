@@ -265,7 +265,7 @@ public:
 //
 public:
   // Notify heuristics and region state change logger that the state of the heap has changed
-  void notify_heap_changed();
+  virtual void notify_heap_changed() const;
 
   // Force counters to update
   void set_forced_counters_update(bool value);
@@ -403,12 +403,6 @@ public:
   // This is public to support assertions that the state hasn't been changed off of
   // a safepoint and that any changes were propagated to threads after the safepoint.
   bool has_gc_state_changed() const { return _gc_state_changed; }
-
-  // Returns true if allocations have occurred in new regions or if regions have been
-  // uncommitted since the previous calls. This call will reset the flag to false.
-  bool has_changed() {
-    return _heap_changed.try_unset();
-  }
 
   virtual void start_idle_span();
 

@@ -87,6 +87,10 @@ ShenandoahGenerationalHeap::ShenandoahGenerationalHeap() :
   _old_gen_memory_pool(nullptr) {
 }
 
+void ShenandoahGenerationalHeap::notify_heap_changed() const {
+  regulator_thread()->notify_heap_changed();
+}
+
 void ShenandoahGenerationalHeap::initialize_generations() {
   ShenandoahHeap::initialize_generations();
   _young_generation->post_initialize(this);
